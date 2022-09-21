@@ -21,6 +21,7 @@ func (c menuScreen) DisplayHelp() {
 	fmt.Println("resume - return to game")
 	fmt.Println("save - save game")
 	displayHelpBasicMenu()
+	go c.Resume()
 }
 
 func (c menuScreen) parse(command string) int {

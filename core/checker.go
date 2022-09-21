@@ -33,7 +33,11 @@ func (c Checker) moveOne(desk *Field, actualPosition, newPosition Coordinate) bo
 }
 
 func (c Checker) moveWithoutEat(desk *Field, actualPosition, newPosition Coordinate, isMakeMove bool) bool {
-	if newPosition.X-actualPosition.X == 1 &&
+	vertical := 1
+	if c.GetOwnerId() == 1 {
+		vertical = -1
+	}
+	if newPosition.X-actualPosition.X == vertical &&
 		(newPosition.Y-actualPosition.Y == 1 || newPosition.Y-actualPosition.Y == -1) {
 		if desk.IsFree(newPosition) {
 			if isMakeMove {
@@ -50,7 +54,7 @@ func (c Checker) moveToEat(desk *Field, actualPosition, newPosition Coordinate, 
 		(newPosition.X + actualPosition.X) / 2,
 		(newPosition.Y + actualPosition.Y) / 2}
 
-	if (newPosition.X-actualPosition.X == 2 || newPosition.X-actualPosition.Y == -2) &&
+	if (newPosition.X-actualPosition.X == 2 || newPosition.X-actualPosition.X == -2) &&
 		(newPosition.Y-actualPosition.Y == 2 || newPosition.Y-actualPosition.Y == -2) {
 		if desk.IsFree(newPosition) && !desk.IsFree(foodPosition) {
 			food := desk.At(foodPosition)

@@ -15,6 +15,7 @@ type gameScreen struct {
 func (c gameScreen) Display() {
 	field := c.interactor.gamer0.GetField()
 	for x := 7; x >= 0; x-- {
+		fmt.Print(x+1, " ")
 		for y := 0; y < 8; y++ {
 			figure := field.At(core.Coordinate{x, y})
 			if figure == nil {
@@ -27,6 +28,7 @@ func (c gameScreen) Display() {
 		}
 		fmt.Println()
 	}
+	fmt.Println("  a b c d e f g h ")
 	go c.Resume()
 }
 
@@ -63,10 +65,14 @@ func (c gameScreen) makeMove(gamer gamer.Gamer, from, to core.Coordinate) int {
 
 func (c gameScreen) getMove() (core.Coordinate, core.Coordinate) {
 	var input string
+	c.interactor.mutex.Lock()
 	fmt.Scan(&input)
+	c.interactor.mutex.Unlock()
 	var from, to core.Coordinate
 	from.InitFromString(input)
+	c.interactor.mutex.Lock()
 	fmt.Scan(&input)
+	c.interactor.mutex.Unlock()
 	to.InitFromString(input)
 
 	return from, to

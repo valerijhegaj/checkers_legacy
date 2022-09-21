@@ -15,7 +15,7 @@ func (c saveGameScreen) Display() {
 	if err != nil {
 		go c.Resume()
 	}
-	for save := range saveList {
+	for _, save := range saveList {
 		fmt.Println(save)
 	}
 	go c.Resume()
@@ -29,7 +29,7 @@ func (c saveGameScreen) DisplayHelp() {
 }
 
 func (c saveGameScreen) parse(command string) int {
-	if command[len(command)-5:] == ".json" {
+	if len(command) >= 5 && command[len(command)-5:] == ".json" {
 		err := c.writeSave(command)
 		if err != nil {
 			fmt.Println(err.Error())

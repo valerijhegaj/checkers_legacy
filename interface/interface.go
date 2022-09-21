@@ -5,6 +5,7 @@ import (
 	"chekers/gamer"
 	"chekers/saveLoad"
 	"fmt"
+	"sync"
 )
 
 // interface status
@@ -45,6 +46,8 @@ type Interface struct {
 
 	exiter chan int
 	Master saveLoad.Master
+
+	mutex sync.Mutex
 }
 
 func (c *Interface) switchCommander(command int, controler screenControler) {
@@ -92,7 +95,9 @@ func (c *Interface) Init(exiter chan int, core core.GameCore) {
 
 func (c *Interface) GetCommand(parse func(string) int) int {
 	var command string
+	c.mutex.Lock()
 	fmt.Scan(&command)
+	c.mutex.Unlock()
 	return parse(command)
 }
 

@@ -15,7 +15,8 @@ func (c loadGameScreen) Display() {
 		fmt.Println(err.Error())
 		go c.Resume()
 	}
-	for save := range saveList {
+	fmt.Println("saves:")
+	for _, save := range saveList {
 		fmt.Println(save)
 	}
 	go c.Resume()
@@ -28,13 +29,14 @@ func (c loadGameScreen) DisplayHelp() {
 }
 
 func (c loadGameScreen) parse(command string) int {
-	if command[len(command)-5:] == ".json" {
+	if len(command) >= 5 && command[len(command)-5:] == ".json" {
 		var save saveLoad.Save
 		err := save.Read(command)
 		if err != nil {
 			fmt.Println(err.Error())
 			return resume
 		}
+
 		c.interactor.initSave(save)
 
 		c.interactor.status = menu

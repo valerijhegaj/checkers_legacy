@@ -9,13 +9,11 @@ type mainMenuScreen struct {
 }
 
 func (c mainMenuScreen) Display() {
-	fmt.Println("start display main menu")
 	fmt.Println("checkers")
 	fmt.Println("start")
 	fmt.Println("load")
 	fmt.Println("exit")
 	go c.Resume()
-	fmt.Println("finish display main menu")
 }
 
 func (c mainMenuScreen) DisplayHelp() {

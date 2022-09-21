@@ -45,9 +45,13 @@ func (c startGameScreen) parse(command string) int {
 func (c startGameScreen) getMaster() saveLoad.Master {
 	var master saveLoad.Master
 	var name string
+	c.interactor.mutex.Lock()
 	fmt.Scan(&name)
+	c.interactor.mutex.Unlock()
 	c.parseMasterOne(&master.Gamer0, name)
+	c.interactor.mutex.Lock()
 	fmt.Scan(&name)
+	c.interactor.mutex.Unlock()
 	c.parseMasterOne(&master.Gamer1, name)
 	return master
 }
