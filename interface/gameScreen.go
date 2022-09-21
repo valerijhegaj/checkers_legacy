@@ -73,13 +73,11 @@ func (c gameScreen) getMove() (core.Coordinate, core.Coordinate) {
 }
 
 func (c gameScreen) Resume() {
-	fmt.Println("start resume", reflect.TypeOf(c))
 	if c.interactor.gamer0.IsTurn() {
 		c.routine(c.interactor.Master.Gamer0, c.interactor.gamer0, c.interactor.bot0)
 	} else {
 		c.routine(c.interactor.Master.Gamer1, c.interactor.gamer1, c.interactor.bot1)
 	}
-	fmt.Println("finish resume", reflect.TypeOf(c))
 }
 
 func (c gameScreen) routine(master int, gamer gamer.Gamer, bot gamer.Bot) {

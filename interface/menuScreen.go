@@ -2,7 +2,6 @@ package _interface
 
 import (
 	"fmt"
-	"reflect"
 )
 
 type menuScreen struct {
@@ -34,8 +33,6 @@ func (c menuScreen) parse(command string) int {
 }
 
 func (c menuScreen) Resume() {
-	fmt.Println("start resume", reflect.TypeOf(c))
 	command := c.interactor.GetCommand(c.parse)
 	c.interactor.switchCommander(command, c)
-	fmt.Println("finish resume", reflect.TypeOf(c))
 }

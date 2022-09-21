@@ -75,7 +75,6 @@ func (c *Interface) switchCommander(command int, controler screenControler) {
 }
 
 func (c *Interface) Init(exiter chan int, core core.GameCore) {
-	fmt.Println("start init interface")
 	c.exiter = exiter
 	c.gamer0 = gamer.Gamer{0, &core}
 	c.gamer1 = gamer.Gamer{1, &core}
@@ -89,7 +88,6 @@ func (c *Interface) Init(exiter chan int, core core.GameCore) {
 	c.saveGameScreen.interactor = c
 
 	c.switchCommander(display, c.mainMenuScreen)
-	fmt.Println("finish init interface")
 }
 
 func (c *Interface) GetCommand(parse func(string) int) int {
@@ -118,7 +116,5 @@ func (c *Interface) CreateSave() saveLoad.Save {
 }
 
 func (c *Interface) exit() {
-	fmt.Println("start exit interface")
 	c.exiter <- 0
-	fmt.Println("finish exit interface")
 }

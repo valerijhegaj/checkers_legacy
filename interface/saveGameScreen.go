@@ -3,7 +3,6 @@ package _interface
 import (
 	"chekers/saveLoad"
 	"fmt"
-	"reflect"
 )
 
 type saveGameScreen struct {
@@ -42,10 +41,8 @@ func (c saveGameScreen) parse(command string) int {
 }
 
 func (c saveGameScreen) Resume() {
-	fmt.Println("start resume", reflect.TypeOf(c))
 	command := c.interactor.GetCommand(c.parse)
 	c.interactor.switchCommander(command, c)
-	fmt.Println("finish resume", reflect.TypeOf(c))
 }
 
 func (c saveGameScreen) writeSave(path string) error {

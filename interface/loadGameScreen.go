@@ -3,7 +3,6 @@ package _interface
 import (
 	"chekers/saveLoad"
 	"fmt"
-	"reflect"
 )
 
 type loadGameScreen struct {
@@ -45,8 +44,6 @@ func (c loadGameScreen) parse(command string) int {
 }
 
 func (c loadGameScreen) Resume() {
-	fmt.Println("start resume", reflect.TypeOf(c))
 	command := c.interactor.GetCommand(c.parse)
 	c.interactor.switchCommander(command, c)
-	fmt.Println("finish resume", reflect.TypeOf(c))
 }

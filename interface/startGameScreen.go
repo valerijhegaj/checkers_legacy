@@ -3,7 +3,6 @@ package _interface
 import (
 	"chekers/saveLoad"
 	"fmt"
-	"reflect"
 )
 
 type startGameScreen struct {
@@ -23,7 +22,6 @@ func (c startGameScreen) DisplayHelp() {
 }
 
 func (c startGameScreen) parse(command string) int {
-
 	if command == "start" || command == "Start" {
 		var save saveLoad.Save
 		err := save.Read("startFields/start_field.json")
@@ -63,8 +61,6 @@ func (c startGameScreen) parseMasterOne(gamer *int, name string) {
 }
 
 func (c startGameScreen) Resume() {
-	fmt.Println("start resume", reflect.TypeOf(c))
 	command := c.interactor.GetCommand(c.parse)
 	c.interactor.switchCommander(command, c)
-	fmt.Println("finish resume", reflect.TypeOf(c))
 }
