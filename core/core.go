@@ -3,6 +3,7 @@ package core
 type GameCore struct {
 	field       Field
 	turnGamerId int
+	checkersFeature
 }
 
 func (c GameCore) GetField() Field {
