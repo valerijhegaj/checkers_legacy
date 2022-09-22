@@ -9,7 +9,15 @@ func (c King) GetOwnerId() int {
 }
 
 func (c King) Move(desk *Field, actualPosition Coordinate, newPosition []Coordinate) (bool, Coordinate) {
+	deadNum := len(desk.Bin)
+
 	for i, newPositionOne := range newPosition {
+		if i > 0 && deadNum-len(desk.Bin) == 0 {
+			return true, actualPosition
+		} else {
+			deadNum = len(desk.Bin)
+		}
+
 		if !c.moveOne(desk, actualPosition, newPositionOne, true) {
 			if i == 0 {
 				return false, actualPosition
