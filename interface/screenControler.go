@@ -9,7 +9,7 @@ type screenControler interface {
 }
 
 func parseBasic(command string) int {
-	if command[0] == 'd' || command[1] == 'D' {
+	if command[0] == 'd' || command[0] == 'D' {
 		return display
 	} else if command[0] == 'r' || command[0] == 'R' {
 		return returnToStatus

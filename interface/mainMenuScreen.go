@@ -10,6 +10,7 @@ type mainMenuScreen struct {
 
 func (c mainMenuScreen) Display() {
 	fmt.Println("checkers")
+	fmt.Println("write 1 of 3 commands")
 	fmt.Println("start")
 	fmt.Println("load")
 	fmt.Println("exit")

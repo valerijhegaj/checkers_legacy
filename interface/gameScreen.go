@@ -13,32 +13,45 @@ type gameScreen struct {
 }
 
 func (c gameScreen) Display() {
+	colorReset := "\033[0m"
+	colorRed := "\033[31m"
+
 	field := c.interactor.gamer0.GetField()
-	for x := 7; x >= 0; x-- {
+	for x := field.BordersRight.X; x >= field.BordersLeft.X; x-- {
 		fmt.Print(x+1, " ")
-		for y := 0; y < 8; y++ {
+		for y := field.BordersLeft.Y; y <= field.BordersRight.Y; y++ {
 			figure := field.At(core.Coordinate{x, y})
 			if figure == nil {
-				fmt.Print("0 ")
+				fmt.Print("_ ")
 			} else if reflect.TypeOf(figure) == reflect.TypeOf(core.Checker{}) {
-				fmt.Print("1 ")
+				if figure.GetOwnerId() == 1 {
+					fmt.Print(colorRed, "O ", colorReset)
+				} else {
+					fmt.Print("O ")
+				}
 			} else {
-				fmt.Print("2 ")
+				if figure.GetOwnerId() == 1 {
+					fmt.Print(colorRed, "K ", colorReset)
+				} else {
+					fmt.Print("K ")
+				}
 			}
 		}
 		fmt.Println()
 	}
-	fmt.Println("  a b c d e f g h ")
+	fmt.Print("  ")
+	for y := field.BordersLeft.Y; y <= field.BordersRight.Y; y++ {
+		fmt.Print(string('a'+y), " ")
+	}
+	fmt.Println()
 	go c.Resume()
 }
 
 func (c gameScreen) DisplayHelp() {
 	displayHelpBasic()
-	fmt.Println("move a4 a5 - move figure from to, " +
-		"for all gamers coordinates are absolute, " +
-		"from view of white left bottom is a0, " +
-		"chars in horizontal, nums in vertical")
-
+	fmt.Println("move a4a5 - move figure from to, " +
+		"for all gamers coordinates are absolute")
+	fmt.Println("O - checker, K - king, _ - empty")
 	go c.Resume()
 }
 
@@ -54,7 +67,7 @@ func (c gameScreen) parse(command string) int {
 	return parseBasic(command)
 }
 
-func (c gameScreen) makeMove(gamer gamer.Gamer, from, to core.Coordinate) int {
+func (c gameScreen) makeMove(gamer gamer.Gamer, from core.Coordinate, to []core.Coordinate) int {
 	if gamer.Move(from, to) {
 		return game
 	} else {
@@ -63,17 +76,30 @@ func (c gameScreen) makeMove(gamer gamer.Gamer, from, to core.Coordinate) int {
 	}
 }
 
-func (c gameScreen) getMove() (core.Coordinate, core.Coordinate) {
+func (c gameScreen) getMove() (core.Coordinate, []core.Coordinate) {
 	var input string
 	c.interactor.mutex.Lock()
-	fmt.Scan(&input)
+	fmt.Scanln(&input)
 	c.interactor.mutex.Unlock()
-	var from, to core.Coordinate
-	from.InitFromString(input)
-	c.interactor.mutex.Lock()
-	fmt.Scan(&input)
-	c.interactor.mutex.Unlock()
-	to.InitFromString(input)
+
+	var coordinates []string
+	for i := 0; i < len(input); i += 2 {
+		coordinates = append(coordinates, input[i:i+2])
+	}
+
+	var from core.Coordinate
+	var to []core.Coordinate
+
+	from.InitFromString(coordinates[0])
+	for i, coordinate := range coordinates {
+		if i == 0 {
+			from.InitFromString(coordinate)
+		} else {
+			var loacalTo core.Coordinate
+			loacalTo.InitFromString(coordinate)
+			to = append(to, loacalTo)
+		}
+	}
 
 	return from, to
 }

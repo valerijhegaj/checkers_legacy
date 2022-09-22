@@ -93,7 +93,7 @@ func (c *JsonSave) takeFiguresFromField(field core.Field) {
 		c.Figures[i].X = coordinate.X
 		c.Figures[i].Y = coordinate.Y
 		c.Figures[i].Figure = reflect.TypeOf(figure).String()[5:]
-		c.TurnGamerId = figure.GetOwnerId()
+		c.Figures[i].GamerId = figure.GetOwnerId()
 		i++
 	}
 }

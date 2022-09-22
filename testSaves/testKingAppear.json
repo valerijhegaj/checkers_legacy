@@ -1,0 +1,29 @@
+{
+  "figures": [
+    {
+      "x": 6,
+      "y": 1,
+      "figure": "Checker",
+      "gamerId": 0
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "figure": "Checker",
+      "gamerId": 1
+    }
+  ],
+  "bordersRight": {
+    "x": 7,
+    "y": 7
+  },
+  "bordersLeft": {
+    "x": 0,
+    "y": 0
+  },
+  "position": {
+    "gamer0": 0,
+    "gamer1": 0
+  },
+  "turnGamerId": 0
+}

@@ -8,16 +8,48 @@ func (c Checker) GetOwnerId() int {
 	return c.OwnerId
 }
 
-func (c Checker) Move(desk *Field, actualPosition Coordinate, newPosition ...Coordinate) (bool, Coordinate) {
+func (c Checker) Move(desk *Field, actualPosition Coordinate, newPosition []Coordinate) (bool, Coordinate) {
+	deadNum := len(desk.Bin)
+
+	vertical := desk.BordersLeft.X
+	if c.GetOwnerId() == 0 {
+		vertical = desk.BordersRight.X
+	}
+
+	var movesMaked int
+
 	for i, newPositionOne := range newPosition {
+		if i > 0 && deadNum-len(desk.Bin) == 0 {
+			return true, actualPosition
+		} else {
+			deadNum = len(desk.Bin)
+		}
+
 		if !c.moveOne(desk, actualPosition, newPositionOne) {
 			if i == 0 {
 				return false, actualPosition
 			} else {
+				movesMaked = i
 				break
 			}
 		}
 		actualPosition = newPositionOne
+
+		if actualPosition.X == vertical {
+			desk.Remove(actualPosition)
+			desk.Put(actualPosition, King{c.OwnerId})
+			movesMaked = i
+			break
+		}
+		movesMaked = i
+	}
+
+	if len(newPosition[movesMaked:]) != 0 {
+		king := desk.At(actualPosition)
+		if deadNum-len(desk.Bin) == 0 {
+			return true, actualPosition
+		}
+		king.Move(desk, actualPosition, newPosition[movesMaked:])
 	}
 	return true, actualPosition
 }
