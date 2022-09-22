@@ -25,7 +25,7 @@ func (c King) Move(desk *Field, actualPosition Coordinate, newPosition []Coordin
 				break
 			}
 		}
-		if !isWasFood {
+		if !isWasFood && i > 0 {
 			//can optimize
 			c.moveOne(desk, newPositionOne, actualPosition, true)
 			break
