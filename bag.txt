@@ -1,0 +1,10 @@
+loadScreen
+    help
+
+menuScreen
+    help
+
+
+input problem
+
+не меняется ход
