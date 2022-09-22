@@ -17,8 +17,8 @@ func (c King) Move(desk *Field, actualPosition Coordinate, newPosition []Coordin
 		} else {
 			deadNum = len(desk.Bin)
 		}
-
-		if !c.moveOne(desk, actualPosition, newPositionOne, true) {
+		isMoved, isWasFood := c.moveOne(desk, actualPosition, newPositionOne, true)
+		if !isMoved {
 			if i == 0 {
 				return false, actualPosition
 			} else {
@@ -26,31 +26,47 @@ func (c King) Move(desk *Field, actualPosition Coordinate, newPosition []Coordin
 			}
 		}
 		actualPosition = newPositionOne
+		if !isWasFood {
+			break
+		}
 	}
 	return true, actualPosition
 }
 
 func (c King) IsMoveOne(desk *Field, actualPosition, newPosition Coordinate) bool {
-	return c.moveOne(desk, actualPosition, newPosition, false)
+	ans, _ := c.moveOne(desk, actualPosition, newPosition, false)
+	return ans
 }
 
-func (c King) moveOne(desk *Field, actualPosition, newPosition Coordinate, isMakeMove bool) bool {
+func (c King) moveOne(desk *Field, actualPosition, newPosition Coordinate, isMakeMove bool) (bool, bool) {
 	dx, dy := newPosition.X-actualPosition.X, newPosition.Y-actualPosition.Y
 	if dx == 0 || (dx != dy && dx != -dy) || !desk.IsFree(newPosition) {
-		return false
+		return false, false
+	}
+
+	var dx_1, dy_1 int
+	if dx > 0 {
+		dx_1 = 1
+	} else {
+		dx_1 = -1
+	}
+	if dy > 0 {
+		dy_1 = 1
+	} else {
+		dy_1 = -1
 	}
 
 	wasAlreadyFood := false
 	finishFoodPosition := Coordinate{}
-	for i := 0; i < dx; i++ {
-		foodPosition := Coordinate{actualPosition.X + i, actualPosition.Y + i*dy/dy}
+	for i := 1; i < dx*dx_1; i++ {
+		foodPosition := Coordinate{actualPosition.X + i*dx_1, actualPosition.Y + i*dy_1}
 		if !desk.IsFree(foodPosition) {
 			if wasAlreadyFood {
-				return false
+				return false, false
 			}
 			food := desk.At(foodPosition)
 			if food.GetOwnerId() == c.GetOwnerId() {
-				return false
+				return false, false
 			}
 			finishFoodPosition = foodPosition
 			wasAlreadyFood = true
@@ -63,5 +79,5 @@ func (c King) moveOne(desk *Field, actualPosition, newPosition Coordinate, isMak
 		}
 		desk.Move(actualPosition, newPosition)
 	}
-	return true
+	return true, wasAlreadyFood
 }

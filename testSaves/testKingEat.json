@@ -1,1 +1,29 @@
-{"figures":[{"x":0,"y":7,"figure":"King","gamerId":0},{"x":4,"y":3,"figure":"Checker","gamerId":1}],"bordersRight":{"x":7,"y":7},"bordersLeft":{"x":0,"y":0},"position":{"gamer0":0,"gamer1":0},"turnGamerId":0}
+{
+  "figures": [
+    {
+      "x": 0,
+      "y": 7,
+      "figure": "King",
+      "gamerId": 0
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "figure": "Checker",
+      "gamerId": 1
+    }
+  ],
+  "bordersRight": {
+    "x": 7,
+    "y": 7
+  },
+  "bordersLeft": {
+    "x": 0,
+    "y": 0
+  },
+  "position": {
+    "gamer0": 0,
+    "gamer1": 0
+  },
+  "turnGamerId": 0
+}
