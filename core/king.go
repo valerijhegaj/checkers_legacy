@@ -25,10 +25,12 @@ func (c King) Move(desk *Field, actualPosition Coordinate, newPosition []Coordin
 				break
 			}
 		}
-		actualPosition = newPositionOne
 		if !isWasFood {
+			//can optimize
+			c.moveOne(desk, newPositionOne, actualPosition, true)
 			break
 		}
+		actualPosition = newPositionOne
 	}
 	return true, actualPosition
 }
