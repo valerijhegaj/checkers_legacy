@@ -16,6 +16,8 @@ func (c Checker) Move(desk *Field, actualPosition Coordinate, newPosition []Coor
 		vertical = desk.BordersRight.X
 	}
 
+	var movesMaked int
+
 	for i, newPositionOne := range newPosition {
 		if i > 0 && deadNum-len(desk.Bin) == 0 {
 			return true, actualPosition
@@ -27,6 +29,7 @@ func (c Checker) Move(desk *Field, actualPosition Coordinate, newPosition []Coor
 			if i == 0 {
 				return false, actualPosition
 			} else {
+				movesMaked = i
 				break
 			}
 		}
@@ -35,16 +38,18 @@ func (c Checker) Move(desk *Field, actualPosition Coordinate, newPosition []Coor
 		if actualPosition.X == vertical {
 			desk.Remove(actualPosition)
 			desk.Put(actualPosition, King{c.OwnerId})
+			movesMaked = i
 			break
 		}
+		movesMaked = i
 	}
 
-	if len(newPosition) != 0 {
+	if len(newPosition[movesMaked:]) != 0 {
 		king := desk.At(actualPosition)
 		if deadNum-len(desk.Bin) == 0 {
 			return true, actualPosition
 		}
-		king.Move(desk, actualPosition, newPosition)
+		king.Move(desk, actualPosition, newPosition[movesMaked:])
 	}
 	return true, actualPosition
 }

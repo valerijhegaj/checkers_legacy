@@ -36,7 +36,7 @@ func (c King) IsMoveOne(desk *Field, actualPosition, newPosition Coordinate) boo
 
 func (c King) moveOne(desk *Field, actualPosition, newPosition Coordinate, isMakeMove bool) bool {
 	dx, dy := newPosition.X-actualPosition.X, newPosition.Y-actualPosition.Y
-	if dx == 0 && dx != dy && dx != -dy && !desk.IsFree(newPosition) {
+	if dx == 0 || (dx != dy && dx != -dy) || !desk.IsFree(newPosition) {
 		return false
 	}
 
