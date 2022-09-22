@@ -8,7 +8,7 @@ func (c King) GetOwnerId() int {
 	return c.OwnerId
 }
 
-func (c King) Move(desk *Field, actualPosition Coordinate, newPosition ...Coordinate) (bool, Coordinate) {
+func (c King) Move(desk *Field, actualPosition Coordinate, newPosition []Coordinate) (bool, Coordinate) {
 	for i, newPositionOne := range newPosition {
 		if !c.moveOne(desk, actualPosition, newPositionOne, true) {
 			if i == 0 {

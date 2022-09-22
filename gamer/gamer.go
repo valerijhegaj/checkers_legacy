@@ -18,7 +18,7 @@ func (c Gamer) IsTurn() bool {
 	return c.Core.IsTurn(c.GamerId)
 }
 
-func (c Gamer) Move(from core.Coordinate, to core.Coordinate) bool {
+func (c Gamer) Move(from core.Coordinate, to []core.Coordinate) bool {
 	return c.Core.Move(from, to, c.GamerId)
 }
 

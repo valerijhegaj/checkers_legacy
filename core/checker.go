@@ -8,7 +8,12 @@ func (c Checker) GetOwnerId() int {
 	return c.OwnerId
 }
 
-func (c Checker) Move(desk *Field, actualPosition Coordinate, newPosition ...Coordinate) (bool, Coordinate) {
+func (c Checker) Move(desk *Field, actualPosition Coordinate, newPosition []Coordinate) (bool, Coordinate) {
+	vertical := desk.BordersLeft.X
+	if c.GetOwnerId() == 0 {
+		vertical = desk.BordersRight.X
+	}
+
 	for i, newPositionOne := range newPosition {
 		if !c.moveOne(desk, actualPosition, newPositionOne) {
 			if i == 0 {
@@ -18,6 +23,17 @@ func (c Checker) Move(desk *Field, actualPosition Coordinate, newPosition ...Coo
 			}
 		}
 		actualPosition = newPositionOne
+
+		if actualPosition.X == vertical {
+			desk.Remove(actualPosition)
+			desk.Put(actualPosition, King{c.OwnerId})
+			break
+		}
+	}
+
+	if len(newPosition) != 0 {
+		king := desk.At(actualPosition)
+		king.Move(desk, actualPosition, newPosition)
 	}
 	return true, actualPosition
 }

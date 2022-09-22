@@ -54,7 +54,7 @@ func (c gameScreen) parse(command string) int {
 	return parseBasic(command)
 }
 
-func (c gameScreen) makeMove(gamer gamer.Gamer, from, to core.Coordinate) int {
+func (c gameScreen) makeMove(gamer gamer.Gamer, from core.Coordinate, to []core.Coordinate) int {
 	if gamer.Move(from, to) {
 		return game
 	} else {
@@ -63,17 +63,30 @@ func (c gameScreen) makeMove(gamer gamer.Gamer, from, to core.Coordinate) int {
 	}
 }
 
-func (c gameScreen) getMove() (core.Coordinate, core.Coordinate) {
+func (c gameScreen) getMove() (core.Coordinate, []core.Coordinate) {
 	var input string
 	c.interactor.mutex.Lock()
-	fmt.Scan(&input)
+	fmt.Scanln(&input)
 	c.interactor.mutex.Unlock()
-	var from, to core.Coordinate
-	from.InitFromString(input)
-	c.interactor.mutex.Lock()
-	fmt.Scan(&input)
-	c.interactor.mutex.Unlock()
-	to.InitFromString(input)
+
+	var coordinates []string
+	for i := 0; i < len(input); i += 2 {
+		coordinates = append(coordinates, input[i:i+2])
+	}
+
+	var from core.Coordinate
+	var to []core.Coordinate
+
+	from.InitFromString(coordinates[0])
+	for i, coordinate := range coordinates {
+		if i == 0 {
+			from.InitFromString(coordinate)
+		} else {
+			var loacalTo core.Coordinate
+			loacalTo.InitFromString(coordinate)
+			to = append(to, loacalTo)
+		}
+	}
 
 	return from, to
 }

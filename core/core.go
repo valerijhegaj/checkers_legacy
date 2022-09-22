@@ -14,7 +14,7 @@ func (c GameCore) IsTurn(gamerId int) bool {
 	return gamerId == c.turnGamerId
 }
 
-func (c *GameCore) Move(from, to Coordinate, gamerId int) bool {
+func (c *GameCore) Move(from Coordinate, to []Coordinate, gamerId int) bool {
 	figure := c.field.At(from)
 	if figure == nil {
 		return false
