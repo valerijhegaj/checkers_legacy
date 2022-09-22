@@ -13,17 +13,28 @@ type gameScreen struct {
 }
 
 func (c gameScreen) Display() {
+	colorReset := "\033[0m"
+	colorRed := "\033[31m"
+
 	field := c.interactor.gamer0.GetField()
 	for x := field.BordersRight.X; x >= field.BordersLeft.X; x-- {
 		fmt.Print(x+1, " ")
 		for y := field.BordersLeft.Y; y <= field.BordersRight.Y; y++ {
 			figure := field.At(core.Coordinate{x, y})
 			if figure == nil {
-				fmt.Print("0 ")
+				fmt.Print("_ ")
 			} else if reflect.TypeOf(figure) == reflect.TypeOf(core.Checker{}) {
-				fmt.Print("1 ")
+				if figure.GetOwnerId() == 1 {
+					fmt.Print(colorRed, "O ", colorReset)
+				} else {
+					fmt.Print("O ")
+				}
 			} else {
-				fmt.Print("2 ")
+				if figure.GetOwnerId() == 1 {
+					fmt.Print(colorRed, "K ", colorReset)
+				} else {
+					fmt.Print("K ")
+				}
 			}
 		}
 		fmt.Println()
@@ -38,11 +49,9 @@ func (c gameScreen) Display() {
 
 func (c gameScreen) DisplayHelp() {
 	displayHelpBasic()
-	fmt.Println("move a4 a5 - move figure from to, " +
-		"for all gamers coordinates are absolute, " +
-		"from view of white left bottom is a0, " +
-		"chars in horizontal, nums in vertical")
-
+	fmt.Println("move a4a5 - move figure from to, " +
+		"for all gamers coordinates are absolute")
+	fmt.Println("O - checker, K - king, _ - empty")
 	go c.Resume()
 }
 

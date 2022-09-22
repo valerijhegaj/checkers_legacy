@@ -1,17 +1,25 @@
 macos:
 git clone https://github.com/valerijhegaj/checkers.git
 cd checkers
-git checkout v0.1
+git checkout dev
 go run main.go
 
 linux:
 git clone https://github.com/valerijhegaj/checkers.git
 cd checkers
-git checkout v0.1
+git checkout dev
 go run main.go
 
 windows:
 don't support
+
+v0.2
+Unstable version, may behave strangely, crash
+new
+- fixed a lot of bugs
+- turning checkers into kings
+- you can play from beginning to end man against man on one computer
+- redesign field
 
 v0.1
 Checkers created

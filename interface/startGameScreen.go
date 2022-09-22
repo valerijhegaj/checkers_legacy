@@ -10,9 +10,10 @@ type startGameScreen struct {
 }
 
 func (c startGameScreen) Display() {
-	fmt.Println("print start")
-	fmt.Println("print gamer or bot (who will be for white)")
-	fmt.Println("print gamer or bot (who will be for nigga)")
+	fmt.Println("write 3 commands sequentially:")
+	fmt.Println("start")
+	fmt.Println("gamer or bot (who will be for white)")
+	fmt.Println("gamer or bot (who will be for red)")
 	go c.Resume()
 }
 
