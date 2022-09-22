@@ -14,9 +14,9 @@ type gameScreen struct {
 
 func (c gameScreen) Display() {
 	field := c.interactor.gamer0.GetField()
-	for x := 7; x >= 0; x-- {
+	for x := field.BordersRight.X; x >= field.BordersLeft.X; x-- {
 		fmt.Print(x+1, " ")
-		for y := 0; y < 8; y++ {
+		for y := field.BordersLeft.Y; y <= field.BordersRight.Y; y++ {
 			figure := field.At(core.Coordinate{x, y})
 			if figure == nil {
 				fmt.Print("0 ")
@@ -28,7 +28,11 @@ func (c gameScreen) Display() {
 		}
 		fmt.Println()
 	}
-	fmt.Println("  a b c d e f g h ")
+	fmt.Print("  ")
+	for y := field.BordersLeft.Y; y <= field.BordersRight.Y; y++ {
+		fmt.Print(string('a'+y), " ")
+	}
+	fmt.Println()
 	go c.Resume()
 }
 
