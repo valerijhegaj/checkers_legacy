@@ -3,20 +3,20 @@ package core
 type checkersFeature struct{}
 
 func (c checkersFeature) IsCanBeEater(desk *Field, position Coordinate) bool {
-	return c.isFoodInThisSide(desk, position, 1, 1) ||
-		c.isFoodInThisSide(desk, position, 1, -1) ||
-		c.isFoodInThisSide(desk, position, -1, -1) ||
-		c.isFoodInThisSide(desk, position, -1, 1)
+	return c.isFoodInThisDirection(desk, position, 1, 1) ||
+		c.isFoodInThisDirection(desk, position, 1, -1) ||
+		c.isFoodInThisDirection(desk, position, -1, -1) ||
+		c.isFoodInThisDirection(desk, position, -1, 1)
 }
 
 func (c checkersFeature) IsCanBeFood(desk *Field, position Coordinate) bool {
-	return c.isEaterInThisSide(desk, position, 1, 1) ||
-		c.isEaterInThisSide(desk, position, 1, -1) ||
-		c.isEaterInThisSide(desk, position, -1, -1) ||
-		c.isEaterInThisSide(desk, position, -1, 1)
+	return c.isEaterInThisDirecytion(desk, position, 1, 1) ||
+		c.isEaterInThisDirecytion(desk, position, 1, -1) ||
+		c.isEaterInThisDirecytion(desk, position, -1, -1) ||
+		c.isEaterInThisDirecytion(desk, position, -1, 1)
 }
 
-func (c checkersFeature) isFoodInThisSide(desk *Field, from Coordinate, dx, dy int) bool {
+func (c checkersFeature) isFoodInThisDirection(desk *Field, from Coordinate, dx, dy int) bool {
 	to := Coordinate{from.X + 2*dx, from.Y + 2*dy}
 
 	for desk.InBorders(to) {
@@ -26,7 +26,7 @@ func (c checkersFeature) isFoodInThisSide(desk *Field, from Coordinate, dx, dy i
 	return true
 }
 
-func (c checkersFeature) isEaterInThisSide(desk *Field, position Coordinate, dx, dy int) bool {
+func (c checkersFeature) isEaterInThisDirecytion(desk *Field, position Coordinate, dx, dy int) bool {
 	from := Coordinate{position.X + dx, position.Y + dy}
 	to := Coordinate{position.X - dx, position.Y - dy}
 

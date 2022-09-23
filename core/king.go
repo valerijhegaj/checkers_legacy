@@ -8,42 +8,60 @@ func (c King) GetOwnerId() int {
 	return c.OwnerId
 }
 
-func (c King) Move(desk *Field, actualPosition Coordinate, newPosition []Coordinate) (bool, Coordinate) {
-	deadNum := len(desk.Bin)
+func (c King) Move(desk *Field, from Coordinate, newPosition []Coordinate) (bool, Coordinate) {
+	var isCanBeMoved, isWasFood bool
+	var foodPosition Coordinate
 
-	for i, newPositionOne := range newPosition {
-		if i > 0 && deadNum-len(desk.Bin) == 0 {
-			return true, actualPosition
-		} else {
-			deadNum = len(desk.Bin)
-		}
-		isMoved, isWasFood := c.moveOne(desk, actualPosition, newPositionOne, true)
-		if !isMoved {
-			if i == 0 {
-				return false, actualPosition
-			} else {
-				break
+	for i, to := range newPosition {
+		isCanBeMoved, isWasFood, foodPosition = c.isMoveOne(desk, from, to)
+		if i == 0 {
+			if isCanBeMoved && !isWasFood {
+				desk.Move(from, to)
+				return true, to
+			}
+			if !isCanBeMoved {
+				return false, from
 			}
 		}
-		if !isWasFood && i > 0 {
-			//can optimize
-			c.moveOne(desk, newPositionOne, actualPosition, true)
-			break
+		if !isCanBeMoved || !isWasFood {
+			return true, from
 		}
-		actualPosition = newPositionOne
+		desk.Remove(foodPosition)
+		desk.Move(from, to)
+		from = to
 	}
-	return true, actualPosition
+
+	return true, from
+}
+
+// always returns true
+func (c King) MoveOnlyToEat(desk *Field, from Coordinate, newPosition []Coordinate) (bool, Coordinate) {
+	var isCanBeMoved, isWasFood bool
+	var foodPosition Coordinate
+
+	for _, to := range newPosition {
+		isCanBeMoved, isWasFood, foodPosition = c.isMoveOne(desk, from, to)
+		if !isCanBeMoved || !isWasFood {
+			return true, from
+		}
+		desk.Remove(foodPosition)
+		desk.Move(from, to)
+		from = to
+	}
+
+	return true, from
 }
 
 func (c King) IsMoveOne(desk *Field, actualPosition, newPosition Coordinate) bool {
-	ans, _ := c.moveOne(desk, actualPosition, newPosition, false)
+	ans, _, _ := c.isMoveOne(desk, actualPosition, newPosition)
 	return ans
 }
 
-func (c King) moveOne(desk *Field, actualPosition, newPosition Coordinate, isMakeMove bool) (bool, bool) {
+func (c King) isMoveOne(desk *Field, actualPosition, newPosition Coordinate) (bool, bool, Coordinate) {
+	finishFoodPosition := Coordinate{}
 	dx, dy := newPosition.X-actualPosition.X, newPosition.Y-actualPosition.Y
 	if dx == 0 || (dx != dy && dx != -dy) || !desk.IsFree(newPosition) {
-		return false, false
+		return false, false, finishFoodPosition
 	}
 
 	var dx_1, dy_1 int
@@ -59,27 +77,20 @@ func (c King) moveOne(desk *Field, actualPosition, newPosition Coordinate, isMak
 	}
 
 	wasAlreadyFood := false
-	finishFoodPosition := Coordinate{}
 	for i := 1; i < dx*dx_1; i++ {
 		foodPosition := Coordinate{actualPosition.X + i*dx_1, actualPosition.Y + i*dy_1}
 		if !desk.IsFree(foodPosition) {
 			if wasAlreadyFood {
-				return false, false
+				return false, false, foodPosition
 			}
 			food := desk.At(foodPosition)
 			if food.GetOwnerId() == c.GetOwnerId() {
-				return false, false
+				return false, false, foodPosition
 			}
 			finishFoodPosition = foodPosition
 			wasAlreadyFood = true
 		}
 	}
 
-	if isMakeMove {
-		if wasAlreadyFood {
-			desk.Remove(finishFoodPosition)
-		}
-		desk.Move(actualPosition, newPosition)
-	}
-	return true, wasAlreadyFood
+	return true, wasAlreadyFood, finishFoodPosition
 }

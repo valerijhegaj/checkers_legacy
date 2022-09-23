@@ -42,6 +42,10 @@ func (c *Field) Remove(ptr Coordinate) {
 	delete(c.Figures, ptr)
 }
 
+func (c *Field) RemoveWithOutBin(ptr Coordinate) {
+	delete(c.Figures, ptr)
+}
+
 func (c *Field) Put(ptr Coordinate, figure Figure) {
 	c.Figures[ptr] = figure
 }

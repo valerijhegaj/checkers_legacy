@@ -8,97 +8,82 @@ func (c Checker) GetOwnerId() int {
 	return c.OwnerId
 }
 
-func (c Checker) Move(desk *Field, actualPosition Coordinate, newPosition []Coordinate) (bool, Coordinate) {
-	deadNum := len(desk.Bin)
+func (c Checker) Move(desk *Field, from Coordinate, newPosition []Coordinate) (bool, Coordinate) {
+	var isCanBeMoved bool
+	var foodPosition Coordinate
 
-	vertical := desk.BordersLeft.X
-	if c.GetOwnerId() == 0 {
-		vertical = desk.BordersRight.X
+	vertical := desk.BordersRight.X
+	if c.OwnerId == 1 {
+		vertical = desk.BordersLeft.X
 	}
 
-	var movesMaked int
-
-	for i, newPositionOne := range newPosition {
-		if i > 0 && deadNum-len(desk.Bin) == 0 {
-			return true, actualPosition
-		} else {
-			deadNum = len(desk.Bin)
-		}
-
-		if !c.moveOne(desk, actualPosition, newPositionOne) {
-			if i == 0 {
-				return false, actualPosition
-			} else {
-				movesMaked = i
-				break
+	for i, to := range newPosition {
+		isCanBeMoved, foodPosition = c.isMoveToEat(desk, from, to)
+		if i == 0 {
+			if c.isMoveWithoutEat(desk, from, to) {
+				desk.Move(from, to)
+				if to.X == vertical {
+					desk.RemoveWithOutBin(to)
+					desk.Put(to, King{c.OwnerId})
+				}
+				return true, to
+			}
+			if !isCanBeMoved {
+				return false, from
 			}
 		}
-		actualPosition = newPositionOne
-
-		if actualPosition.X == vertical {
-			desk.Remove(actualPosition)
-			desk.Put(actualPosition, King{c.OwnerId})
-			movesMaked = i
-			break
+		if !isCanBeMoved {
+			return true, from
 		}
-		movesMaked = i
+		desk.Remove(foodPosition)
+		desk.Move(from, to)
+		from = to
+		if to.X == vertical {
+			desk.RemoveWithOutBin(to)
+			king := King{c.OwnerId}
+			desk.Put(to, king)
+			return king.Move(desk, to, newPosition[i+1:])
+		}
 	}
 
-	if len(newPosition[movesMaked:]) != 0 {
-		king := desk.At(actualPosition)
-		if deadNum-len(desk.Bin) == 0 {
-			return true, actualPosition
-		}
-		king.Move(desk, actualPosition, newPosition[movesMaked:])
-	}
-	return true, actualPosition
+	return true, from
+
 }
 
-func (c Checker) IsMoveOne(desk *Field, actualPosition, newPosition Coordinate) bool {
-	return c.moveWithoutEat(desk, actualPosition, newPosition, false) ||
-		c.moveToEat(desk, actualPosition, newPosition, false)
+func (c Checker) IsMoveOne(desk *Field, from, to Coordinate) bool {
+	var isMoveWithFood bool
+	isMoveWithFood, _ = c.isMoveToEat(desk, from, to)
+	return isMoveWithFood || c.isMoveWithoutEat(desk, from, to)
 }
 
-func (c Checker) moveOne(desk *Field, actualPosition, newPosition Coordinate) bool {
-	return c.moveWithoutEat(desk, actualPosition, newPosition, true) ||
-		c.moveToEat(desk, actualPosition, newPosition, true)
-}
-
-func (c Checker) moveWithoutEat(desk *Field, actualPosition, newPosition Coordinate, isMakeMove bool) bool {
+func (c Checker) isMoveWithoutEat(desk *Field, from, to Coordinate) bool {
 	vertical := 1
 	if c.GetOwnerId() == 1 {
 		vertical = -1
 	}
-	if newPosition.X-actualPosition.X == vertical &&
-		(newPosition.Y-actualPosition.Y == 1 || newPosition.Y-actualPosition.Y == -1) {
-		if desk.IsFree(newPosition) {
-			if isMakeMove {
-				desk.Move(actualPosition, newPosition)
-			}
+	if to.X-from.X == vertical &&
+		(to.Y-from.Y == 1 || to.Y-from.Y == -1) {
+		if desk.IsFree(to) {
 			return true
 		}
 	}
 	return false
 }
 
-func (c Checker) moveToEat(desk *Field, actualPosition, newPosition Coordinate, isMakeMove bool) bool {
+func (c Checker) isMoveToEat(desk *Field, from, to Coordinate) (bool, Coordinate) {
 	foodPosition := Coordinate{
-		(newPosition.X + actualPosition.X) / 2,
-		(newPosition.Y + actualPosition.Y) / 2}
+		(to.X + from.X) / 2,
+		(to.Y + from.Y) / 2}
 
-	if (newPosition.X-actualPosition.X == 2 || newPosition.X-actualPosition.X == -2) &&
-		(newPosition.Y-actualPosition.Y == 2 || newPosition.Y-actualPosition.Y == -2) {
-		if desk.IsFree(newPosition) && !desk.IsFree(foodPosition) {
+	if (to.X-from.X == 2 || to.X-from.X == -2) &&
+		(to.Y-from.Y == 2 || to.Y-from.Y == -2) {
+		if desk.IsFree(to) && !desk.IsFree(foodPosition) {
 			food := desk.At(foodPosition)
 			if food.GetOwnerId() != c.GetOwnerId() {
-				if isMakeMove {
-					desk.Remove(foodPosition)
-					desk.Move(actualPosition, newPosition)
-				}
-				return true
+				return true, foodPosition
 			}
 		}
 	}
 
-	return false
+	return false, foodPosition
 }
