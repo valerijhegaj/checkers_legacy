@@ -42,7 +42,7 @@ func (c Checker) Move(desk *Field, from Coordinate, newPosition []Coordinate) (b
 			desk.RemoveWithOutBin(to)
 			king := King{c.OwnerId}
 			desk.Put(to, king)
-			return king.Move(desk, to, newPosition[i+1:])
+			return king.MoveOnlyToEat(desk, to, newPosition[i+1:])
 		}
 	}
 
