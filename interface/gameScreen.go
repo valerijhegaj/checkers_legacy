@@ -41,7 +41,7 @@ func (c gameScreen) Display() {
 	}
 	fmt.Print("  ")
 	for y := field.BordersLeft.Y; y <= field.BordersRight.Y; y++ {
-		fmt.Print(string('a'+y), " ")
+		fmt.Print(string(rune('a'+y)), " ")
 	}
 	fmt.Println()
 	go c.Resume()

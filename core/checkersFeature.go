@@ -30,7 +30,7 @@ func (c checkersFeature) isEaterInThisDirecytion(desk *Field, position Coordinat
 	from := Coordinate{position.X + dx, position.Y + dy}
 	to := Coordinate{position.X - dx, position.Y - dy}
 
-	if !desk.IsFree(to) {
+	if !desk.IsAvailable(to) {
 		return false
 	}
 

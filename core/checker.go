@@ -42,7 +42,7 @@ func (c Checker) Move(desk *Field, from Coordinate, newPosition []Coordinate) (b
 			desk.RemoveWithOutBin(to)
 			king := King{c.OwnerId}
 			desk.Put(to, king)
-			return king.MoveOnlyToEat(desk, to, newPosition[i+1:])
+			return king.moveOnlyToEat(desk, to, newPosition[i+1:])
 		}
 	}
 
@@ -63,7 +63,7 @@ func (c Checker) isMoveWithoutEat(desk *Field, from, to Coordinate) bool {
 	}
 	if to.X-from.X == vertical &&
 		(to.Y-from.Y == 1 || to.Y-from.Y == -1) {
-		if desk.IsFree(to) {
+		if desk.IsAvailable(to) {
 			return true
 		}
 	}
@@ -77,7 +77,7 @@ func (c Checker) isMoveToEat(desk *Field, from, to Coordinate) (bool, Coordinate
 
 	if (to.X-from.X == 2 || to.X-from.X == -2) &&
 		(to.Y-from.Y == 2 || to.Y-from.Y == -2) {
-		if desk.IsFree(to) && !desk.IsFree(foodPosition) {
+		if desk.IsAvailable(to) && !desk.IsAvailable(foodPosition) {
 			food := desk.At(foodPosition)
 			if food.GetOwnerId() != c.GetOwnerId() {
 				return true, foodPosition

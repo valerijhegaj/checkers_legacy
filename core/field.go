@@ -1,6 +1,5 @@
 package core
 
-// non sync
 type Field struct {
 	Figures      map[Coordinate]Figure
 	Bin          []Figure
@@ -17,7 +16,7 @@ func (c *Field) InBorders(coordinate Coordinate) bool {
 		coordinate.X >= c.BordersLeft.X && coordinate.Y >= c.BordersLeft.Y
 }
 
-func (c *Field) IsFree(coordinate Coordinate) bool {
+func (c *Field) IsAvailable(coordinate Coordinate) bool {
 	_, ok := c.Figures[coordinate]
 	return !ok && c.InBorders(coordinate)
 }
@@ -31,7 +30,7 @@ func (c *Field) At(coordinate Coordinate) Figure {
 }
 
 func (c *Field) Move(prev Coordinate, next Coordinate) {
-	if !c.IsFree(prev) {
+	if !c.IsAvailable(prev) {
 		c.Figures[next] = c.Figures[prev]
 		delete(c.Figures, prev)
 	}
@@ -48,10 +47,6 @@ func (c *Field) RemoveWithOutBin(ptr Coordinate) {
 
 func (c *Field) Put(ptr Coordinate, figure Figure) {
 	c.Figures[ptr] = figure
-}
-
-func (c *Field) GetBin() []Figure {
-	return c.Bin
 }
 
 func (c *Field) GetCopy() Field {

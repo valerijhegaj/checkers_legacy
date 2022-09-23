@@ -49,7 +49,7 @@ func (c *Save) putFiguresOnField(figures []figureInfo) {
 }
 
 func (c *Save) InitFromJsonSave(jsonSave *JsonSave) {
-	c.Field.Figures = make(map[core.Coordinate]core.Figure)
+	c.Field.Init()
 	c.putFiguresOnField(jsonSave.Figures)
 	c.Field.BordersRight = jsonSave.BordersRight
 	c.Field.BordersLeft = jsonSave.BordersLeft
