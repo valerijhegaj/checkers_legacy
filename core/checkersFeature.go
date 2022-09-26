@@ -1,12 +1,7 @@
 package core
 
 type checkersFeature struct {
-	desk        *Field
-	GamerEaters []int
-}
-
-func (c checkersFeature) Init() {
-	c.GamerEaters = make([]int, 2)
+	desk *Field
 }
 
 func (c checkersFeature) CheckMove(from, to Coordinate, gamerId int) bool {
