@@ -76,11 +76,23 @@ func (c gameScreen) makeMove(gamer gamer.Gamer, from core.Coordinate, to []core.
 	}
 }
 
+func InitFromString(coordinate string) core.Coordinate {
+	var c core.Coordinate
+	c.X = int(coordinate[1] - '1')
+	c.Y = int(coordinate[0] - 'a')
+	return c
+}
+
 func (c gameScreen) getMove() (core.Coordinate, []core.Coordinate) {
 	var input string
+
 	c.interactor.mutex.Lock()
 	fmt.Scanln(&input)
 	c.interactor.mutex.Unlock()
+
+	if len(input)%2 != 0 {
+		return core.Coordinate{0, 0}, []core.Coordinate{{0, 0}}
+	}
 
 	var coordinates []string
 	for i := 0; i < len(input); i += 2 {
@@ -90,14 +102,11 @@ func (c gameScreen) getMove() (core.Coordinate, []core.Coordinate) {
 	var from core.Coordinate
 	var to []core.Coordinate
 
-	from.InitFromString(coordinates[0])
 	for i, coordinate := range coordinates {
 		if i == 0 {
-			from.InitFromString(coordinate)
+			from = InitFromString(coordinate)
 		} else {
-			var loacalTo core.Coordinate
-			loacalTo.InitFromString(coordinate)
-			to = append(to, loacalTo)
+			to = append(to, InitFromString(coordinate))
 		}
 	}
 
@@ -106,15 +115,15 @@ func (c gameScreen) getMove() (core.Coordinate, []core.Coordinate) {
 
 func (c gameScreen) Resume() {
 	if c.interactor.gamer0.IsTurn() {
-		c.routine(c.interactor.Master.Gamer0, c.interactor.gamer0, c.interactor.bot0)
+		c.routine(c.interactor.Participants.Gamer0, c.interactor.gamer0, c.interactor.bot0)
 	} else {
-		c.routine(c.interactor.Master.Gamer1, c.interactor.gamer1, c.interactor.bot1)
+		c.routine(c.interactor.Participants.Gamer1, c.interactor.gamer1, c.interactor.bot1)
 	}
 }
 
 func (c gameScreen) routine(master int, gamer gamer.Gamer, bot gamer.Bot) {
 	if master == saveLoad.Bot {
-		bot.Move(gamer)
+		bot.Move(gamer) //not implemented
 	} else {
 		command := c.interactor.GetCommand(c.parse)
 		c.interactor.switchCommander(command, c)

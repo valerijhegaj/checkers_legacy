@@ -12,7 +12,7 @@ const (
 	Bot
 )
 
-type Master struct {
+type Participants struct {
 	Gamer0 int `json:"gamer0"`
 	Gamer1 int `json:"gamer1"`
 }
@@ -24,7 +24,7 @@ func GetSaveList(path string) ([]string, error) {
 		return saveList, err
 	}
 	for _, file := range files {
-		if !file.IsDir() {
+		if !file.IsDir() && file.Name() != ".gitignore" {
 			saveList = append(saveList, file.Name())
 		}
 	}
@@ -34,7 +34,7 @@ func GetSaveList(path string) ([]string, error) {
 
 type Save struct {
 	Field       core.Field
-	Master      Master
+	Master      Participants
 	TurnGamerId int
 }
 
@@ -48,7 +48,7 @@ func (c *Save) putFiguresOnField(figures []figureInfo) {
 	}
 }
 
-func (c *Save) InitFromJsonSave(jsonSave *JsonSave) {
+func (c *Save) initFromJsonSave(jsonSave *jsonSave) {
 	c.Field.Init()
 	c.putFiguresOnField(jsonSave.Figures)
 	c.Field.BordersRight = jsonSave.BordersRight
@@ -58,14 +58,14 @@ func (c *Save) InitFromJsonSave(jsonSave *JsonSave) {
 }
 
 func (c *Save) Read(path string) error {
-	var helper JsonSave
-	err := helper.Read(path)
-	c.InitFromJsonSave(&helper)
+	var helper jsonSave
+	err := helper.read(path)
+	c.initFromJsonSave(&helper)
 	return err
 }
 
 func (c *Save) Write(path string) error {
-	var helper JsonSave
+	var helper jsonSave
 	helper.initFromSave(c)
 	return helper.write(path)
 }
@@ -77,16 +77,16 @@ type figureInfo struct {
 	GamerId int    `json:"gamerId"`
 }
 
-type JsonSave struct {
+type jsonSave struct {
 	Figures      []figureInfo    `json:"figures"`
 	BordersRight core.Coordinate `json:"bordersRight"`
 	BordersLeft  core.Coordinate `json:"bordersLeft"`
-	Position     Master          `json:"position"`
+	Position     Participants    `json:"position"`
 	TurnGamerId  int             `json:"turnGamerId"`
 }
 
 // warning reflect.TypeOf(figure).String()[5:] can don't work with other names and struct of project
-func (c *JsonSave) takeFiguresFromField(field core.Field) {
+func (c *jsonSave) takeFiguresFromField(field core.Field) {
 	c.Figures = make([]figureInfo, len(field.Figures))
 	i := 0
 	for coordinate, figure := range field.Figures {
@@ -98,7 +98,7 @@ func (c *JsonSave) takeFiguresFromField(field core.Field) {
 	}
 }
 
-func (c *JsonSave) initFromSave(save *Save) {
+func (c *jsonSave) initFromSave(save *Save) {
 	c.Position = save.Master
 	c.TurnGamerId = save.TurnGamerId
 	c.BordersRight = save.Field.BordersRight
@@ -106,7 +106,7 @@ func (c *JsonSave) initFromSave(save *Save) {
 	c.takeFiguresFromField(save.Field)
 }
 
-func (c *JsonSave) write(path string) error {
+func (c *jsonSave) write(path string) error {
 	rawSave, err := json.Marshal(c)
 	if err != nil {
 		return err
@@ -115,7 +115,7 @@ func (c *JsonSave) write(path string) error {
 	return err
 }
 
-func (c *JsonSave) Read(path string) error {
+func (c *jsonSave) read(path string) error {
 	rawSave, err := ioutil.ReadFile(path)
 	if err != nil {
 		return err

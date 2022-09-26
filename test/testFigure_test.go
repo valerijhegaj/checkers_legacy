@@ -1,10 +1,12 @@
-package core
+package test
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestTest_figure_GetOwnerId(t *testing.T) {
 	test := func(ownerId int) {
-		figure := test_figure{ownerId}
+		figure := Test_figure{ownerId}
 
 		got := figure.GetOwnerId()
 		if got != ownerId {

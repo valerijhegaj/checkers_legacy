@@ -8,7 +8,7 @@ func (c Checker) GetOwnerId() int {
 	return c.OwnerId
 }
 
-func (c Checker) Move(desk *Field, from Coordinate, newPosition []Coordinate) (bool, Coordinate) {
+func (c Checker) Move(desk *Field, from Coordinate, way []Coordinate) (bool, Coordinate) {
 	var isCanBeMoved bool
 	var foodPosition Coordinate
 
@@ -17,7 +17,7 @@ func (c Checker) Move(desk *Field, from Coordinate, newPosition []Coordinate) (b
 		vertical = desk.BordersLeft.X
 	}
 
-	for i, to := range newPosition {
+	for i, to := range way {
 		isCanBeMoved, foodPosition = c.isMoveToEat(desk, from, to)
 		if i == 0 {
 			if c.isMoveWithoutEat(desk, from, to) {
@@ -42,7 +42,7 @@ func (c Checker) Move(desk *Field, from Coordinate, newPosition []Coordinate) (b
 			desk.RemoveWithOutBin(to)
 			king := King{c.OwnerId}
 			desk.Put(to, king)
-			return king.moveOnlyToEat(desk, to, newPosition[i+1:])
+			return king.moveOnlyToEat(desk, to, way[i+1:])
 		}
 	}
 
@@ -50,10 +50,11 @@ func (c Checker) Move(desk *Field, from Coordinate, newPosition []Coordinate) (b
 
 }
 
-func (c Checker) IsMoveOne(desk *Field, from, to Coordinate) bool {
+func (c Checker) IsMoveOne(desk *Field, from, to Coordinate) (bool, Coordinate) {
 	var isMoveWithFood bool
-	isMoveWithFood, _ = c.isMoveToEat(desk, from, to)
-	return isMoveWithFood || c.isMoveWithoutEat(desk, from, to)
+	var foodPosition Coordinate
+	isMoveWithFood, foodPosition = c.isMoveToEat(desk, from, to)
+	return isMoveWithFood || c.isMoveWithoutEat(desk, from, to), foodPosition
 }
 
 func (c Checker) isMoveWithoutEat(desk *Field, from, to Coordinate) bool {
@@ -85,5 +86,5 @@ func (c Checker) isMoveToEat(desk *Field, from, to Coordinate) (bool, Coordinate
 		}
 	}
 
-	return false, foodPosition
+	return false, desk.BordersLeft
 }

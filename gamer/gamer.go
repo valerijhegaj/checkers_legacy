@@ -18,8 +18,8 @@ func (c Gamer) IsTurn() bool {
 	return c.Core.IsTurn(c.GamerId)
 }
 
-func (c Gamer) Move(from core.Coordinate, to []core.Coordinate) bool {
-	return c.Core.Move(from, to, c.GamerId)
+func (c Gamer) Move(from core.Coordinate, way []core.Coordinate) bool {
+	return c.Core.Move(from, way, c.GamerId)
 }
 
 func (c Gamer) InitSave(save saveLoad.Save) {

@@ -29,10 +29,10 @@ func (c *Field) At(coordinate Coordinate) Figure {
 	return nil
 }
 
-func (c *Field) Move(prev Coordinate, next Coordinate) {
-	if !c.IsAvailable(prev) {
-		c.Figures[next] = c.Figures[prev]
-		delete(c.Figures, prev)
+func (c *Field) Move(from Coordinate, to Coordinate) {
+	if !c.IsAvailable(from) {
+		c.Figures[to] = c.Figures[from]
+		delete(c.Figures, from)
 	}
 }
 

@@ -14,24 +14,32 @@ func (c GameCore) IsTurn(gamerId int) bool {
 	return gamerId == c.turnGamerId
 }
 
-func (c *GameCore) Move(from Coordinate, to []Coordinate, gamerId int) bool {
+func (c *GameCore) Move(from Coordinate, way []Coordinate, gamerId int) bool {
+	if gamerId != c.turnGamerId {
+		return false
+	}
 	figure := c.field.At(from)
 	if figure == nil {
 		return false
 	}
-	if figure.GetOwnerId() != gamerId {
+	if figure.GetOwnerId() != c.turnGamerId {
 		return false
 	}
-	sucсeess, _ := figure.Move(&c.field, from, to)
+	if !c.checkersFeature.CheckMove(from, way[0], gamerId) {
+		return false
+	}
+
+	sucсeess, to := figure.Move(&c.field, from, way)
 	if sucсeess {
-		c.turnGamerId += 1
-		c.turnGamerId %= 2
+		c.checkersFeature.MadeMove(from, to, gamerId)
+		c.turnGamerId ^= 1
 	}
 	return sucсeess
 }
 
 func (c *GameCore) InitField(field Field) {
 	c.field = field
+	c.checkersFeature.desk = &field
 }
 
 func (c *GameCore) InitTurnGamerId(turnGamerId int) {
