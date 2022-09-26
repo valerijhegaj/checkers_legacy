@@ -43,8 +43,8 @@ func (c startGameScreen) parse(command string) int {
 	return parseBasic(command)
 }
 
-func (c startGameScreen) getMaster() saveLoad.Master {
-	var master saveLoad.Master
+func (c startGameScreen) getMaster() saveLoad.Participants {
+	var master saveLoad.Participants
 	var name string
 	c.interactor.mutex.Lock()
 	fmt.Scan(&name)

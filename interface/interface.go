@@ -44,8 +44,8 @@ type Interface struct {
 
 	status int
 
-	exiter chan int
-	Master saveLoad.Master
+	exiter       chan int
+	Participants saveLoad.Participants
 
 	mutex sync.Mutex
 }
@@ -103,14 +103,14 @@ func (c *Interface) GetCommand(parse func(string) int) int {
 
 func (c *Interface) initSave(save saveLoad.Save) {
 	c.gamer0.InitSave(save)
-	c.Master = save.Master
+	c.Participants = save.Master
 }
 
 func (c *Interface) CreateSave() saveLoad.Save {
 	var save saveLoad.Save
 
 	save.Field = c.gamer0.GetField()
-	save.Master = c.Master
+	save.Master = c.Participants
 	if c.gamer0.IsTurn() {
 		save.TurnGamerId = 0
 	} else {
