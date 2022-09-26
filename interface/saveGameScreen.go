@@ -24,7 +24,8 @@ func (c saveGameScreen) Display() {
 func (c saveGameScreen) DisplayHelp() {
 	fmt.Println("save")
 	displayHelpBasic()
-	fmt.Println("path - print path where you want to save (game see saves only from saves)")
+	fmt.Println("path/name.json - print path where you want to save (game see saves only from saves)," +
+		" to see them from load/save display you should save saves/name.json")
 	go c.Resume()
 }
 
