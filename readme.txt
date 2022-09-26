@@ -13,6 +13,11 @@ go run main.go
 windows:
 don't support
 
+v0.3
+Unstable version, may behave strangely, crash
+- fixed critical bugs in moves
+- mandatory eating if possible
+
 v0.2
 Unstable version, may behave strangely, crash
 new
