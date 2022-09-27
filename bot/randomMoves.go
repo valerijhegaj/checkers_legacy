@@ -16,6 +16,9 @@ func (c RandomMoves) analyzeField(field *core.Field, gamerId int) (core.Coordina
 		if figure == nil {
 			continue
 		}
+		if figure.GetOwnerId() != gamerId {
+			continue
+		}
 		moves := figure.GetAvailableMoves(field, from)
 		if moves == nil {
 			continue
