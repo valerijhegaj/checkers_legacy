@@ -1,6 +1,7 @@
 package _interface
 
 import (
+	"chekers/bot"
 	"chekers/core"
 	"chekers/gamer"
 	"chekers/saveLoad"
@@ -150,9 +151,10 @@ func (c gameScreen) Resume() {
 	}
 }
 
-func (c gameScreen) routine(master int, gamer gamer.Gamer, bot gamer.Bot) {
+func (c gameScreen) routine(master int, gamer gamer.Gamer, bot bot.Bot) {
 	if master == saveLoad.Bot {
-		bot.Move(gamer) //not implemented
+		bot.Move(gamer)
+		c.interactor.switchCommander(game, c)
 	} else {
 		command := c.interactor.GetCommand(c.parse)
 		c.interactor.switchCommander(command, c)

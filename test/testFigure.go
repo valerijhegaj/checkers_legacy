@@ -17,3 +17,7 @@ func (c Test_figure) Move(desk *core.Field, from core.Coordinate, way []core.Coo
 func (c Test_figure) IsMoveOne(desk *core.Field, from, to core.Coordinate) (bool, core.Coordinate) {
 	return false, desk.BordersLeft
 }
+
+func (c Test_figure) GetAvailableMoves(desk *core.Field, from core.Coordinate) []core.Coordinate {
+	return nil
+}

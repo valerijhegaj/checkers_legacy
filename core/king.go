@@ -4,6 +4,26 @@ type King struct {
 	OwnerId int
 }
 
+func (c King) GetAvailableMoves(desk *Field, from Coordinate) []Coordinate {
+	var moves []Coordinate
+	addMoves := func(dx, dy int, checker func(field *Field, from, to Coordinate) (bool, Coordinate)) {
+		move := Coordinate{from.X + dx, from.Y + dy}
+		for ; desk.InBorders(move); move.X, move.Y = move.X+1, move.Y+1 {
+			isMove, _ := checker(desk, from, move)
+			if isMove {
+				moves = append(moves, move)
+			}
+		}
+	}
+
+	addMoves(1, 1, c.IsMoveOne)
+	addMoves(1, -1, c.IsMoveOne)
+	addMoves(-1, 1, c.IsMoveOne)
+	addMoves(-1, -1, c.IsMoveOne)
+
+	return moves
+}
+
 func (c King) GetOwnerId() int {
 	return c.OwnerId
 }
