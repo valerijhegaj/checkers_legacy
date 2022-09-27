@@ -17,27 +17,52 @@ func (c gameScreen) Display() {
 	colorRed := "\033[31m"
 
 	field := c.interactor.gamer0.GetField()
-	for x := field.BordersRight.X; x >= field.BordersLeft.X; x-- {
-		fmt.Print(x+1, " ")
-		for y := field.BordersLeft.Y; y <= field.BordersRight.Y; y++ {
-			figure := field.At(core.Coordinate{x, y})
-			if figure == nil {
-				fmt.Print("_ ")
-			} else if reflect.TypeOf(figure) == reflect.TypeOf(core.Checker{}) {
-				if figure.GetOwnerId() == 1 {
-					fmt.Print(colorRed, "O ", colorReset)
+	if c.interactor.gamer0.IsTurn() {
+		for x := field.BordersRight.X; x >= field.BordersLeft.X; x-- {
+			fmt.Print(x+1, " ")
+			for y := field.BordersLeft.Y; y <= field.BordersRight.Y; y++ {
+				figure := field.At(core.Coordinate{x, y})
+				if figure == nil {
+					fmt.Print("_ ")
+				} else if reflect.TypeOf(figure) == reflect.TypeOf(core.Checker{}) {
+					if figure.GetOwnerId() == 1 {
+						fmt.Print(colorRed, "O ", colorReset)
+					} else {
+						fmt.Print("O ")
+					}
 				} else {
-					fmt.Print("O ")
-				}
-			} else {
-				if figure.GetOwnerId() == 1 {
-					fmt.Print(colorRed, "K ", colorReset)
-				} else {
-					fmt.Print("K ")
+					if figure.GetOwnerId() == 1 {
+						fmt.Print(colorRed, "K ", colorReset)
+					} else {
+						fmt.Print("K ")
+					}
 				}
 			}
+			fmt.Println()
 		}
-		fmt.Println()
+	} else {
+		for x := field.BordersLeft.X; x <= field.BordersRight.X; x++ {
+			fmt.Print(8-x, " ")
+			for y := field.BordersRight.Y; y >= field.BordersLeft.Y; y-- {
+				figure := field.At(core.Coordinate{x, y})
+				if figure == nil {
+					fmt.Print("_ ")
+				} else if reflect.TypeOf(figure) == reflect.TypeOf(core.Checker{}) {
+					if figure.GetOwnerId() == 1 {
+						fmt.Print(colorRed, "O ", colorReset)
+					} else {
+						fmt.Print("O ")
+					}
+				} else {
+					if figure.GetOwnerId() == 1 {
+						fmt.Print(colorRed, "K ", colorReset)
+					} else {
+						fmt.Print("K ")
+					}
+				}
+			}
+			fmt.Println()
+		}
 	}
 	fmt.Print("  ")
 	for y := field.BordersLeft.Y; y <= field.BordersRight.Y; y++ {
@@ -76,10 +101,14 @@ func (c gameScreen) makeMove(gamer gamer.Gamer, from core.Coordinate, to []core.
 	}
 }
 
-func InitFromString(coordinate string) core.Coordinate {
+func InitFromString(coordinate string, interactor *Interface) core.Coordinate {
 	var c core.Coordinate
 	c.X = int(coordinate[1] - '1')
 	c.Y = int(coordinate[0] - 'a')
+	if interactor.gamer1.IsTurn() {
+		c.X = 7 - c.X
+		c.Y = 7 - c.Y
+	}
 	return c
 }
 
@@ -104,9 +133,9 @@ func (c gameScreen) getMove() (core.Coordinate, []core.Coordinate) {
 
 	for i, coordinate := range coordinates {
 		if i == 0 {
-			from = InitFromString(coordinate)
+			from = InitFromString(coordinate, c.interactor)
 		} else {
-			to = append(to, InitFromString(coordinate))
+			to = append(to, InitFromString(coordinate, c.interactor))
 		}
 	}
 
