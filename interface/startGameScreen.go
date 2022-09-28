@@ -60,6 +60,7 @@ func (c startGameScreen) getMaster() saveLoad.Participants {
 func (c startGameScreen) parseMasterOne(gamer, level *int, name string) {
 	if len(name) != 5 {
 		*gamer = saveLoad.Man
+		return
 	}
 	if name[:3] == "bot" || name[:3] == "Bot" {
 		*gamer = saveLoad.Bot
