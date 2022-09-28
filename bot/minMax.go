@@ -135,6 +135,7 @@ func (c *node) createChilds(n int, gamerId int) int {
 		min := math.MaxInt
 		for _, child := range c.childs {
 			min = int(math.Min(float64(child.createChilds(n-1, gamerId)), float64(min)))
+			child.childs = nil
 		}
 		c.score = min
 		return min
@@ -142,6 +143,7 @@ func (c *node) createChilds(n int, gamerId int) int {
 		max := math.MinInt
 		for _, child := range c.childs {
 			max = int(math.Max(float64(child.createChilds(n-1, gamerId)), float64(max)))
+			child.childs = nil
 		}
 		c.score = max
 		return max
