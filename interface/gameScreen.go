@@ -92,7 +92,7 @@ func (c gameScreen) makeMove(gamer gamer.Gamer, from core.Coordinate, to []core.
 	}
 }
 
-func InitFromString(coordinate string, interactor *Interface) core.Coordinate {
+func InitFromStringCoordinate(coordinate string, interactor *Interface) core.Coordinate {
 	var c core.Coordinate
 	c.X = int(coordinate[1] - '1')
 	c.Y = int(coordinate[0] - 'a')
@@ -101,6 +101,19 @@ func InitFromString(coordinate string, interactor *Interface) core.Coordinate {
 		c.Y = 7 - c.Y
 	}
 	return c
+}
+
+func ToStringCoordinate(c core.Coordinate, interactor *Interface) string {
+	ans := ""
+	if interactor.gamer1.IsTurn() {
+		ans += string(rune(7 - c.Y + 'a'))
+		ans += string(rune(7 - c.X + '1'))
+	} else {
+
+		ans += string(rune(c.Y + 'a'))
+		ans += string(rune(c.X + '1'))
+	}
+	return ans
 }
 
 func (c gameScreen) getMove() (core.Coordinate, []core.Coordinate) {
@@ -124,9 +137,9 @@ func (c gameScreen) getMove() (core.Coordinate, []core.Coordinate) {
 
 	for i, coordinate := range coordinates {
 		if i == 0 {
-			from = InitFromString(coordinate, c.interactor)
+			from = InitFromStringCoordinate(coordinate, c.interactor)
 		} else {
-			to = append(to, InitFromString(coordinate, c.interactor))
+			to = append(to, InitFromStringCoordinate(coordinate, c.interactor))
 		}
 	}
 
@@ -144,10 +157,19 @@ func (c gameScreen) Resume() {
 func (c gameScreen) routine(master int, gamer gamer.Gamer, bot bot.Bot) {
 	if master == saveLoad.Bot {
 		from, to := bot.Move(gamer)
-		fmt.Println(from, to)
+		c.print(from, to)
 		c.interactor.switchCommander(game, c)
 	} else {
 		command := c.interactor.GetCommand(c.parse)
 		c.interactor.switchCommander(command, c)
 	}
+}
+
+func (c gameScreen) print(from core.Coordinate, to []core.Coordinate) {
+	fmt.Print("from: ", ToStringCoordinate(from, c.interactor))
+	fmt.Print(" to: ")
+	for _, move := range to {
+		fmt.Print(ToStringCoordinate(move, c.interactor), " ")
+	}
+	fmt.Println()
 }
