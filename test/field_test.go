@@ -46,7 +46,7 @@ func TestField_InBorders(t *testing.T) {
 	}
 }
 
-func getTestField() core.Field {
+func createTestField() core.Field {
 	var field core.Field
 	field.Init()
 	field.BordersRight = core.Coordinate{7, 7}
@@ -56,9 +56,9 @@ func getTestField() core.Field {
 }
 
 func TestField_Put(t *testing.T) {
-	field := getTestField()
+	field := createTestField()
 	for i := 0; i < 3; i++ {
-		field.Put(core.Coordinate{i, i}, Test_figure{1})
+		field.Put(core.Coordinate{i, i}, TestFigure{1})
 		if len(field.Figures) != i+1 {
 			t.Error("can't put")
 		}
@@ -66,10 +66,10 @@ func TestField_Put(t *testing.T) {
 }
 
 func TestField_At(t *testing.T) {
-	field := getTestField()
+	field := createTestField()
 
-	field.Put(core.Coordinate{1, 1}, Test_figure{1})
-	field.Put(core.Coordinate{2, 2}, Test_figure{0})
+	field.Put(core.Coordinate{1, 1}, TestFigure{1})
+	field.Put(core.Coordinate{2, 2}, TestFigure{0})
 
 	figure := field.At(core.Coordinate{1, 1})
 	if figure == nil {
@@ -94,15 +94,15 @@ func TestField_At(t *testing.T) {
 }
 
 func TestField_IsAvailable(t *testing.T) {
-	field := getTestField()
+	field := createTestField()
 	if !field.IsAvailable(core.Coordinate{0, 0}) {
 		t.Error()
 	}
 	if field.IsAvailable(core.Coordinate{-1, 0}) {
 		t.Error()
 	}
-	field.Put(core.Coordinate{1, 1}, Test_figure{1})
-	field.Put(core.Coordinate{2, 2}, Test_figure{1})
+	field.Put(core.Coordinate{1, 1}, TestFigure{1})
+	field.Put(core.Coordinate{2, 2}, TestFigure{1})
 
 	if field.IsAvailable(core.Coordinate{1, 1}) {
 		t.Error()
@@ -122,8 +122,8 @@ func TestField_IsAvailable(t *testing.T) {
 }
 
 func TestField_Move(t *testing.T) {
-	field := getTestField()
-	field.Put(core.Coordinate{0, 0}, Test_figure{0})
+	field := createTestField()
+	field.Put(core.Coordinate{0, 0}, TestFigure{0})
 	field.Move(core.Coordinate{0, 0}, core.Coordinate{1, 1})
 
 	if field.At(core.Coordinate{0, 0}) != nil {
@@ -133,7 +133,7 @@ func TestField_Move(t *testing.T) {
 		t.Error()
 	} else if field.At(core.Coordinate{1, 1}).GetOwnerId() != 0 {
 		t.Error()
-	} else if reflect.TypeOf(field.At(core.Coordinate{1, 1})) != reflect.TypeOf(Test_figure{}) {
+	} else if reflect.TypeOf(field.At(core.Coordinate{1, 1})) != reflect.TypeOf(TestFigure{}) {
 		t.Error()
 	}
 
@@ -147,9 +147,9 @@ func TestField_Move(t *testing.T) {
 }
 
 func TestField_Remove(t *testing.T) {
-	field := getTestField()
+	field := createTestField()
 
-	field.Put(core.Coordinate{0, 0}, Test_figure{0})
+	field.Put(core.Coordinate{0, 0}, TestFigure{0})
 	field.Remove(core.Coordinate{0, 0})
 
 	if len(field.Bin) != 1 {
@@ -158,7 +158,7 @@ func TestField_Remove(t *testing.T) {
 	if field.Bin[0].GetOwnerId() != 0 {
 		t.Error()
 	}
-	if reflect.TypeOf(field.Bin[0]) != reflect.TypeOf(Test_figure{0}) {
+	if reflect.TypeOf(field.Bin[0]) != reflect.TypeOf(TestFigure{0}) {
 		t.Error()
 	}
 	if field.At(core.Coordinate{0, 0}) != nil {
@@ -167,9 +167,9 @@ func TestField_Remove(t *testing.T) {
 }
 
 func TestField_RemoveWithOutBin(t *testing.T) {
-	field := getTestField()
+	field := createTestField()
 
-	field.Put(core.Coordinate{0, 0}, Test_figure{0})
+	field.Put(core.Coordinate{0, 0}, TestFigure{0})
 	field.RemoveWithOutBin(core.Coordinate{0, 0})
 
 	if len(field.Bin) != 0 {
@@ -181,11 +181,11 @@ func TestField_RemoveWithOutBin(t *testing.T) {
 }
 
 func TestField_GetCopy(t *testing.T) {
-	field := getTestField()
-	field.Put(core.Coordinate{0, 0}, Test_figure{0})
+	field := createTestField()
+	field.Put(core.Coordinate{0, 0}, TestFigure{0})
 	copy := field.GetCopy()
 	field.Remove(core.Coordinate{0, 0})
-	field.Put(core.Coordinate{0, 1}, Test_figure{1})
+	field.Put(core.Coordinate{0, 1}, TestFigure{1})
 
 	if len(copy.Bin) == 1 {
 		t.Error()

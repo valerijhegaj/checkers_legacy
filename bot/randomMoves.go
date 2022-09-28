@@ -5,6 +5,10 @@ import (
 	"math/rand"
 )
 
+func CreateRandomMoves() RandomMoves {
+	return RandomMoves{psevdoRandom{}}
+}
+
 type RandomMoves struct {
 	Random
 }
@@ -37,12 +41,12 @@ type Random interface {
 	randn(n int) int
 }
 
-type PsevdoRandom struct{}
+type psevdoRandom struct{}
 
-func (c PsevdoRandom) randlr(l, r int) int {
+func (c psevdoRandom) randlr(l, r int) int {
 	return rand.Intn(r-l) + l
 }
 
-func (c PsevdoRandom) randn(n int) int {
+func (c psevdoRandom) randn(n int) int {
 	return rand.Intn(n)
 }

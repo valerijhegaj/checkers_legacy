@@ -14,7 +14,7 @@ func TestKing_GetOwnerId(t *testing.T) {
 }
 
 func TestKing_IsMoveOne(t *testing.T) {
-	field := getTestField()
+	field := createTestField()
 	king := core.King{0}
 	from := core.Coordinate{3, 3}
 	field.Put(from, king)
@@ -41,7 +41,7 @@ func TestKing_IsMoveOne(t *testing.T) {
 }
 
 func TestKing_Move_WithoutFood(t *testing.T) {
-	field := getTestField()
+	field := createTestField()
 	king := core.King{0}
 	from := core.Coordinate{3, 3}
 	field.Put(from, king)
@@ -129,7 +129,7 @@ func TestKing_Move_WithFood(t *testing.T) {
 
 	for x := 1; x < 8; x += 2 {
 		for y := 1; y < 8; y += 2 {
-			grandField.Put(core.Coordinate{x, y}, Test_figure{1})
+			grandField.Put(core.Coordinate{x, y}, TestFigure{1})
 		}
 	}
 
@@ -285,8 +285,8 @@ func TestKing_Move_WithFood(t *testing.T) {
 		true, core.Coordinate{0, 8},
 		"19")
 
-	field := getTestField()
-	field.Put(core.Coordinate{3, 3}, Test_figure{1})
+	field := createTestField()
+	field.Put(core.Coordinate{3, 3}, TestFigure{1})
 
 	testFigure_Move(t,
 		core.King{0}, core.King{0},
@@ -346,9 +346,9 @@ func TestKing_Move_WithFood(t *testing.T) {
 		true, core.Coordinate{2, 2},
 		"phantom move after move without food")
 
-	field = getTestField()
-	field.Put(core.Coordinate{3, 3}, Test_figure{0})
-	field.Put(core.Coordinate{5, 3}, Test_figure{0})
+	field = createTestField()
+	field.Put(core.Coordinate{3, 3}, TestFigure{0})
+	field.Put(core.Coordinate{5, 3}, TestFigure{0})
 
 	testFigure_Move(t,
 		core.King{0}, core.King{0},
@@ -364,4 +364,38 @@ func TestKing_Move_WithFood(t *testing.T) {
 		map[core.Coordinate]bool{},
 		false, core.Coordinate{0, 0},
 		"eat friends")
+}
+
+func TestKing_GetAvailableMoves(t *testing.T) {
+	field := createTestField()
+	field.Put(core.Coordinate{3, 3}, core.King{0})
+	field.Put(core.Coordinate{6, 6}, TestFigure{1})
+	field.Put(core.Coordinate{2, 2}, TestFigure{1})
+	field.Put(core.Coordinate{4, 2}, TestFigure{0})
+
+	figure := field.At(core.Coordinate{3, 3})
+	test := func(
+		get func(field2 *core.Field,
+			coordinate core.Coordinate) []core.Coordinate,
+		realMoves map[core.Coordinate]bool) {
+		moves := get(&field, core.Coordinate{3, 3})
+
+		for _, ptr := range moves {
+			if !realMoves[ptr] {
+				t.Error("in moves extra move:", ptr)
+			}
+			delete(realMoves, ptr)
+		}
+		for key, _ := range realMoves {
+			t.Error("in moves expected:", key, ", but didn't state")
+		}
+	}
+
+	realMoves := map[core.Coordinate]bool{{4, 4}: true, {5, 5}: true,
+		{7, 7}: true, {2, 4}: true, {1, 5}: true,
+		{0, 6}: true, {1, 1}: true, {0, 0}: true}
+	test(figure.GetAvailableMoves, realMoves)
+	realMoves = map[core.Coordinate]bool{{7, 7}: true, {1, 1}: true,
+		{0, 0}: true}
+	test(figure.GetAvailableMovesToEat, realMoves)
 }

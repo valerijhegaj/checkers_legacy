@@ -18,26 +18,31 @@ func (c gameScreen) Display() {
 	colorRed := "\033[31m"
 
 	field := c.interactor.gamer0.GetField()
+
+	printFigureCorrect := func(x, y int) {
+		figure := field.At(core.Coordinate{x, y})
+		if figure == nil {
+			fmt.Print("_ ")
+		} else if reflect.TypeOf(figure) == reflect.TypeOf(core.Checker{}) {
+			if figure.GetOwnerId() == 1 {
+				fmt.Print(colorRed, "O ", colorReset)
+			} else {
+				fmt.Print("O ")
+			}
+		} else {
+			if figure.GetOwnerId() == 1 {
+				fmt.Print(colorRed, "K ", colorReset)
+			} else {
+				fmt.Print("K ")
+			}
+		}
+	}
+
 	if c.interactor.gamer0.IsTurn() {
 		for x := field.BordersRight.X; x >= field.BordersLeft.X; x-- {
 			fmt.Print(x+1, " ")
 			for y := field.BordersLeft.Y; y <= field.BordersRight.Y; y++ {
-				figure := field.At(core.Coordinate{x, y})
-				if figure == nil {
-					fmt.Print("_ ")
-				} else if reflect.TypeOf(figure) == reflect.TypeOf(core.Checker{}) {
-					if figure.GetOwnerId() == 1 {
-						fmt.Print(colorRed, "O ", colorReset)
-					} else {
-						fmt.Print("O ")
-					}
-				} else {
-					if figure.GetOwnerId() == 1 {
-						fmt.Print(colorRed, "K ", colorReset)
-					} else {
-						fmt.Print("K ")
-					}
-				}
+				printFigureCorrect(x, y)
 			}
 			fmt.Println()
 		}
@@ -45,22 +50,7 @@ func (c gameScreen) Display() {
 		for x := field.BordersLeft.X; x <= field.BordersRight.X; x++ {
 			fmt.Print(8-x, " ")
 			for y := field.BordersRight.Y; y >= field.BordersLeft.Y; y-- {
-				figure := field.At(core.Coordinate{x, y})
-				if figure == nil {
-					fmt.Print("_ ")
-				} else if reflect.TypeOf(figure) == reflect.TypeOf(core.Checker{}) {
-					if figure.GetOwnerId() == 1 {
-						fmt.Print(colorRed, "O ", colorReset)
-					} else {
-						fmt.Print("O ")
-					}
-				} else {
-					if figure.GetOwnerId() == 1 {
-						fmt.Print(colorRed, "K ", colorReset)
-					} else {
-						fmt.Print("K ")
-					}
-				}
+				printFigureCorrect(x, y)
 			}
 			fmt.Println()
 		}
@@ -153,7 +143,8 @@ func (c gameScreen) Resume() {
 
 func (c gameScreen) routine(master int, gamer gamer.Gamer, bot bot.Bot) {
 	if master == saveLoad.Bot {
-		bot.Move(gamer)
+		from, to := bot.Move(gamer)
+		fmt.Println(from, to)
 		c.interactor.switchCommander(game, c)
 	} else {
 		command := c.interactor.GetCommand(c.parse)

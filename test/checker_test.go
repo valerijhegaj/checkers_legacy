@@ -14,7 +14,7 @@ func TestChecker_GetOwnerId(t *testing.T) {
 }
 
 func TestChecker_IsMoveOne0(t *testing.T) {
-	field := getTestField()
+	field := createTestField()
 	checker := core.Checker{0}
 	from := core.Coordinate{3, 3}
 	field.Put(from, checker)
@@ -56,7 +56,7 @@ func TestChecker_IsMoveOne0(t *testing.T) {
 }
 
 func TestChecker_IsMoveOne1(t *testing.T) {
-	field := getTestField()
+	field := createTestField()
 	checker := core.Checker{1}
 	from := core.Coordinate{3, 3}
 	field.Put(from, checker)
@@ -110,13 +110,13 @@ func TestChecker_Move(t *testing.T) {
 
 	for x := 1; x < 8; x += 2 {
 		for y := 1; y < 8; y += 2 {
-			grandField0.Put(core.Coordinate{x, y}, Test_figure{0})
+			grandField0.Put(core.Coordinate{x, y}, TestFigure{0})
 		}
 	}
 
 	for x := 1; x < 8; x += 2 {
 		for y := 1; y < 8; y += 2 {
-			grandField1.Put(core.Coordinate{x, y}, Test_figure{1})
+			grandField1.Put(core.Coordinate{x, y}, TestFigure{1})
 		}
 	}
 

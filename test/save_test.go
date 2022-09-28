@@ -10,7 +10,7 @@ package test
 //
 //func getTestSave() saveLoad.Save {
 //	var save saveLoad.Save
-//	save.Field = getTestField()
+//	save.Field = createTestField()
 //	save.Field.Put(core.Coordinate{1, 2}, core.Checker{1})
 //	save.Field.Put(core.Coordinate{2, 3}, core.King{1})
 //	save.Field.Put(core.Coordinate{3, 4}, core.Checker{0})

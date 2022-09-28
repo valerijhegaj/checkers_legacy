@@ -6,7 +6,7 @@ import (
 
 func TestTest_figure_GetOwnerId(t *testing.T) {
 	test := func(ownerId int) {
-		figure := Test_figure{ownerId}
+		figure := TestFigure{ownerId}
 
 		got := figure.GetOwnerId()
 		if got != ownerId {

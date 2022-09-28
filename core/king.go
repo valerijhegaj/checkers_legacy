@@ -8,7 +8,7 @@ func (c King) GetAvailableMoves(desk *Field, from Coordinate) []Coordinate {
 	var moves []Coordinate
 	addMoves := func(dx, dy int, checker func(field *Field, from, to Coordinate) (bool, Coordinate)) {
 		move := Coordinate{from.X + dx, from.Y + dy}
-		for ; desk.InBorders(move); move.X, move.Y = move.X+1, move.Y+1 {
+		for ; desk.InBorders(move); move.X, move.Y = move.X+dx, move.Y+dy {
 			isMove, _ := checker(desk, from, move)
 			if isMove {
 				moves = append(moves, move)
@@ -20,6 +20,26 @@ func (c King) GetAvailableMoves(desk *Field, from Coordinate) []Coordinate {
 	addMoves(1, -1, c.IsMoveOne)
 	addMoves(-1, 1, c.IsMoveOne)
 	addMoves(-1, -1, c.IsMoveOne)
+
+	return moves
+}
+
+func (c King) GetAvailableMovesToEat(desk *Field, from Coordinate) []Coordinate {
+	var moves []Coordinate
+	addMoves := func(dx, dy int, checker func(field *Field, from, to Coordinate) (bool, Coordinate)) {
+		move := Coordinate{from.X + dx, from.Y + dy}
+		for ; desk.InBorders(move); move.X, move.Y = move.X+dx, move.Y+dy {
+			isMove, _ := checker(desk, from, move)
+			if isMove {
+				moves = append(moves, move)
+			}
+		}
+	}
+
+	addMoves(1, 1, c.isMoveOneToEat)
+	addMoves(1, -1, c.isMoveOneToEat)
+	addMoves(-1, 1, c.isMoveOneToEat)
+	addMoves(-1, -1, c.isMoveOneToEat)
 
 	return moves
 }
@@ -75,6 +95,11 @@ func (c King) moveOnlyToEat(desk *Field, from Coordinate, way []Coordinate) (boo
 func (c King) IsMoveOne(desk *Field, from, to Coordinate) (bool, Coordinate) {
 	ans, _, foodPosition := c.isMoveOne(desk, from, to)
 	return ans, foodPosition
+}
+
+func (c King) isMoveOneToEat(desk *Field, from, to Coordinate) (bool, Coordinate) {
+	_, isWasFood, foodPosition := c.isMoveOne(desk, from, to)
+	return isWasFood, foodPosition
 }
 
 func (c King) isMoveOne(desk *Field, from, to Coordinate) (bool, bool, Coordinate) {

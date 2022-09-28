@@ -6,4 +6,5 @@ type Figure interface {
 	Move(desk *Field, from Coordinate, way []Coordinate) (bool, Coordinate)
 	IsMoveOne(desk *Field, from, to Coordinate) (bool, Coordinate)
 	GetAvailableMoves(desk *Field, from Coordinate) []Coordinate
+	GetAvailableMovesToEat(desk *Field, from Coordinate) []Coordinate
 }

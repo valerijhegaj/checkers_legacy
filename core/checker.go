@@ -26,6 +26,24 @@ func (c Checker) GetAvailableMoves(desk *Field, from Coordinate) []Coordinate {
 	return moves
 }
 
+func (c Checker) GetAvailableMovesToEat(desk *Field, from Coordinate) []Coordinate {
+	var moves []Coordinate
+	addMove := func(dx, dy int, checker func(field *Field, from, to Coordinate) (bool, Coordinate)) {
+		move := Coordinate{from.X + dx, from.Y + dy}
+		isMove, _ := checker(desk, from, move)
+		if isMove {
+			moves = append(moves, move)
+		}
+	}
+
+	addMove(2, 2, c.isMoveToEat)
+	addMove(-2, 2, c.isMoveToEat)
+	addMove(2, -2, c.isMoveToEat)
+	addMove(-2, -2, c.isMoveToEat)
+
+	return moves
+}
+
 func (c Checker) GetOwnerId() int {
 	return c.OwnerId
 }

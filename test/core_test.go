@@ -8,7 +8,7 @@ import (
 
 func getTestCore() core.GameCore {
 	var Core core.GameCore
-	field := getTestField()
+	field := createTestField()
 	field.Put(core.Coordinate{4, 4}, core.Checker{1})
 	field.Put(core.Coordinate{1, 1}, core.Checker{0})
 	Core.InitTurnGamerId(1)
@@ -130,7 +130,7 @@ func TestChecker_MoveWithFeature1(t *testing.T) {
 
 func TestChecker_MoveWithFeature2(t *testing.T) {
 	var Core core.GameCore
-	field := getTestField()
+	field := createTestField()
 	field.Put(core.Coordinate{4, 1}, core.Checker{1})
 	field.Put(core.Coordinate{3, 2}, core.Checker{1})
 	field.Put(core.Coordinate{7, 3}, core.Checker{1})
