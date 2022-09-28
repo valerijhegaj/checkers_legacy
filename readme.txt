@@ -13,6 +13,10 @@ go run main.go
 windows:
 don't support
 
+v0.4
+may be stable version
+- bots (on 4 level can think about 1sec if a lot of king, 2-5 sec, don't start on higher levels)
+
 v0.3
 Unstable version, may behave strangely, crash
 - fixed critical bugs in moves

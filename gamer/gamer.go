@@ -26,10 +26,3 @@ func (c Gamer) InitSave(save saveLoad.Save) {
 	c.Core.InitField(save.Field)
 	c.Core.InitTurnGamerId(save.TurnGamerId)
 }
-
-type Bot struct {
-}
-
-func (c Bot) Move(gamer Gamer) {
-	//not implemented
-}

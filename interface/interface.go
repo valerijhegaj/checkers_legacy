@@ -1,6 +1,7 @@
 package _interface
 
 import (
+	"chekers/bot"
 	"chekers/core"
 	"chekers/gamer"
 	"chekers/saveLoad"
@@ -32,8 +33,8 @@ const (
 type Interface struct {
 	gamer0 gamer.Gamer
 	gamer1 gamer.Gamer
-	bot0   gamer.Bot
-	bot1   gamer.Bot
+	bot0   bot.Bot
+	bot1   bot.Bot
 
 	mainMenuScreen
 	startGameScreen
@@ -82,6 +83,8 @@ func (c *Interface) Init(exiter chan int, core core.GameCore) {
 	c.gamer0 = gamer.Gamer{0, &core}
 	c.gamer1 = gamer.Gamer{1, &core}
 	c.status = mainMenu
+	c.bot0 = bot.CreateBot(0)
+	c.bot1 = bot.CreateBot(0)
 
 	c.mainMenuScreen.interactor = c
 	c.startGameScreen.interactor = c
@@ -104,6 +107,8 @@ func (c *Interface) GetCommand(parse func(string) int) int {
 func (c *Interface) initSave(save saveLoad.Save) {
 	c.gamer0.InitSave(save)
 	c.Participants = save.Master
+	c.bot0 = bot.CreateBot(save.Master.Level0)
+	c.bot1 = bot.CreateBot(save.Master.Level1)
 }
 
 func (c *Interface) CreateSave() saveLoad.Save {

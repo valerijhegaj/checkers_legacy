@@ -2,18 +2,26 @@ package test
 
 import "chekers/core"
 
-type Test_figure struct {
+type TestFigure struct {
 	OwnerId int
 }
 
-func (c Test_figure) GetOwnerId() int {
+func (c TestFigure) GetOwnerId() int {
 	return c.OwnerId
 }
 
-func (c Test_figure) Move(desk *core.Field, from core.Coordinate, way []core.Coordinate) (bool, core.Coordinate) {
+func (c TestFigure) Move(desk *core.Field, from core.Coordinate, way []core.Coordinate) (bool, core.Coordinate) {
 	return false, from
 }
 
-func (c Test_figure) IsMoveOne(desk *core.Field, from, to core.Coordinate) (bool, core.Coordinate) {
+func (c TestFigure) IsMoveOne(desk *core.Field, from, to core.Coordinate) (bool, core.Coordinate) {
 	return false, desk.BordersLeft
+}
+
+func (c TestFigure) GetAvailableMoves(desk *core.Field, from core.Coordinate) []core.Coordinate {
+	return nil
+}
+
+func (c TestFigure) GetAvailableMovesToEat(ddesk *core.Field, from core.Coordinate) []core.Coordinate {
+	return nil
 }

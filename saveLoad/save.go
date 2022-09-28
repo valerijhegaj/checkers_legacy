@@ -14,7 +14,9 @@ const (
 
 type Participants struct {
 	Gamer0 int `json:"gamer0"`
+	Level0 int `json:"level0"`
 	Gamer1 int `json:"gamer1"`
+	Level1 int `json:"level1"`
 }
 
 func GetSaveList(path string) ([]string, error) {
