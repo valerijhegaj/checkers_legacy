@@ -13,6 +13,10 @@ go run main.go
 windows:
 don't support
 
+v0.4
+may be stable version
+- bots
+
 v0.3
 Unstable version, may behave strangely, crash
 - fixed critical bugs in moves
