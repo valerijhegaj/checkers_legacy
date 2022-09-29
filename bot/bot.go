@@ -5,7 +5,7 @@ import (
 	"chekers/gamer"
 )
 
-func CreateBot(level int) Bot {
+func NewBot(level int) Bot {
 	var bot Bot
 	if level == 0 {
 		bot.Analyzator = CreateRandomMoves()
