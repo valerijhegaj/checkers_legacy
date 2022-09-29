@@ -3,7 +3,6 @@ package bot
 import (
 	"chekers/core"
 	"math"
-	"runtime"
 )
 
 type minMax struct {
@@ -27,7 +26,6 @@ func (c minMax) analyzeField(field *core.Field, gamerId int) (core.Coordinate,
 	c.body.Build(c.level * 2)
 	from, way = c.body.GetBestMove()
 	c.body = tree{}
-	runtime.GC()
 	return from, way
 }
 
@@ -44,6 +42,14 @@ func (c *tree) GetBestMove() (core.Coordinate, []core.Coordinate) {
 		if i.score == c.root.score {
 			return i.from, i.way
 		}
+	}
+	return core.Coordinate{}, nil
+}
+
+func (c *tree) GetRandomMove(random Random) (core.Coordinate, []core.Coordinate) {
+	if len(c.root.childs) != 0 {
+		i := random.randn(len(c.root.childs))
+		return c.root.childs[i].from, c.root.childs[i].way
 	}
 	return core.Coordinate{}, nil
 }

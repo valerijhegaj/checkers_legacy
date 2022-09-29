@@ -6,6 +6,8 @@ import (
 	"chekers/gamer"
 	"chekers/saveLoad"
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/dialog"
+	"reflect"
 )
 
 const (
@@ -58,6 +60,23 @@ func (c *Interface) Begin(commander Commander) {
 	content := commander.GetContent()
 	(*c.w).SetContent(content)
 	(*c.w).Canvas().SetOnTypedKey(commander.KeyEventCallback)
+	if reflect.TypeOf(commander) == reflect.TypeOf(&Game{}) {
+		isEnd, winner := c.gamer[0].GetWinner()
+		if !isEnd {
+			commanderCope := Game{c}
+			defer commanderCope.Routine()
+			return
+		}
+
+		nullGamer := gamer.Gamer{0, nil}
+		if winner == c.gamer[0] {
+			dialog.ShowInformation("End game", "Blue win!!!", *c.w)
+		} else if winner == nullGamer {
+			dialog.ShowInformation("End game", "Draw :(", *c.w)
+		} else if winner == c.gamer[1] {
+			dialog.ShowInformation("End game", "Red win!!!", *c.w)
+		}
+	}
 }
 
 func (c Interface) Exit() {
@@ -90,5 +109,21 @@ func (c *Interface) Return() {
 		c.Begin(&c.MainMenu)
 	} else {
 		c.Begin(&c.Menu)
+	}
+}
+
+func (c *Interface) Move(from core.Coordinate, to []core.Coordinate) {
+	defer c.Begin(&c.Game)
+	if c.Participants.Gamer0 == saveLoad.Man {
+		if c.gamer[0].IsTurn() {
+			if c.gamer[0].Move(from, to) {
+				return
+			}
+		}
+	}
+	if c.Participants.Gamer1 == saveLoad.Man {
+		if c.gamer[0].IsTurn() {
+			c.gamer[0].Move(from, to)
+		}
 	}
 }

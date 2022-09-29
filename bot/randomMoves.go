@@ -6,30 +6,30 @@ import (
 )
 
 func CreateRandomMoves() RandomMoves {
-	return RandomMoves{psevdoRandom{}}
+	return RandomMoves{psevdoRandom{}, tree{}}
 }
 
 type RandomMoves struct {
 	Random
+	body tree
 }
 
 func (c RandomMoves) analyzeField(field *core.Field, gamerId int) (core.Coordinate, []core.Coordinate) {
-	for {
-		from := c.getRandomPosition(field.BordersLeft, field.BordersRight)
-		figure := field.At(from)
-		if figure == nil {
-			continue
-		}
-		if figure.GetOwnerId() != gamerId {
-			continue
-		}
-		moves := figure.GetAvailableMoves(field, from)
-		if moves == nil {
-			continue
-		}
-		to := moves[c.randn(len(moves))]
-		return from, []core.Coordinate{to}
-	}
+	var from core.Coordinate
+	var way []core.Coordinate
+	c.body = tree{
+		&node{
+			nil,
+			field.GetCopy(),
+			core.Coordinate{},
+			[]core.Coordinate{},
+			gamerId,
+			0}}
+
+	c.body.Build(2)
+	from, way = c.body.GetRandomMove(c.Random)
+	c.body = tree{}
+	return from, way
 }
 
 func (c RandomMoves) getRandomPosition(left, right core.Coordinate) core.Coordinate {
