@@ -40,6 +40,37 @@ type Save struct {
 	TurnGamerId int
 }
 
+func (c *Save) Create() {
+	c.Field.Init()
+	c.Field.Put(core.Coordinate{0, 0}, core.Checker{0})
+	c.Field.Put(core.Coordinate{0, 2}, core.Checker{0})
+	c.Field.Put(core.Coordinate{0, 4}, core.Checker{0})
+	c.Field.Put(core.Coordinate{0, 6}, core.Checker{0})
+	c.Field.Put(core.Coordinate{1, 1}, core.Checker{0})
+	c.Field.Put(core.Coordinate{1, 3}, core.Checker{0})
+	c.Field.Put(core.Coordinate{1, 5}, core.Checker{0})
+	c.Field.Put(core.Coordinate{1, 7}, core.Checker{0})
+	c.Field.Put(core.Coordinate{2, 0}, core.Checker{0})
+	c.Field.Put(core.Coordinate{2, 2}, core.Checker{0})
+	c.Field.Put(core.Coordinate{2, 4}, core.Checker{0})
+	c.Field.Put(core.Coordinate{2, 6}, core.Checker{0})
+
+	c.Field.Put(core.Coordinate{5, 1}, core.Checker{1})
+	c.Field.Put(core.Coordinate{5, 3}, core.Checker{1})
+	c.Field.Put(core.Coordinate{5, 5}, core.Checker{1})
+	c.Field.Put(core.Coordinate{5, 7}, core.Checker{1})
+	c.Field.Put(core.Coordinate{6, 0}, core.Checker{1})
+	c.Field.Put(core.Coordinate{6, 2}, core.Checker{1})
+	c.Field.Put(core.Coordinate{6, 4}, core.Checker{1})
+	c.Field.Put(core.Coordinate{6, 6}, core.Checker{1})
+	c.Field.Put(core.Coordinate{7, 1}, core.Checker{1})
+	c.Field.Put(core.Coordinate{7, 3}, core.Checker{1})
+	c.Field.Put(core.Coordinate{7, 5}, core.Checker{1})
+	c.Field.Put(core.Coordinate{7, 7}, core.Checker{1})
+
+	c.Field.BordersRight = core.Coordinate{7, 7}
+}
+
 func (c *Save) putFiguresOnField(figures []figureInfo) {
 	for _, i := range figures {
 		if i.Figure == "Checker" {
