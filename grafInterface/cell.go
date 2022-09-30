@@ -18,12 +18,10 @@ type Cell struct {
 }
 
 func (c Cell) Tapped(*fyne.PointEvent) {
-	fmt.Println("Tapped", c.ptr)
 	eventor.Tapped(c.ptr, c.interactor)
 }
 
 func (c Cell) TappedSecondary(*fyne.PointEvent) {
-	fmt.Println("Secondary")
 	eventor.TappedSecondary(c.ptr)
 }
 
@@ -37,17 +35,20 @@ type event struct {
 
 func (c *event) Tapped(coordinate core.Coordinate, interactor *Interface) {
 	if c.isNotEmptyFrom {
+		fmt.Println("to", coordinate)
 		c.to = append(c.to, coordinate)
 		interactor.Move(c.from, c.to)
 		c.to = nil
 		c.isNotEmptyFrom = false
 	} else {
+		fmt.Println("from", coordinate)
 		c.from = coordinate
 		c.isNotEmptyFrom = true
 	}
 }
 
 func (c *event) TappedSecondary(coordinate core.Coordinate) {
+	fmt.Println("way", coordinate)
 	if c.isNotEmptyFrom {
 		c.to = append(c.to, coordinate)
 	}

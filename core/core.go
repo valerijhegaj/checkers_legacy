@@ -18,7 +18,6 @@ func (c GameCore) IsTurn(gamerId int) bool {
 }
 
 func (c *GameCore) Move(from Coordinate, way []Coordinate, gamerId int) bool {
-	c.Mutex.Lock()
 	if gamerId != c.turnGamerId {
 		return false
 	}
@@ -38,7 +37,6 @@ func (c *GameCore) Move(from Coordinate, way []Coordinate, gamerId int) bool {
 		c.checkersFeature.MadeMove(from, to, gamerId)
 		c.turnGamerId ^= 1
 	}
-	c.Mutex.Unlock()
 	return sucсeess
 }
 

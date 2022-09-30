@@ -32,8 +32,6 @@ func (c Gamer) InitSave(save saveLoad.Save) {
 }
 
 func (c Gamer) GetWinner() (bool, Gamer) {
-	c.Core.Mutex.Lock()
-	defer c.Core.Mutex.Unlock()
 	field := c.GetField()
 	isCanMakeTurn0 := false
 	isCanMakeTurn1 := false

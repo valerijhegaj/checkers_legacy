@@ -116,14 +116,13 @@ func (c *Interface) Move(from core.Coordinate, to []core.Coordinate) {
 	defer c.Begin(&c.Game)
 	if c.Participants.Gamer0 == saveLoad.Man {
 		if c.gamer[0].IsTurn() {
-			if c.gamer[0].Move(from, to) {
-				return
-			}
+			c.gamer[0].Move(from, to)
+			return
 		}
 	}
 	if c.Participants.Gamer1 == saveLoad.Man {
-		if c.gamer[0].IsTurn() {
-			c.gamer[0].Move(from, to)
+		if c.gamer[1].IsTurn() {
+			c.gamer[1].Move(from, to)
 		}
 	}
 }
