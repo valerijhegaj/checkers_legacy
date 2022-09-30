@@ -41,34 +41,7 @@ type Save struct {
 }
 
 func (c *Save) Create() {
-	c.Field.Init()
-	c.Field.Put(core.Coordinate{0, 0}, core.Checker{0})
-	c.Field.Put(core.Coordinate{0, 2}, core.Checker{0})
-	c.Field.Put(core.Coordinate{0, 4}, core.Checker{0})
-	c.Field.Put(core.Coordinate{0, 6}, core.Checker{0})
-	c.Field.Put(core.Coordinate{1, 1}, core.Checker{0})
-	c.Field.Put(core.Coordinate{1, 3}, core.Checker{0})
-	c.Field.Put(core.Coordinate{1, 5}, core.Checker{0})
-	c.Field.Put(core.Coordinate{1, 7}, core.Checker{0})
-	c.Field.Put(core.Coordinate{2, 0}, core.Checker{0})
-	c.Field.Put(core.Coordinate{2, 2}, core.Checker{0})
-	c.Field.Put(core.Coordinate{2, 4}, core.Checker{0})
-	c.Field.Put(core.Coordinate{2, 6}, core.Checker{0})
-
-	c.Field.Put(core.Coordinate{5, 1}, core.Checker{1})
-	c.Field.Put(core.Coordinate{5, 3}, core.Checker{1})
-	c.Field.Put(core.Coordinate{5, 5}, core.Checker{1})
-	c.Field.Put(core.Coordinate{5, 7}, core.Checker{1})
-	c.Field.Put(core.Coordinate{6, 0}, core.Checker{1})
-	c.Field.Put(core.Coordinate{6, 2}, core.Checker{1})
-	c.Field.Put(core.Coordinate{6, 4}, core.Checker{1})
-	c.Field.Put(core.Coordinate{6, 6}, core.Checker{1})
-	c.Field.Put(core.Coordinate{7, 1}, core.Checker{1})
-	c.Field.Put(core.Coordinate{7, 3}, core.Checker{1})
-	c.Field.Put(core.Coordinate{7, 5}, core.Checker{1})
-	c.Field.Put(core.Coordinate{7, 7}, core.Checker{1})
-
-	c.Field.BordersRight = core.Coordinate{7, 7}
+	c.Field = core.NewStandart8x8Field()
 }
 
 func (c *Save) putFiguresOnField(figures []figureInfo) {
@@ -82,7 +55,7 @@ func (c *Save) putFiguresOnField(figures []figureInfo) {
 }
 
 func (c *Save) initFromJsonSave(jsonSave *jsonSave) {
-	c.Field.Init()
+	c.Field = core.NewField()
 	c.putFiguresOnField(jsonSave.Figures)
 	c.Field.BordersRight = jsonSave.BordersRight
 	c.Field.BordersLeft = jsonSave.BordersLeft

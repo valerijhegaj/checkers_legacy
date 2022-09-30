@@ -5,6 +5,7 @@ type Figure interface {
 	GetOwnerId() int
 	Move(desk *Field, from Coordinate, way []Coordinate) (bool, Coordinate)
 	IsMoveOne(desk *Field, from, to Coordinate) (bool, Coordinate)
+	//Without moves includes a lot of steps
 	GetAvailableMoves(desk *Field, from Coordinate) []Coordinate
 	GetAvailableMovesToEat(desk *Field, from Coordinate) []Coordinate
 }
