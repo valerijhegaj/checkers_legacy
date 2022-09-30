@@ -48,6 +48,8 @@ func (c *Interface) Init(a *fyne.App, w *fyne.Window, core *core.GameCore) {
 	c.bot[0] = bot.NewBot(3)
 	c.bot[1] = bot.NewBot(3)
 
+	(*w).SetIcon(resourceKingGamer1Png)
+
 	c.returnStatus = MainMenuStatus
 }
 
