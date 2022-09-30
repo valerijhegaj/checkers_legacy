@@ -1,16 +1,14 @@
-package test
+package core
 
 import (
-	"chekers/core"
-	"chekers/saveLoad"
 	"testing"
 )
 
-func getTestCore() core.GameCore {
-	var Core core.GameCore
-	field := createTestField()
-	field.Put(core.Coordinate{4, 4}, core.Checker{1})
-	field.Put(core.Coordinate{1, 1}, core.Checker{0})
+func getTestCore() GameCore {
+	var Core GameCore
+	field := NewTestField()
+	field.Put(Coordinate{4, 4}, Checker{1})
+	field.Put(Coordinate{1, 1}, Checker{0})
 	Core.InitTurnGamerId(1)
 	Core.InitField(field)
 	return Core
@@ -33,50 +31,45 @@ func TestGameCore_IsTurn(t *testing.T) {
 func TestGameCore_Move(t *testing.T) {
 	Core := getTestCore()
 
-	if Core.Move(core.Coordinate{1, 1}, []core.Coordinate{{2, 0}}, 1) {
+	if Core.Move(Coordinate{1, 1}, []Coordinate{{2, 0}}, 1) {
 		t.Error()
 	}
 	if !Core.IsTurn(1) {
 		t.Error()
 	}
 
-	if Core.Move(core.Coordinate{1, 1}, []core.Coordinate{{2, 0}}, 0) {
+	if Core.Move(Coordinate{1, 1}, []Coordinate{{2, 0}}, 0) {
 		t.Error()
 	}
 	if !Core.IsTurn(1) {
 		t.Error()
 	}
 
-	if Core.Move(core.Coordinate{4, 4}, []core.Coordinate{{5, 5}}, 1) {
+	if Core.Move(Coordinate{4, 4}, []Coordinate{{5, 5}}, 1) {
 		t.Error()
 	}
-	if !Core.Move(core.Coordinate{4, 4}, []core.Coordinate{{3, 3}}, 1) {
+	if !Core.Move(Coordinate{4, 4}, []Coordinate{{3, 3}}, 1) {
 		t.Error()
 	}
 	if Core.IsTurn(1) {
 		t.Error()
 	}
 
-	if !Core.Move(core.Coordinate{1, 1}, []core.Coordinate{{2, 2}}, 0) {
+	if !Core.Move(Coordinate{1, 1}, []Coordinate{{2, 2}}, 0) {
 		t.Error()
 	}
 }
 
 func TestChecker_MoveWithFeature1(t *testing.T) {
-	var Core core.GameCore
-	var save saveLoad.Save
-	err := save.Read("../startFields/start_field.json")
-	if err != nil {
-		t.Error(err.Error())
-	}
+	var Core GameCore
 
-	Core.InitField(save.Field)
+	Core.InitField(NewStandart8x8Field())
 	gamerId := 0
 	Core.InitTurnGamerId(gamerId)
 
 	testMove := func(move string, returnValue bool) {
-		ok := Core.Move(core.Coordinate{int(move[1] - '1'), int(move[0] - 'a')},
-			[]core.Coordinate{{int(move[3] - '1'), int(move[2] - 'a')}}, gamerId)
+		ok := Core.Move(Coordinate{int(move[1] - '1'), int(move[0] - 'a')},
+			[]Coordinate{{int(move[3] - '1'), int(move[2] - 'a')}}, gamerId)
 		if ok {
 			gamerId ^= 1
 		}
@@ -112,8 +105,8 @@ func TestChecker_MoveWithFeature1(t *testing.T) {
 	testMove("e7d6", true)
 	testMove("d2c3", true)
 	testMove("d6e5", true)
-	ok := Core.Move(core.Coordinate{7, 1},
-		[]core.Coordinate{{5, 3}, {3, 5}}, gamerId)
+	ok := Core.Move(Coordinate{7, 1},
+		[]Coordinate{{5, 3}, {3, 5}}, gamerId)
 	if ok {
 		gamerId ^= 1
 	}
@@ -129,20 +122,20 @@ func TestChecker_MoveWithFeature1(t *testing.T) {
 }
 
 func TestChecker_MoveWithFeature2(t *testing.T) {
-	var Core core.GameCore
-	field := createTestField()
-	field.Put(core.Coordinate{4, 1}, core.Checker{1})
-	field.Put(core.Coordinate{3, 2}, core.Checker{1})
-	field.Put(core.Coordinate{7, 3}, core.Checker{1})
-	field.Put(core.Coordinate{1, 4}, core.King{0})
-	field.Put(core.Coordinate{0, 1}, core.King{0})
+	var Core GameCore
+	field := NewTestField()
+	field.Put(Coordinate{4, 1}, Checker{1})
+	field.Put(Coordinate{3, 2}, Checker{1})
+	field.Put(Coordinate{7, 3}, Checker{1})
+	field.Put(Coordinate{1, 4}, King{0})
+	field.Put(Coordinate{0, 1}, King{0})
 	Core.InitField(field)
 	gamerId := 1
 	Core.InitTurnGamerId(gamerId)
 
 	testMove := func(move string, returnValue bool) {
-		ok := Core.Move(core.Coordinate{int(move[1] - '1'), int(move[0] - 'a')},
-			[]core.Coordinate{{int(move[3] - '1'), int(move[2] - 'a')}}, gamerId)
+		ok := Core.Move(Coordinate{int(move[1] - '1'), int(move[0] - 'a')},
+			[]Coordinate{{int(move[3] - '1'), int(move[2] - 'a')}}, gamerId)
 		if ok {
 			gamerId ^= 1
 		}

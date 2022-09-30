@@ -35,7 +35,7 @@ func (c *Game) StartInit() {
 	save.Master.Gamer0 = saveLoad.Man
 	save.Master.Level0 = 3
 	save.Master.Gamer1 = saveLoad.Bot
-	save.Master.Level1 = 3
+	save.Master.Level1 = 4
 
 	c.intractor.InitSave(save)
 }
@@ -59,13 +59,13 @@ func (c *Game) createBoard(board core.Field) *fyne.Container {
 			boardDraw.Add(container.NewMax(cellBg, cell))
 		}
 	}
-	if c.intractor.gamer[0].IsTurn() {
+	if c.intractor.gamer[0].IsTurn() && c.intractor.Participants.Gamer0 == saveLoad.Man {
 		for x = board.BordersRight.X; x >= board.BordersLeft.X; x-- {
 			for y = board.BordersLeft.Y; y <= board.BordersRight.Y; y++ {
 				routine()
 			}
 		}
-	} else {
+	} else if c.intractor.gamer[1].IsTurn() && c.intractor.Participants.Gamer1 == saveLoad.Man {
 		for x = board.BordersLeft.X; x <= board.BordersRight.X; x++ {
 			for y = board.BordersRight.Y; y >= board.BordersLeft.Y; y-- {
 				routine()
