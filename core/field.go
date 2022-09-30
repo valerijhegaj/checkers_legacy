@@ -12,8 +12,10 @@ func (c *Field) Init() {
 }
 
 func (c *Field) InBorders(coordinate Coordinate) bool {
-	return coordinate.X <= c.BordersRight.X && coordinate.Y <= c.BordersRight.Y &&
-		coordinate.X >= c.BordersLeft.X && coordinate.Y >= c.BordersLeft.Y
+	return coordinate.X <= c.BordersRight.X &&
+		coordinate.Y <= c.BordersRight.Y &&
+		coordinate.X >= c.BordersLeft.X &&
+		coordinate.Y >= c.BordersLeft.Y
 }
 
 func (c *Field) IsAvailable(coordinate Coordinate) bool {

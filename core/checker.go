@@ -4,43 +4,36 @@ type Checker struct {
 	OwnerId int
 }
 
+func (c Checker) addMove(moves *[]Coordinate,
+	desk *Field,
+	d, from Coordinate,
+	IsMove func(field *Field, from, to Coordinate) (bool, Coordinate)) {
+	move := Coordinate{from.X + d.X, from.Y + d.Y}
+	isMove, _ := IsMove(desk, from, move)
+	if isMove {
+		*moves = append(*moves, move)
+	}
+}
+
 func (c Checker) GetAvailableMoves(desk *Field, from Coordinate) []Coordinate {
 	var moves []Coordinate
-	addMove := func(dx, dy int, checker func(field *Field, from, to Coordinate) (bool, Coordinate)) {
-		move := Coordinate{from.X + dx, from.Y + dy}
-		isMove, _ := checker(desk, from, move)
-		if isMove {
-			moves = append(moves, move)
-		}
-	}
-
-	addMove(1, 1, c.isMoveWithoutEat)
-	addMove(-1, 1, c.isMoveWithoutEat)
-	addMove(1, -1, c.isMoveWithoutEat)
-	addMove(-1, -1, c.isMoveWithoutEat)
-	addMove(2, 2, c.isMoveToEat)
-	addMove(-2, 2, c.isMoveToEat)
-	addMove(2, -2, c.isMoveToEat)
-	addMove(-2, -2, c.isMoveToEat)
-
+	c.addMove(&moves, desk, Coordinate{1, 1}, from, c.isMoveWithoutEat)
+	c.addMove(&moves, desk, Coordinate{1, -1}, from, c.isMoveWithoutEat)
+	c.addMove(&moves, desk, Coordinate{-1, 1}, from, c.isMoveWithoutEat)
+	c.addMove(&moves, desk, Coordinate{-1, -1}, from, c.isMoveWithoutEat)
+	c.addMove(&moves, desk, Coordinate{2, 2}, from, c.isMoveToEat)
+	c.addMove(&moves, desk, Coordinate{-2, 2}, from, c.isMoveToEat)
+	c.addMove(&moves, desk, Coordinate{2, -2}, from, c.isMoveToEat)
+	c.addMove(&moves, desk, Coordinate{-2, -2}, from, c.isMoveToEat)
 	return moves
 }
 
 func (c Checker) GetAvailableMovesToEat(desk *Field, from Coordinate) []Coordinate {
 	var moves []Coordinate
-	addMove := func(dx, dy int, checker func(field *Field, from, to Coordinate) (bool, Coordinate)) {
-		move := Coordinate{from.X + dx, from.Y + dy}
-		isMove, _ := checker(desk, from, move)
-		if isMove {
-			moves = append(moves, move)
-		}
-	}
-
-	addMove(2, 2, c.isMoveToEat)
-	addMove(-2, 2, c.isMoveToEat)
-	addMove(2, -2, c.isMoveToEat)
-	addMove(-2, -2, c.isMoveToEat)
-
+	c.addMove(&moves, desk, Coordinate{2, 2}, from, c.isMoveToEat)
+	c.addMove(&moves, desk, Coordinate{-2, 2}, from, c.isMoveToEat)
+	c.addMove(&moves, desk, Coordinate{2, -2}, from, c.isMoveToEat)
+	c.addMove(&moves, desk, Coordinate{-2, -2}, from, c.isMoveToEat)
 	return moves
 }
 

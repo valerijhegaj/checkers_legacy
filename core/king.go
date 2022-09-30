@@ -4,43 +4,34 @@ type King struct {
 	OwnerId int
 }
 
-func (c King) GetAvailableMoves(desk *Field, from Coordinate) []Coordinate {
-	var moves []Coordinate
-	addMoves := func(dx, dy int, checker func(field *Field, from, to Coordinate) (bool, Coordinate)) {
-		move := Coordinate{from.X + dx, from.Y + dy}
-		for ; desk.InBorders(move); move.X, move.Y = move.X+dx, move.Y+dy {
-			isMove, _ := checker(desk, from, move)
-			if isMove {
-				moves = append(moves, move)
-			}
+func (c King) addMove(moves *[]Coordinate,
+	desk *Field,
+	d, from Coordinate,
+	IsMove func(field *Field, from, to Coordinate) (bool, Coordinate)) {
+	move := Coordinate{from.X + d.X, from.Y + d.Y}
+	for ; desk.InBorders(move); move.X, move.Y = move.X+d.X, move.Y+d.Y {
+		isMove, _ := IsMove(desk, from, move)
+		if isMove {
+			*moves = append(*moves, move)
 		}
 	}
+}
 
-	addMoves(1, 1, c.IsMoveOne)
-	addMoves(1, -1, c.IsMoveOne)
-	addMoves(-1, 1, c.IsMoveOne)
-	addMoves(-1, -1, c.IsMoveOne)
-
+func (c King) GetAvailableMoves(desk *Field, from Coordinate) []Coordinate {
+	var moves []Coordinate
+	c.addMove(&moves, desk, Coordinate{1, 1}, from, c.IsMoveOne)
+	c.addMove(&moves, desk, Coordinate{1, -1}, from, c.IsMoveOne)
+	c.addMove(&moves, desk, Coordinate{-1, 1}, from, c.IsMoveOne)
+	c.addMove(&moves, desk, Coordinate{-1, -1}, from, c.IsMoveOne)
 	return moves
 }
 
 func (c King) GetAvailableMovesToEat(desk *Field, from Coordinate) []Coordinate {
 	var moves []Coordinate
-	addMoves := func(dx, dy int, checker func(field *Field, from, to Coordinate) (bool, Coordinate)) {
-		move := Coordinate{from.X + dx, from.Y + dy}
-		for ; desk.InBorders(move); move.X, move.Y = move.X+dx, move.Y+dy {
-			isMove, _ := checker(desk, from, move)
-			if isMove {
-				moves = append(moves, move)
-			}
-		}
-	}
-
-	addMoves(1, 1, c.isMoveOneToEat)
-	addMoves(1, -1, c.isMoveOneToEat)
-	addMoves(-1, 1, c.isMoveOneToEat)
-	addMoves(-1, -1, c.isMoveOneToEat)
-
+	c.addMove(&moves, desk, Coordinate{1, 1}, from, c.isMoveOneToEat)
+	c.addMove(&moves, desk, Coordinate{1, -1}, from, c.isMoveOneToEat)
+	c.addMove(&moves, desk, Coordinate{-1, 1}, from, c.isMoveOneToEat)
+	c.addMove(&moves, desk, Coordinate{-1, -1}, from, c.isMoveOneToEat)
 	return moves
 }
 
@@ -109,21 +100,21 @@ func (c King) isMoveOne(desk *Field, from, to Coordinate) (bool, bool, Coordinat
 		return false, false, desk.BordersLeft
 	}
 
-	var dx_1, dy_1 int
+	var dx1, dy1 int
 	if dx > 0 {
-		dx_1 = 1
+		dx1 = 1
 	} else {
-		dx_1 = -1
+		dx1 = -1
 	}
 	if dy > 0 {
-		dy_1 = 1
+		dy1 = 1
 	} else {
-		dy_1 = -1
+		dy1 = -1
 	}
 
 	wasAlreadyFood := false
-	for i := 1; i < dx*dx_1; i++ {
-		foodPosition := Coordinate{from.X + i*dx_1, from.Y + i*dy_1}
+	for i := 1; i < dx*dx1; i++ {
+		foodPosition := Coordinate{from.X + i*dx1, from.Y + i*dy1}
 		if !desk.IsAvailable(foodPosition) {
 			if wasAlreadyFood {
 				return false, false, desk.BordersLeft
