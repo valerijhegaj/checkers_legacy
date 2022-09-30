@@ -26,7 +26,7 @@ func GetSaveList(path string) ([]string, error) {
 		return saveList, err
 	}
 	for _, file := range files {
-		if !file.IsDir() && file.Name() != ".gitignore" {
+		if !file.IsDir() && len(file.Name()) > 5 && file.Name()[len(file.Name())-5:len(file.Name())] == ".json" {
 			saveList = append(saveList, file.Name())
 		}
 	}
