@@ -39,5 +39,5 @@ chmod +x checkers \
 
 ## Report bugs / questions
 
-Telegram: @valerijhegaj
+Telegram: @valerijhegaj \
 email: valerijhegaj@gmail.com
