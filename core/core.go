@@ -32,9 +32,8 @@ func (c *GameCore) Move(from Coordinate, way []Coordinate, gamerId int) bool {
 		return false
 	}
 
-	sucсeess, to := figure.Move(&c.field, from, way)
+	sucсeess, _ := figure.Move(&c.field, from, way)
 	if sucсeess {
-		c.checkersFeature.MadeMove(from, to, gamerId)
 		c.turnGamerId ^= 1
 	}
 	return sucсeess
