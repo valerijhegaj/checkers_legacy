@@ -3,56 +3,35 @@ package bot
 import (
 	"chekers/core"
 	"math"
+	"reflect"
 )
 
-func NewMinMax(level int) Analyzator {
-	return &minMax{level: level}
-}
-
-type minMax struct {
-	level int
-	Tree
-}
-
-func (c *minMax) analyzeField(field *core.Field, gamerId int) (core.Coordinate,
-	[]core.Coordinate) {
-	var from core.Coordinate
-	var way []core.Coordinate
-
-	c.Tree = NewTree(field, gamerId)
-	c.Build(c.level * 2)
-	from, way = c.GetBestMove()
-	c.Tree = nil
-	return from, way
-}
-
-type Tree interface {
-	Build(level int)
-	GetBestMove() (core.Coordinate, []core.Coordinate)
-}
-
-func NewTree(field *core.Field, gamerId int) Tree {
-	return &tree{
-		root: &node{
-			nil,
-			field.GetCopy(),
-			core.Coordinate{},
-			[]core.Coordinate{},
-			gamerId,
-			0},
+func NewMinMax(level int) Mind {
+	return &MinMaxTree{
+		level,
+		nil,
+		NewSimpleAmmount(),
 	}
 }
 
-type tree struct {
-	root *node
+func NewMinMaxV2(level int, kingCost, checkerCost float64) Mind {
+	return &MinMaxTree{
+		level,
+		nil,
+		NewAmmountWithCoef(kingCost, checkerCost),
+	}
+}
+
+type MinMaxTree struct {
+	level int
+	root  *node
 	Evristika
 }
 
-func (c *tree) Build(level int) {
-	c.root.createChilds(level, c.root.gamerId)
-}
-
-func (c *tree) GetBestMove() (core.Coordinate, []core.Coordinate) {
+func (c *MinMaxTree) GetMove(field *core.Field, gamerId int) (core.Coordinate, []core.Coordinate) {
+	c.root = &node{nil, *field, core.Coordinate{}, []core.Coordinate{}, gamerId, 0}
+	c.root.createChilds(c.level*2, c.root.gamerId, c.Evristika)
+	defer func() { c.root = nil }()
 	for _, i := range c.root.childs {
 		if i.score == c.root.score {
 			return i.from, i.way
@@ -61,7 +40,7 @@ func (c *tree) GetBestMove() (core.Coordinate, []core.Coordinate) {
 	return core.Coordinate{}, nil
 }
 
-func (c *tree) GetRandomMove(random Random) (core.Coordinate, []core.Coordinate) {
+func (c *MinMaxTree) GetRandomMove(random Random) (core.Coordinate, []core.Coordinate) {
 	if len(c.root.childs) != 0 {
 		i := random.randn(len(c.root.childs))
 		return c.root.childs[i].from, c.root.childs[i].way
@@ -75,12 +54,13 @@ type node struct {
 	from    core.Coordinate
 	way     []core.Coordinate
 	gamerId int
-	score   int
+	score   float64
 }
 
-func (c *node) createChilds(n int, gamerId int) int {
+func (c *node) createChilds(n int, gamerId int, evristika Evristika) float64 {
 	if n == 1 {
-		return c.calculateScore(gamerId)
+		c.score = evristika.CalculateScore(gamerId, c.field)
+		return c.score
 	}
 
 	isEat := false
@@ -149,21 +129,22 @@ func (c *node) createChilds(n int, gamerId int) int {
 		}
 	}
 	if c.childs == nil {
-		return c.calculateScore(gamerId)
+		c.score = evristika.CalculateScore(gamerId, c.field)
+		return c.score
 	}
 
 	if c.gamerId != gamerId {
-		min := math.MaxInt
+		min := math.MaxFloat64
 		for _, child := range c.childs {
-			min = int(math.Min(float64(child.createChilds(n-1, gamerId)), float64(min)))
+			min = math.Min(child.createChilds(n-1, gamerId, evristika), min)
 			child.childs = nil
 		}
 		c.score = min
 		return min
 	} else {
-		max := math.MinInt
+		max := -math.MaxFloat64
 		for _, child := range c.childs {
-			max = int(math.Max(float64(child.createChilds(n-1, gamerId)), float64(max)))
+			max = math.Max(child.createChilds(n-1, gamerId, evristika), max)
 			child.childs = nil
 		}
 		c.score = max
@@ -171,8 +152,8 @@ func (c *node) createChilds(n int, gamerId int) int {
 	}
 }
 
-func (c *node) calculateScore(gamerId int) int {
-	ans := 0
+func (c *node) calculateScore(gamerId int) float64 {
+	ans := float64(0)
 
 	for _, figure := range c.field.Figures {
 		if figure.GetOwnerId() == gamerId {
@@ -186,4 +167,53 @@ func (c *node) calculateScore(gamerId int) int {
 }
 
 type Evristika interface {
+	CalculateScore(gamerId int, field core.Field) float64
+}
+
+func NewSimpleAmmount() Evristika {
+	return &simpleAmmount{}
+}
+
+type simpleAmmount struct {
+}
+
+func (c *simpleAmmount) CalculateScore(gamerId int, field core.Field) float64 {
+	ans := float64(0)
+
+	for _, figure := range field.Figures {
+		if figure.GetOwnerId() == gamerId {
+			ans += 1
+		} else {
+			ans -= 1
+		}
+	}
+	return ans
+}
+
+func NewAmmountWithCoef(kingCost, checkerCost float64) Evristika {
+	return &AmmountWithCoef{kingCost, checkerCost}
+}
+
+type AmmountWithCoef struct {
+	KingCost    float64
+	CheckerCost float64
+}
+
+func (c *AmmountWithCoef) CalculateScore(gamerId int, field core.Field) float64 {
+	ans := float64(0)
+
+	for _, figure := range field.Figures {
+		var coef float64
+		if reflect.TypeOf(figure) == reflect.TypeOf(core.Checker{}) {
+			coef = c.CheckerCost
+		} else {
+			coef = c.KingCost
+		}
+		if figure.GetOwnerId() == gamerId {
+			ans += coef
+		} else {
+			ans -= coef
+		}
+	}
+	return ans
 }

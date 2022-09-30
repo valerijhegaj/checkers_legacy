@@ -5,30 +5,21 @@ import (
 	"math/rand"
 )
 
-func CreateRandomMoves() RandomMoves {
-	return RandomMoves{psevdoRandom{}, tree{}}
+func NewRandomMoves() RandomMoves {
+	return RandomMoves{psevdoRandom{}, MinMaxTree{}}
 }
 
 type RandomMoves struct {
 	Random
-	body tree
+	body MinMaxTree
 }
 
-func (c RandomMoves) analyzeField(field *core.Field, gamerId int) (core.Coordinate, []core.Coordinate) {
+func (c RandomMoves) GetMove(field *core.Field, gamerId int) (core.Coordinate, []core.Coordinate) {
 	var from core.Coordinate
 	var way []core.Coordinate
-	c.body = tree{
-		&node{
-			nil,
-			field.GetCopy(),
-			core.Coordinate{},
-			[]core.Coordinate{},
-			gamerId,
-			0}}
-
-	c.body.Build(2)
+	c.body = MinMaxTree{2, nil, &simpleAmmount{}}
 	from, way = c.body.GetRandomMove(c.Random)
-	c.body = tree{}
+	c.body = MinMaxTree{}
 	return from, way
 }
 

@@ -32,10 +32,10 @@ func (c *Game) KeyEventCallback(keyEvent *fyne.KeyEvent) {
 func (c *Game) StartInit() {
 	var save saveLoad.Save
 	save.Create()
-	save.Master.Gamer0 = saveLoad.Man
+	save.Master.Gamer0 = saveLoad.Bot
 	save.Master.Level0 = 4
 	save.Master.Gamer1 = saveLoad.Bot
-	save.Master.Level1 = 4
+	save.Master.Level1 = 5
 
 	c.intractor.InitSave(save)
 }
