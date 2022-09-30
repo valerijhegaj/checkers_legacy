@@ -5,32 +5,47 @@ import (
 	"math"
 )
 
-type minMax struct {
-	level int
-	body  tree
+func NewMinMax(level int) Analyzator {
+	return &minMax{level: level}
 }
 
-func (c minMax) analyzeField(field *core.Field, gamerId int) (core.Coordinate,
+type minMax struct {
+	level int
+	Tree
+}
+
+func (c *minMax) analyzeField(field *core.Field, gamerId int) (core.Coordinate,
 	[]core.Coordinate) {
 	var from core.Coordinate
 	var way []core.Coordinate
-	c.body = tree{
-		&node{
+
+	c.Tree = NewTree(field, gamerId)
+	c.Build(c.level * 2)
+	from, way = c.GetBestMove()
+	c.Tree = nil
+	return from, way
+}
+
+type Tree interface {
+	Build(level int)
+	GetBestMove() (core.Coordinate, []core.Coordinate)
+}
+
+func NewTree(field *core.Field, gamerId int) Tree {
+	return &tree{
+		root: &node{
 			nil,
 			field.GetCopy(),
 			core.Coordinate{},
 			[]core.Coordinate{},
 			gamerId,
-			0}}
-
-	c.body.Build(c.level * 2)
-	from, way = c.body.GetBestMove()
-	c.body = tree{}
-	return from, way
+			0},
+	}
 }
 
 type tree struct {
 	root *node
+	Evristika
 }
 
 func (c *tree) Build(level int) {
@@ -168,4 +183,7 @@ func (c *node) calculateScore(gamerId int) int {
 	}
 	c.score = ans
 	return ans
+}
+
+type Evristika interface {
 }
