@@ -1,4 +1,7 @@
 # Changelog - Checkers
+## v1.0.0
+very unstable version, may behave strangely, crash, deadlocks
+- added compilations
 
 ## v0.5
 very unstable version, may behave strangely, crash, deadlocks
