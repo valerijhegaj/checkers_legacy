@@ -7,15 +7,6 @@ import (
 	"fyne.io/fyne/v2/app"
 )
 
-//consol
-//func main() {
-//	var Interface _interface.Interface
-//	var Core core.GameCore
-//	exiter := make(chan int)
-//	Interface.Init(exiter, Core)
-//	<-exiter
-//}
-
 func main() {
 	a := app.New()
 	w := a.NewWindow("Checkers")

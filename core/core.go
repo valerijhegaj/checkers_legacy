@@ -1,9 +1,12 @@
 package core
 
+import "sync"
+
 type GameCore struct {
 	field       Field
 	turnGamerId int
 	checkersFeature
+	Mutex sync.Mutex
 }
 
 func (c GameCore) GetField() Field {
