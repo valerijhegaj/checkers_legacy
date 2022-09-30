@@ -40,7 +40,7 @@ func (c *Field) Move(from Coordinate, to Coordinate) {
 
 func (c *Field) Remove(ptr Coordinate) {
 	c.Bin = append(c.Bin, c.Figures[ptr])
-	delete(c.Figures, ptr)
+	c.RemoveWithOutBin(ptr)
 }
 
 func (c *Field) RemoveWithOutBin(ptr Coordinate) {
