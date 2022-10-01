@@ -1,4 +1,5 @@
 #on intel macbook
+
 fyne package
 
 MAC_BIN_PATH="chekers.app/Contents/MacOS"
