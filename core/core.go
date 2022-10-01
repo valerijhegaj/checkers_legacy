@@ -33,11 +33,11 @@ func (c *GameCore) Move(
 		return false
 	}
 
-	sucсeess, _ := figure.Move(&c.field, from, way)
-	if sucсeess {
+	success, _ := figure.Move(&c.field, from, way)
+	if success {
 		c.turnGamerId ^= 1
 	}
-	return sucсeess
+	return success
 }
 
 func (c *GameCore) InitField(field Field) {

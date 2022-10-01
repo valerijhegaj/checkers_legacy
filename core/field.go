@@ -100,7 +100,3 @@ func (c *Field) GetCopy() Field {
 
 	return copy_
 }
-
-func (c *Field) CreateStandart88() {
-
-}
