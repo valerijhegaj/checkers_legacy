@@ -46,7 +46,7 @@ type Save struct {
 }
 
 func (c *Save) Create() {
-	c.Field = core.NewStandart8x8Field()
+	c.Field = core.NewStandard8x8Field()
 }
 
 func (c *Save) putFiguresOnField(figures []figureInfo) {

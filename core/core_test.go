@@ -63,7 +63,7 @@ func TestGameCore_Move(t *testing.T) {
 func TestChecker_MoveWithFeature1(t *testing.T) {
 	var Core GameCore
 
-	Core.InitField(NewStandart8x8Field())
+	Core.InitField(NewStandard8x8Field())
 	gamerId := 0
 	Core.InitTurnGamerId(gamerId)
 

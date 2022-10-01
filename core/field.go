@@ -4,7 +4,7 @@ func NewField() Field {
 	return Field{Figures: make(map[Coordinate]Figure)}
 }
 
-func NewStandartField(n int) Field {
+func NewStandardField(n int) Field {
 	field := NewField()
 	for x := 0; x < n/2-1; x++ {
 		for y := x % 2; y < n; y += 2 {
@@ -22,8 +22,8 @@ func NewStandartField(n int) Field {
 	return field
 }
 
-func NewStandart8x8Field() Field {
-	return NewStandartField(8)
+func NewStandard8x8Field() Field {
+	return NewStandardField(8)
 }
 
 type Field struct {

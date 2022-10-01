@@ -123,7 +123,7 @@ func compare(l, r mind, leftLevel, rightLevel int) int {
 	}
 
 	var c core.GameCore
-	c.InitField(core.NewStandart8x8Field())
+	c.InitField(core.NewStandard8x8Field())
 	c.InitTurnGamerId(0)
 
 	var gamers [2]gamer.Gamer

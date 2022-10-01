@@ -27,7 +27,7 @@ func (c startGameScreen) DisplayHelp() {
 func (c startGameScreen) parse(command string) int {
 	if command == "start" || command == "Start" {
 		var save saveLoad.Save
-		save.Field = core.NewStandart8x8Field()
+		save.Field = core.NewStandard8x8Field()
 
 		save.Master = c.getMaster()
 		save.TurnGamerId = 0
