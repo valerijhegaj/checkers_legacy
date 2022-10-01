@@ -37,6 +37,11 @@ unzip in folder for game \
 chmod +x checkers \
 ./checkers
 
+### Other or if the above does not start
+git clone https://github.com/valerijhegaj/checkers.git \
+cd checkers \
+go run main.go
+
 ## Report bugs / questions
 
 Telegram: @valerijhegaj \
