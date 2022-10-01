@@ -154,70 +154,22 @@ func (c King) GetAvailableMoves(
 	desk *Field,
 	from Coordinate,
 ) []Coordinate {
-	var availableMoves []Coordinate
-	c.addMove(
-		&availableMoves,
-		desk,
-		Coordinate{1, 1},
-		from,
-		c.IsMoveOne,
-	)
-	c.addMove(
-		&availableMoves,
-		desk,
-		Coordinate{1, -1},
-		from,
-		c.IsMoveOne,
-	)
-	c.addMove(
-		&availableMoves,
-		desk,
-		Coordinate{-1, 1},
-		from,
-		c.IsMoveOne,
-	)
-	c.addMove(
-		&availableMoves,
-		desk,
-		Coordinate{-1, -1},
-		from,
-		c.IsMoveOne,
-	)
-	return availableMoves
+	var moves []Coordinate
+	c.addMove(&moves, desk, Coordinate{1, 1}, from, c.IsMoveOne)
+	c.addMove(&moves, desk, Coordinate{1, -1}, from, c.IsMoveOne)
+	c.addMove(&moves, desk, Coordinate{-1, 1}, from, c.IsMoveOne)
+	c.addMove(&moves, desk, Coordinate{-1, -1}, from, c.IsMoveOne)
+	return moves
 }
 
 func (c King) GetAvailableMovesToEat(
 	desk *Field,
 	from Coordinate,
 ) []Coordinate {
-	var availableMoves []Coordinate
-	c.addMove(
-		&availableMoves,
-		desk,
-		Coordinate{1, 1},
-		from,
-		c.isMoveOneToEat,
-	)
-	c.addMove(
-		&availableMoves,
-		desk,
-		Coordinate{1, -1},
-		from,
-		c.isMoveOneToEat,
-	)
-	c.addMove(
-		&availableMoves,
-		desk,
-		Coordinate{-1, 1},
-		from,
-		c.isMoveOneToEat,
-	)
-	c.addMove(
-		&availableMoves,
-		desk,
-		Coordinate{-1, -1},
-		from,
-		c.isMoveOneToEat,
-	)
-	return availableMoves
+	var moves []Coordinate
+	c.addMove(&moves, desk, Coordinate{1, 1}, from, c.isMoveOneToEat)
+	c.addMove(&moves, desk, Coordinate{1, -1}, from, c.isMoveOneToEat)
+	c.addMove(&moves, desk, Coordinate{-1, 1}, from, c.isMoveOneToEat)
+	c.addMove(&moves, desk, Coordinate{-1, -1}, from, c.isMoveOneToEat)
+	return moves
 }
