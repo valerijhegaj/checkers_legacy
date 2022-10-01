@@ -32,11 +32,11 @@ func (c King) Move(
 	desk.Remove(foodPosition)
 	desk.Move(from, way[0])
 
-	return c.moveOnlyToEat(desk, way[0], way[1:])
+	return c.moveToEat(desk, way[0], way[1:])
 }
 
 // always returns true
-func (c King) moveOnlyToEat(
+func (c King) moveToEat(
 	desk *Field,
 	from Coordinate,
 	way []Coordinate,
