@@ -23,9 +23,6 @@ func (c Gamer) Move(
 	way []core.Coordinate,
 ) bool {
 	ans := c.Core.Move(from, way, c.GamerId)
-	//if ans {
-	//	fmt.Println(from, way)
-	//}
 	return ans
 }
 
@@ -34,6 +31,7 @@ func (c Gamer) InitSave(save saveLoad.Save) {
 	c.Core.InitTurnGamerId(save.TurnGamerId)
 }
 
+// if your turn and you can't move: you lose
 func (c Gamer) GetWinner() (
 	bool,
 	Gamer,
