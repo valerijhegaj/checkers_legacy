@@ -89,10 +89,12 @@ func TestKing_Move_WithoutFood(t *testing.T) {
 	test(Coordinate{8, 1}, false)
 }
 
-func testFigure_Move(t *testing.T, figure Figure, fininshFigure Figure,
+func testFigure_Move(
+	t *testing.T, figure Figure, fininshFigure Figure,
 	checkField Field, field Field, from Coordinate, to []Coordinate,
 	empty map[Coordinate]bool, _isMoved bool, _finish Coordinate,
-	messeage string) {
+	messeage string,
+) {
 
 	field.Put(from, figure)
 	isMoved, finish := figure.Move(&field, from, to)
@@ -131,237 +133,305 @@ func TestKing_Move_WithFood(t *testing.T) {
 		}
 	}
 
-	testFigure_Move(t,
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{6, 6}},
 		map[Coordinate]bool{{5, 5}: true},
 		true, Coordinate{6, 6},
-		"1")
-	testFigure_Move(t,
+		"1",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{6, 2}},
 		map[Coordinate]bool{{5, 3}: true},
 		true, Coordinate{6, 2},
-		"2")
-	testFigure_Move(t,
+		"2",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{2, 6}},
 		map[Coordinate]bool{{3, 5}: true},
 		true, Coordinate{2, 6},
-		"3")
-	testFigure_Move(t,
+		"3",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{2, 2}},
 		map[Coordinate]bool{{3, 3}: true},
 		true, Coordinate{2, 2},
-		"4")
+		"4",
+	)
 
-	testFigure_Move(t,
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(),
 		Coordinate{8, 8},
-		[]Coordinate{{6, 6}, {8, 4}, {6, 2}, {4, 0},
+		[]Coordinate{
+			{6, 6}, {8, 4}, {6, 2}, {4, 0},
 			{2, 2}, {0, 4}, {2, 6}, {4, 8},
-			{6, 6}, {4, 4}},
-		map[Coordinate]bool{{7, 7}: true, {7, 5}: true,
+			{6, 6}, {4, 4},
+		},
+		map[Coordinate]bool{
+			{7, 7}: true, {7, 5}: true,
 			{7, 3}: true, {5, 1}: true, {3, 1}: true,
 			{1, 3}: true, {1, 5}: true, {3, 7}: true,
-			{5, 7}: true, {5, 5}: true},
+			{5, 7}: true, {5, 5}: true,
+		},
 		true, Coordinate{4, 4},
-		"5")
-	testFigure_Move(t,
+		"5",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(),
 		Coordinate{8, 8},
-		[]Coordinate{{6, 6}, {4, 8}, {2, 6}, {0, 4},
+		[]Coordinate{
+			{6, 6}, {4, 8}, {2, 6}, {0, 4},
 			{2, 2}, {4, 0}, {6, 2}, {8, 4},
-			{6, 6}, {4, 4}},
-		map[Coordinate]bool{{7, 7}: true, {7, 5}: true,
+			{6, 6}, {4, 4},
+		},
+		map[Coordinate]bool{
+			{7, 7}: true, {7, 5}: true,
 			{7, 3}: true, {5, 1}: true, {3, 1}: true,
 			{1, 3}: true, {1, 5}: true, {3, 7}: true,
-			{5, 7}: true, {5, 5}: true},
+			{5, 7}: true, {5, 5}: true,
+		},
 		true, Coordinate{4, 4},
-		"6")
+		"6",
+	)
 
-	testFigure_Move(t,
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{5, 3}, {6, 2}},
 		map[Coordinate]bool{},
 		false, Coordinate{4, 4},
-		"7")
-	testFigure_Move(t,
+		"7",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{3, 5}, {2, 6}},
 		map[Coordinate]bool{},
 		false, Coordinate{4, 4},
-		"8")
-	testFigure_Move(t,
+		"8",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{3, 3}, {2, 2}},
 		map[Coordinate]bool{},
 		false, Coordinate{4, 4},
-		"9")
-	testFigure_Move(t,
+		"9",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{5, 5}, {6, 6}},
 		map[Coordinate]bool{},
 		false, Coordinate{4, 4},
-		"10")
+		"10",
+	)
 
-	testFigure_Move(t,
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{7, 1}, {8, 0}},
 		map[Coordinate]bool{},
 		false, Coordinate{4, 4},
-		"11")
-	testFigure_Move(t,
+		"11",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{1, 7}, {0, 8}},
 		map[Coordinate]bool{},
 		false, Coordinate{4, 4},
-		"12")
-	testFigure_Move(t,
+		"12",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{7, 7}, {8, 8}},
 		map[Coordinate]bool{},
 		false, Coordinate{4, 4},
-		"13")
-	testFigure_Move(t,
+		"13",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{1, 1}, {0, 0}},
 		map[Coordinate]bool{},
 		false, Coordinate{4, 4},
-		"14")
+		"14",
+	)
 
-	testFigure_Move(t,
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{8, 0}},
 		map[Coordinate]bool{},
 		false, Coordinate{4, 4},
-		"15")
-	testFigure_Move(t,
+		"15",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{0, 8}},
 		map[Coordinate]bool{},
 		false, Coordinate{4, 4},
-		"16")
-	testFigure_Move(t,
+		"16",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{8, 8}},
 		map[Coordinate]bool{},
 		false, Coordinate{4, 4},
-		"17")
-	testFigure_Move(t,
+		"17",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{0, 0}},
 		map[Coordinate]bool{},
 		false, Coordinate{4, 4},
-		"18")
+		"18",
+	)
 
-	testFigure_Move(t,
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		grandField, grandField.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{6, 2}, {2, 6}, {8, 0}, {0, 8}},
-		map[Coordinate]bool{{3, 5}: true, {5, 3}: true,
-			{1, 7}: true, {7, 1}: true},
+		map[Coordinate]bool{
+			{3, 5}: true, {5, 3}: true,
+			{1, 7}: true, {7, 1}: true,
+		},
 		true, Coordinate{0, 8},
-		"19")
+		"19",
+	)
 
 	field := NewTestField()
 	field.Put(Coordinate{3, 3}, TestFigure{1})
 
-	testFigure_Move(t,
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		field, field.GetCopy(), Coordinate{0, 0},
 		[]Coordinate{{2, 2}},
 		map[Coordinate]bool{},
 		true, Coordinate{2, 2},
-		"20")
-	testFigure_Move(t,
+		"20",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		field, field.GetCopy(), Coordinate{0, 0},
 		[]Coordinate{{3, 3}},
 		map[Coordinate]bool{},
 		false, Coordinate{0, 0},
-		"21")
-	testFigure_Move(t,
+		"21",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		field, field.GetCopy(), Coordinate{0, 0},
 		[]Coordinate{{4, 4}},
 		map[Coordinate]bool{{3, 3}: true},
 		true, Coordinate{4, 4},
-		"22")
-	testFigure_Move(t,
+		"22",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		field, field.GetCopy(), Coordinate{0, 0},
 		[]Coordinate{{5, 5}},
 		map[Coordinate]bool{{3, 3}: true},
 		true, Coordinate{5, 5},
-		"23")
-	testFigure_Move(t,
+		"23",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		field, field.GetCopy(), Coordinate{0, 0},
 		[]Coordinate{{6, 6}},
 		map[Coordinate]bool{{3, 3}: true},
 		true, Coordinate{6, 6},
-		"24")
-	testFigure_Move(t,
+		"24",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		field, field.GetCopy(), Coordinate{0, 0},
 		[]Coordinate{{7, 7}},
 		map[Coordinate]bool{{3, 3}: true},
 		true, Coordinate{7, 7},
-		"25")
+		"25",
+	)
 
-	testFigure_Move(t,
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		field, field.GetCopy(), Coordinate{0, 0},
 		[]Coordinate{{6, 6}, {7, 5}},
 		map[Coordinate]bool{{3, 3}: true},
 		true, Coordinate{6, 6},
-		"phantom move after eat")
-	testFigure_Move(t,
+		"phantom move after eat",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		field, field.GetCopy(), Coordinate{0, 0},
 		[]Coordinate{{2, 2}, {3, 1}},
 		map[Coordinate]bool{},
 		true, Coordinate{2, 2},
-		"phantom move after move without food")
+		"phantom move after move without food",
+	)
 
 	field = NewTestField()
 	field.Put(Coordinate{3, 3}, TestFigure{0})
 	field.Put(Coordinate{5, 3}, TestFigure{0})
 
-	testFigure_Move(t,
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		field, field.GetCopy(), Coordinate{0, 0},
 		[]Coordinate{{4, 4}},
 		map[Coordinate]bool{},
 		false, Coordinate{0, 0},
-		"eat friends")
-	testFigure_Move(t,
+		"eat friends",
+	)
+	testFigure_Move(
+		t,
 		King{0}, King{0},
 		field, field.GetCopy(), Coordinate{0, 0},
 		[]Coordinate{{4, 4}, {6, 2}},
 		map[Coordinate]bool{},
 		false, Coordinate{0, 0},
-		"eat friends")
+		"eat friends",
+	)
 }
 
 func TestKing_GetAvailableMoves(t *testing.T) {
@@ -373,9 +443,12 @@ func TestKing_GetAvailableMoves(t *testing.T) {
 
 	figure := field.At(Coordinate{3, 3})
 	test := func(
-		get func(field2 *Field,
-			coordinate Coordinate) []Coordinate,
-		realMoves map[Coordinate]bool) {
+		get func(
+			field2 *Field,
+			coordinate Coordinate,
+		) []Coordinate,
+		realMoves map[Coordinate]bool,
+	) {
 		moves := get(&field, Coordinate{3, 3})
 
 		for _, ptr := range moves {
@@ -389,11 +462,15 @@ func TestKing_GetAvailableMoves(t *testing.T) {
 		}
 	}
 
-	realMoves := map[Coordinate]bool{{4, 4}: true, {5, 5}: true,
+	realMoves := map[Coordinate]bool{
+		{4, 4}: true, {5, 5}: true,
 		{7, 7}: true, {2, 4}: true, {1, 5}: true,
-		{0, 6}: true, {1, 1}: true, {0, 0}: true}
+		{0, 6}: true, {1, 1}: true, {0, 0}: true,
+	}
 	test(figure.GetAvailableMoves, realMoves)
-	realMoves = map[Coordinate]bool{{7, 7}: true, {1, 1}: true,
-		{0, 0}: true}
+	realMoves = map[Coordinate]bool{
+		{7, 7}: true, {1, 1}: true,
+		{0, 0}: true,
+	}
 	test(figure.GetAvailableMovesToEat, realMoves)
 }

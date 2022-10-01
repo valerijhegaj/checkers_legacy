@@ -1,8 +1,9 @@
 package _interface
 
 import (
-	"chekers/saveLoad"
 	"fmt"
+
+	"chekers/saveLoad"
 )
 
 type saveGameScreen struct {
@@ -24,8 +25,10 @@ func (c saveGameScreen) Display() {
 func (c saveGameScreen) DisplayHelp() {
 	fmt.Println("save")
 	displayHelpBasic()
-	fmt.Println("path/name.json - print path where you want to save (game see saves only from saves)," +
-		" to see them from load/save display you should save saves/name.json")
+	fmt.Println(
+		"path/name.json - print path where you want to save (game see saves only from saves)," +
+			" to see them from load/save display you should save saves/name.json",
+	)
 	go c.Resume()
 }
 

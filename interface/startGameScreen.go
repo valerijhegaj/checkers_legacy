@@ -1,8 +1,9 @@
 package _interface
 
 import (
-	"chekers/saveLoad"
 	"fmt"
+
+	"chekers/saveLoad"
 )
 
 type startGameScreen struct {
@@ -57,7 +58,10 @@ func (c startGameScreen) getMaster() saveLoad.Participants {
 	return master
 }
 
-func (c startGameScreen) parseMasterOne(gamer, level *int, name string) {
+func (c startGameScreen) parseMasterOne(
+	gamer, level *int,
+	name string,
+) {
 	if len(name) != 5 {
 		*gamer = saveLoad.Man
 		return

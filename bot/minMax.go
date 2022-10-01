@@ -1,9 +1,10 @@
 package bot
 
 import (
-	"chekers/core"
 	"math"
 	"reflect"
+
+	"chekers/core"
 )
 
 func NewMinMax(level int) Mind {
@@ -28,8 +29,21 @@ type MinMaxTree struct {
 	Evristika
 }
 
-func (c *MinMaxTree) GetMove(field *core.Field, gamerId int) (core.Coordinate, []core.Coordinate) {
-	c.root = &node{nil, *field, core.Coordinate{}, []core.Coordinate{}, gamerId, 0}
+func (c *MinMaxTree) GetMove(
+	field *core.Field,
+	gamerId int,
+) (
+	core.Coordinate,
+	[]core.Coordinate,
+) {
+	c.root = &node{
+		nil,
+		*field,
+		core.Coordinate{},
+		[]core.Coordinate{},
+		gamerId,
+		0,
+	}
 	c.root.createChilds(c.level*2, c.root.gamerId, c.Evristika)
 	defer func() { c.root = nil }()
 	for _, i := range c.root.childs {
@@ -40,7 +54,10 @@ func (c *MinMaxTree) GetMove(field *core.Field, gamerId int) (core.Coordinate, [
 	return core.Coordinate{}, nil
 }
 
-func (c *MinMaxTree) GetRandomMove(random Random) (core.Coordinate, []core.Coordinate) {
+func (c *MinMaxTree) GetRandomMove(random Random) (
+	core.Coordinate,
+	[]core.Coordinate,
+) {
 	if len(c.root.childs) != 0 {
 		i := random.randn(len(c.root.childs))
 		return c.root.childs[i].from, c.root.childs[i].way
@@ -57,7 +74,11 @@ type node struct {
 	score   float64
 }
 
-func (c *node) createChilds(n int, gamerId int, evristika Evristika) float64 {
+func (c *node) createChilds(
+	n int,
+	gamerId int,
+	evristika Evristika,
+) float64 {
 	if n == 1 {
 		c.score = evristika.CalculateScore(gamerId, c.field)
 		return c.score
@@ -76,36 +97,46 @@ func (c *node) createChilds(n int, gamerId int, evristika Evristika) float64 {
 			childField := c.field.GetCopy()
 			figure := childField.At(from)
 			figure.Move(&childField, from, []core.Coordinate{to})
-			c.childs = append(c.childs, &node{
-				nil,
-				childField,
-				from,
-				[]core.Coordinate{to},
-				c.gamerId ^ 1,
-				0})
+			c.childs = append(
+				c.childs, &node{
+					nil,
+					childField,
+					from,
+					[]core.Coordinate{to},
+					c.gamerId ^ 1,
+					0,
+				},
+			)
 		}
 	}
 	if isEat {
 		for i := 0; i < len(c.childs); i++ {
 			child := c.childs[i]
 			figure := child.field.At(child.way[len(child.way)-1])
-			moves := figure.GetAvailableMovesToEat(&child.field,
-				child.way[len(child.way)-1])
+			moves := figure.GetAvailableMovesToEat(
+				&child.field,
+				child.way[len(child.way)-1],
+			)
 			for _, to := range moves {
 				childField := child.field.GetCopy()
 				figure := childField.At(child.way[len(child.way)-1])
-				figure.Move(&childField, child.way[len(child.way)-1],
-					[]core.Coordinate{to})
+				figure.Move(
+					&childField, child.way[len(child.way)-1],
+					[]core.Coordinate{to},
+				)
 				way := make([]core.Coordinate, len(child.way)+1)
 				copy(way, child.way)
 				way[len(child.way)] = to
-				c.childs = append(c.childs, &node{
-					nil,
-					childField,
-					child.from,
-					way,
-					c.gamerId ^ 1,
-					0})
+				c.childs = append(
+					c.childs, &node{
+						nil,
+						childField,
+						child.from,
+						way,
+						c.gamerId ^ 1,
+						0,
+					},
+				)
 			}
 		}
 	} else {
@@ -118,13 +149,16 @@ func (c *node) createChilds(n int, gamerId int, evristika Evristika) float64 {
 				childField := c.field.GetCopy()
 				figure := childField.At(from)
 				figure.Move(&childField, from, []core.Coordinate{to})
-				c.childs = append(c.childs, &node{
-					nil,
-					childField,
-					from,
-					[]core.Coordinate{to},
-					c.gamerId ^ 1,
-					0})
+				c.childs = append(
+					c.childs, &node{
+						nil,
+						childField,
+						from,
+						[]core.Coordinate{to},
+						c.gamerId ^ 1,
+						0,
+					},
+				)
 			}
 		}
 	}
@@ -177,7 +211,10 @@ func NewSimpleAmmount() Evristika {
 type simpleAmmount struct {
 }
 
-func (c *simpleAmmount) CalculateScore(gamerId int, field core.Field) float64 {
+func (c *simpleAmmount) CalculateScore(
+	gamerId int,
+	field core.Field,
+) float64 {
 	ans := float64(0)
 
 	for _, figure := range field.Figures {
@@ -199,7 +236,10 @@ type AmmountWithCoef struct {
 	CheckerCost float64
 }
 
-func (c *AmmountWithCoef) CalculateScore(gamerId int, field core.Field) float64 {
+func (c *AmmountWithCoef) CalculateScore(
+	gamerId int,
+	field core.Field,
+) float64 {
 	ans := float64(0)
 
 	for _, figure := range field.Figures {

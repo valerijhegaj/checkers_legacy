@@ -20,21 +20,27 @@ type MainMenu struct {
 func (c *MainMenu) Init(intractor *Interface) {
 	c.intractor = intractor
 	c.name = widget.NewLabel("        Checkers        ")
-	c.start = widget.NewButton("Start", func() {
-		c.intractor.Game.StartInit()
-		c.intractor.Begin(&c.intractor.Game)
-	})
-	c.load = widget.NewButton("Load", func() {
-		c.intractor.Begin(&c.intractor.Load)
-	})
-	c.settings = widget.NewButton("Settings", func() {
-		if c.intractor.gamer[0].IsTurn() {
-			c.intractor.bot[0].Move(c.intractor.gamer[0])
-		} else {
-			c.intractor.bot[1].Move(c.intractor.gamer[1])
-		}
-		c.intractor.Begin(&c.intractor.Game)
-	})
+	c.start = widget.NewButton(
+		"Start", func() {
+			c.intractor.Game.StartInit()
+			c.intractor.Begin(&c.intractor.Game)
+		},
+	)
+	c.load = widget.NewButton(
+		"Load", func() {
+			c.intractor.Begin(&c.intractor.Load)
+		},
+	)
+	c.settings = widget.NewButton(
+		"Settings", func() {
+			if c.intractor.gamer[0].IsTurn() {
+				c.intractor.bot[0].Move(c.intractor.gamer[0])
+			} else {
+				c.intractor.bot[1].Move(c.intractor.gamer[1])
+			}
+			c.intractor.Begin(&c.intractor.Game)
+		},
+	)
 	c.exit = widget.NewButton("Exit", intractor.Exit)
 }
 

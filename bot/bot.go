@@ -21,7 +21,10 @@ type Bot struct {
 	Mind
 }
 
-func (c *Bot) Move(gamer gamer.Gamer) (core.Coordinate, []core.Coordinate) {
+func (c *Bot) Move(gamer gamer.Gamer) (
+	core.Coordinate,
+	[]core.Coordinate,
+) {
 	field := gamer.GetField()
 	from, way := c.GetMove(&field, gamer.GamerId)
 
@@ -30,5 +33,8 @@ func (c *Bot) Move(gamer gamer.Gamer) (core.Coordinate, []core.Coordinate) {
 }
 
 type Mind interface {
-	GetMove(field *core.Field, gamerId int) (core.Coordinate, []core.Coordinate)
+	GetMove(field *core.Field, gamerId int) (
+		core.Coordinate,
+		[]core.Coordinate,
+	)
 }

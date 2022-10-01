@@ -4,10 +4,15 @@ type Checker struct {
 	OwnerId int
 }
 
-func (c Checker) addMove(moves *[]Coordinate,
+func (c Checker) addMove(
+	moves *[]Coordinate,
 	desk *Field,
 	d, from Coordinate,
-	IsMove func(field *Field, from, to Coordinate) (bool, Coordinate)) {
+	IsMove func(field *Field, from, to Coordinate) (
+		bool,
+		Coordinate,
+	),
+) {
 	move := Coordinate{from.X + d.X, from.Y + d.Y}
 	isMove, _ := IsMove(desk, from, move)
 	if isMove {
@@ -15,12 +20,21 @@ func (c Checker) addMove(moves *[]Coordinate,
 	}
 }
 
-func (c Checker) GetAvailableMoves(desk *Field, from Coordinate) []Coordinate {
+func (c Checker) GetAvailableMoves(
+	desk *Field,
+	from Coordinate,
+) []Coordinate {
 	var moves []Coordinate
 	c.addMove(&moves, desk, Coordinate{1, 1}, from, c.isMoveWithoutEat)
 	c.addMove(&moves, desk, Coordinate{1, -1}, from, c.isMoveWithoutEat)
 	c.addMove(&moves, desk, Coordinate{-1, 1}, from, c.isMoveWithoutEat)
-	c.addMove(&moves, desk, Coordinate{-1, -1}, from, c.isMoveWithoutEat)
+	c.addMove(
+		&moves,
+		desk,
+		Coordinate{-1, -1},
+		from,
+		c.isMoveWithoutEat,
+	)
 	c.addMove(&moves, desk, Coordinate{2, 2}, from, c.isMoveToEat)
 	c.addMove(&moves, desk, Coordinate{-2, 2}, from, c.isMoveToEat)
 	c.addMove(&moves, desk, Coordinate{2, -2}, from, c.isMoveToEat)
@@ -28,7 +42,10 @@ func (c Checker) GetAvailableMoves(desk *Field, from Coordinate) []Coordinate {
 	return moves
 }
 
-func (c Checker) GetAvailableMovesToEat(desk *Field, from Coordinate) []Coordinate {
+func (c Checker) GetAvailableMovesToEat(
+	desk *Field,
+	from Coordinate,
+) []Coordinate {
 	var moves []Coordinate
 	c.addMove(&moves, desk, Coordinate{2, 2}, from, c.isMoveToEat)
 	c.addMove(&moves, desk, Coordinate{-2, 2}, from, c.isMoveToEat)
@@ -41,7 +58,14 @@ func (c Checker) GetOwnerId() int {
 	return c.OwnerId
 }
 
-func (c Checker) Move(desk *Field, from Coordinate, way []Coordinate) (bool, Coordinate) {
+func (c Checker) Move(
+	desk *Field,
+	from Coordinate,
+	way []Coordinate,
+) (
+	bool,
+	Coordinate,
+) {
 	var isCanBeMoved bool
 	var foodPosition Coordinate
 
@@ -84,7 +108,10 @@ func (c Checker) Move(desk *Field, from Coordinate, way []Coordinate) (bool, Coo
 
 }
 
-func (c Checker) IsMoveOne(desk *Field, from, to Coordinate) (bool, Coordinate) {
+func (c Checker) IsMoveOne(desk *Field, from, to Coordinate) (
+	bool,
+	Coordinate,
+) {
 	isMoveWithFood, foodPosition := c.isMoveToEat(desk, from, to)
 	if isMoveWithFood {
 		return isMoveWithFood, foodPosition
@@ -93,7 +120,13 @@ func (c Checker) IsMoveOne(desk *Field, from, to Coordinate) (bool, Coordinate) 
 	return isMoveWithOutFood, foodPosition
 }
 
-func (c Checker) isMoveWithoutEat(desk *Field, from, to Coordinate) (bool, Coordinate) {
+func (c Checker) isMoveWithoutEat(
+	desk *Field,
+	from, to Coordinate,
+) (
+	bool,
+	Coordinate,
+) {
 	vertical := 1
 	if c.GetOwnerId() == 1 {
 		vertical = -1
@@ -107,10 +140,14 @@ func (c Checker) isMoveWithoutEat(desk *Field, from, to Coordinate) (bool, Coord
 	return false, desk.BordersLeft
 }
 
-func (c Checker) isMoveToEat(desk *Field, from, to Coordinate) (bool, Coordinate) {
+func (c Checker) isMoveToEat(desk *Field, from, to Coordinate) (
+	bool,
+	Coordinate,
+) {
 	foodPosition := Coordinate{
 		(to.X + from.X) / 2,
-		(to.Y + from.Y) / 2}
+		(to.Y + from.Y) / 2,
+	}
 
 	if (to.X-from.X == 2 || to.X-from.X == -2) &&
 		(to.Y-from.Y == 2 || to.Y-from.Y == -2) {

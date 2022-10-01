@@ -1,8 +1,9 @@
 package grafInterface
 
 import (
-	"chekers/core"
 	"fmt"
+
+	"chekers/core"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 )
@@ -33,7 +34,10 @@ type event struct {
 	isNotEmptyFrom bool
 }
 
-func (c *event) Tapped(coordinate core.Coordinate, interactor *Interface) {
+func (c *event) Tapped(
+	coordinate core.Coordinate,
+	interactor *Interface,
+) {
 	if c.isNotEmptyFrom {
 		fmt.Println("to", coordinate)
 		c.to = append(c.to, coordinate)

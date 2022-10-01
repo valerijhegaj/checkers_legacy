@@ -4,10 +4,15 @@ type King struct {
 	OwnerId int
 }
 
-func (c King) addMove(moves *[]Coordinate,
+func (c King) addMove(
+	moves *[]Coordinate,
 	desk *Field,
 	d, from Coordinate,
-	IsMove func(field *Field, from, to Coordinate) (bool, Coordinate)) {
+	IsMove func(field *Field, from, to Coordinate) (
+		bool,
+		Coordinate,
+	),
+) {
 	move := Coordinate{from.X + d.X, from.Y + d.Y}
 	for ; desk.InBorders(move); move.X, move.Y = move.X+d.X, move.Y+d.Y {
 		isMove, _ := IsMove(desk, from, move)
@@ -17,7 +22,10 @@ func (c King) addMove(moves *[]Coordinate,
 	}
 }
 
-func (c King) GetAvailableMoves(desk *Field, from Coordinate) []Coordinate {
+func (c King) GetAvailableMoves(
+	desk *Field,
+	from Coordinate,
+) []Coordinate {
 	var moves []Coordinate
 	c.addMove(&moves, desk, Coordinate{1, 1}, from, c.IsMoveOne)
 	c.addMove(&moves, desk, Coordinate{1, -1}, from, c.IsMoveOne)
@@ -26,7 +34,10 @@ func (c King) GetAvailableMoves(desk *Field, from Coordinate) []Coordinate {
 	return moves
 }
 
-func (c King) GetAvailableMovesToEat(desk *Field, from Coordinate) []Coordinate {
+func (c King) GetAvailableMovesToEat(
+	desk *Field,
+	from Coordinate,
+) []Coordinate {
 	var moves []Coordinate
 	c.addMove(&moves, desk, Coordinate{1, 1}, from, c.isMoveOneToEat)
 	c.addMove(&moves, desk, Coordinate{1, -1}, from, c.isMoveOneToEat)
@@ -39,12 +50,23 @@ func (c King) GetOwnerId() int {
 	return c.OwnerId
 }
 
-func (c King) Move(desk *Field, from Coordinate, way []Coordinate) (bool, Coordinate) {
+func (c King) Move(
+	desk *Field,
+	from Coordinate,
+	way []Coordinate,
+) (
+	bool,
+	Coordinate,
+) {
 	var isCanBeMoved, isWasFood bool
 	var foodPosition Coordinate
 
 	for i, to := range way {
-		isCanBeMoved, isWasFood, foodPosition = c.isMoveOne(desk, from, to)
+		isCanBeMoved, isWasFood, foodPosition = c.isMoveOne(
+			desk,
+			from,
+			to,
+		)
 		if i == 0 {
 			if isCanBeMoved && !isWasFood {
 				desk.Move(from, to)
@@ -66,12 +88,23 @@ func (c King) Move(desk *Field, from Coordinate, way []Coordinate) (bool, Coordi
 }
 
 // always returns true, method for checker (test in checker)
-func (c King) moveOnlyToEat(desk *Field, from Coordinate, way []Coordinate) (bool, Coordinate) {
+func (c King) moveOnlyToEat(
+	desk *Field,
+	from Coordinate,
+	way []Coordinate,
+) (
+	bool,
+	Coordinate,
+) {
 	var isCanBeMoved, isWasFood bool
 	var foodPosition Coordinate
 
 	for _, to := range way {
-		isCanBeMoved, isWasFood, foodPosition = c.isMoveOne(desk, from, to)
+		isCanBeMoved, isWasFood, foodPosition = c.isMoveOne(
+			desk,
+			from,
+			to,
+		)
 		if !isCanBeMoved || !isWasFood {
 			return true, from
 		}
@@ -83,17 +116,27 @@ func (c King) moveOnlyToEat(desk *Field, from Coordinate, way []Coordinate) (boo
 	return true, from
 }
 
-func (c King) IsMoveOne(desk *Field, from, to Coordinate) (bool, Coordinate) {
+func (c King) IsMoveOne(desk *Field, from, to Coordinate) (
+	bool,
+	Coordinate,
+) {
 	ans, _, foodPosition := c.isMoveOne(desk, from, to)
 	return ans, foodPosition
 }
 
-func (c King) isMoveOneToEat(desk *Field, from, to Coordinate) (bool, Coordinate) {
+func (c King) isMoveOneToEat(desk *Field, from, to Coordinate) (
+	bool,
+	Coordinate,
+) {
 	_, isWasFood, foodPosition := c.isMoveOne(desk, from, to)
 	return isWasFood, foodPosition
 }
 
-func (c King) isMoveOne(desk *Field, from, to Coordinate) (bool, bool, Coordinate) {
+func (c King) isMoveOne(desk *Field, from, to Coordinate) (
+	bool,
+	bool,
+	Coordinate,
+) {
 	finishFoodPosition := desk.BordersLeft
 	dx, dy := to.X-from.X, to.Y-from.Y
 	if dx == 0 || (dx != dy && dx != -dy) || !desk.IsAvailable(to) {

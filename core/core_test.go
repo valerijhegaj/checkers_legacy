@@ -68,8 +68,10 @@ func TestChecker_MoveWithFeature1(t *testing.T) {
 	Core.InitTurnGamerId(gamerId)
 
 	testMove := func(move string, returnValue bool) {
-		ok := Core.Move(Coordinate{int(move[1] - '1'), int(move[0] - 'a')},
-			[]Coordinate{{int(move[3] - '1'), int(move[2] - 'a')}}, gamerId)
+		ok := Core.Move(
+			Coordinate{int(move[1] - '1'), int(move[0] - 'a')},
+			[]Coordinate{{int(move[3] - '1'), int(move[2] - 'a')}}, gamerId,
+		)
 		if ok {
 			gamerId ^= 1
 		}
@@ -105,8 +107,10 @@ func TestChecker_MoveWithFeature1(t *testing.T) {
 	testMove("e7d6", true)
 	testMove("d2c3", true)
 	testMove("d6e5", true)
-	ok := Core.Move(Coordinate{7, 1},
-		[]Coordinate{{5, 3}, {3, 5}}, gamerId)
+	ok := Core.Move(
+		Coordinate{7, 1},
+		[]Coordinate{{5, 3}, {3, 5}}, gamerId,
+	)
 	if ok {
 		gamerId ^= 1
 	}
@@ -134,8 +138,10 @@ func TestChecker_MoveWithFeature2(t *testing.T) {
 	Core.InitTurnGamerId(gamerId)
 
 	testMove := func(move string, returnValue bool) {
-		ok := Core.Move(Coordinate{int(move[1] - '1'), int(move[0] - 'a')},
-			[]Coordinate{{int(move[3] - '1'), int(move[2] - 'a')}}, gamerId)
+		ok := Core.Move(
+			Coordinate{int(move[1] - '1'), int(move[0] - 'a')},
+			[]Coordinate{{int(move[3] - '1'), int(move[2] - 'a')}}, gamerId,
+		)
 		if ok {
 			gamerId ^= 1
 		}

@@ -1,10 +1,11 @@
 package saveLoad
 
 import (
-	"chekers/core"
 	"encoding/json"
 	"io/ioutil"
 	"reflect"
+
+	"chekers/core"
 )
 
 const (
@@ -19,14 +20,18 @@ type Participants struct {
 	Level1 int `json:"level1"`
 }
 
-func GetSaveList(path string) ([]string, error) {
+func GetSaveList(path string) (
+	[]string,
+	error,
+) {
 	var saveList []string
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
 		return saveList, err
 	}
 	for _, file := range files {
-		if !file.IsDir() && len(file.Name()) > 5 && file.Name()[len(file.Name())-5:len(file.Name())] == ".json" {
+		if !file.IsDir() && len(file.Name()) > 5 &&
+			file.Name()[len(file.Name())-5:len(file.Name())] == ".json" {
 			saveList = append(saveList, file.Name())
 		}
 	}
@@ -47,9 +52,15 @@ func (c *Save) Create() {
 func (c *Save) putFiguresOnField(figures []figureInfo) {
 	for _, i := range figures {
 		if i.Figure == "Checker" {
-			c.Field.Figures[core.Coordinate{i.X, i.Y}] = core.Checker{i.GamerId}
+			c.Field.Figures[core.Coordinate{
+				i.X,
+				i.Y,
+			}] = core.Checker{i.GamerId}
 		} else if i.Figure == "King" {
-			c.Field.Figures[core.Coordinate{i.X, i.Y}] = core.King{i.GamerId}
+			c.Field.Figures[core.Coordinate{
+				i.X,
+				i.Y,
+			}] = core.King{i.GamerId}
 		}
 	}
 }
@@ -91,7 +102,8 @@ type jsonSave struct {
 	TurnGamerId  int             `json:"turnGamerId"`
 }
 
-// warning reflect.TypeOf(figure).String()[5:] can don't work with other names and struct of project
+// warning reflect.TypeOf(figure).String()[5:]
+// can don't work with other names and struct of project
 func (c *jsonSave) takeFiguresFromField(field core.Field) {
 	c.Figures = make([]figureInfo, len(field.Figures))
 	i := 0

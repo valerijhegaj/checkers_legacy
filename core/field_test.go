@@ -131,7 +131,14 @@ func TestField_Move(t *testing.T) {
 		t.Error()
 	} else if field.At(Coordinate{1, 1}).GetOwnerId() != 0 {
 		t.Error()
-	} else if reflect.TypeOf(field.At(Coordinate{1, 1})) != reflect.TypeOf(TestFigure{}) {
+	} else if reflect.TypeOf(
+		field.At(
+			Coordinate{
+				1,
+				1,
+			},
+		),
+	) != reflect.TypeOf(TestFigure{}) {
 		t.Error()
 	}
 

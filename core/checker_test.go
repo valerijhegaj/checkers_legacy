@@ -117,194 +117,254 @@ func TestChecker_Move(t *testing.T) {
 		}
 	}
 
-	testFigure_Move(t,
+	testFigure_Move(
+		t,
 		Checker{0}, Checker{0},
 		grandField1, grandField1.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{6, 6}},
 		map[Coordinate]bool{{5, 5}: true},
 		true, Coordinate{6, 6},
-		"1")
-	testFigure_Move(t,
+		"1",
+	)
+	testFigure_Move(
+		t,
 		Checker{0}, Checker{0},
 		grandField1, grandField1.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{6, 2}},
 		map[Coordinate]bool{{5, 3}: true},
 		true, Coordinate{6, 2},
-		"2")
-	testFigure_Move(t,
+		"2",
+	)
+	testFigure_Move(
+		t,
 		Checker{0}, Checker{0},
 		grandField1, grandField1.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{2, 6}},
 		map[Coordinate]bool{{3, 5}: true},
 		true, Coordinate{2, 6},
-		"3")
-	testFigure_Move(t,
+		"3",
+	)
+	testFigure_Move(
+		t,
 		Checker{0}, Checker{0},
 		grandField1, grandField1.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{2, 2}},
 		map[Coordinate]bool{{3, 3}: true},
 		true, Coordinate{2, 2},
-		"4")
+		"4",
+	)
 
-	testFigure_Move(t,
+	testFigure_Move(
+		t,
 		Checker{0}, Checker{0},
 		grandField1, grandField1.GetCopy(),
 		Coordinate{8, 8},
-		[]Coordinate{{6, 6}, {8, 4}, {6, 2}, {4, 0},
+		[]Coordinate{
+			{6, 6}, {8, 4}, {6, 2}, {4, 0},
 			{2, 2}, {0, 4}, {2, 6}, {4, 8},
-			{6, 6}, {4, 4}},
-		map[Coordinate]bool{{7, 7}: true, {7, 5}: true,
+			{6, 6}, {4, 4},
+		},
+		map[Coordinate]bool{
+			{7, 7}: true, {7, 5}: true,
 			{7, 3}: true, {5, 1}: true, {3, 1}: true,
 			{1, 3}: true, {1, 5}: true, {3, 7}: true,
-			{5, 7}: true, {5, 5}: true},
+			{5, 7}: true, {5, 5}: true,
+		},
 		true, Coordinate{4, 4},
-		"5")
-	testFigure_Move(t,
+		"5",
+	)
+	testFigure_Move(
+		t,
 		Checker{0}, Checker{0},
 		grandField1, grandField1.GetCopy(),
 		Coordinate{8, 8},
-		[]Coordinate{{6, 6}, {4, 8}, {2, 6}, {0, 4},
+		[]Coordinate{
+			{6, 6}, {4, 8}, {2, 6}, {0, 4},
 			{2, 2}, {4, 0}, {6, 2}, {8, 4},
-			{6, 6}, {4, 4}},
-		map[Coordinate]bool{{7, 7}: true, {7, 5}: true,
+			{6, 6}, {4, 4},
+		},
+		map[Coordinate]bool{
+			{7, 7}: true, {7, 5}: true,
 			{7, 3}: true, {5, 1}: true, {3, 1}: true,
 			{1, 3}: true, {1, 5}: true, {3, 7}: true,
-			{5, 7}: true, {5, 5}: true},
+			{5, 7}: true, {5, 5}: true,
+		},
 		true, Coordinate{4, 4},
-		"6")
+		"6",
+	)
 
-	testFigure_Move(t,
+	testFigure_Move(
+		t,
 		Checker{0}, Checker{0},
 		grandField1, grandField1.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{5, 3}, {6, 2}},
 		map[Coordinate]bool{},
 		false, Coordinate{4, 4},
-		"7")
-	testFigure_Move(t,
+		"7",
+	)
+	testFigure_Move(
+		t,
 		Checker{0}, Checker{0},
 		grandField1, grandField1.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{3, 5}, {2, 6}},
 		map[Coordinate]bool{},
 		false, Coordinate{4, 4},
-		"8")
-	testFigure_Move(t,
+		"8",
+	)
+	testFigure_Move(
+		t,
 		Checker{0}, Checker{0},
 		grandField1, grandField1.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{3, 3}, {2, 2}},
 		map[Coordinate]bool{},
 		false, Coordinate{4, 4},
-		"9")
-	testFigure_Move(t,
+		"9",
+	)
+	testFigure_Move(
+		t,
 		Checker{0}, Checker{0},
 		grandField1, grandField1.GetCopy(), Coordinate{4, 4},
 		[]Coordinate{{5, 5}, {6, 6}},
 		map[Coordinate]bool{},
 		false, Coordinate{4, 4},
-		"10")
+		"10",
+	)
 
-	testFigure_Move(t,
+	testFigure_Move(
+		t,
 		Checker{0}, King{0},
 		grandField1, grandField1.GetCopy(), Coordinate{8, 4},
 		[]Coordinate{{9, 5}},
 		map[Coordinate]bool{},
 		true, Coordinate{9, 5},
-		"turninig to king")
-	testFigure_Move(t,
+		"turninig to king",
+	)
+	testFigure_Move(
+		t,
 		Checker{1}, Checker{1},
 		grandField1, grandField1.GetCopy(), Coordinate{8, 4},
 		[]Coordinate{{9, 5}},
 		map[Coordinate]bool{},
 		false, Coordinate{8, 4},
-		"turninig to king")
-	testFigure_Move(t,
+		"turninig to king",
+	)
+	testFigure_Move(
+		t,
 		Checker{1}, King{1},
 		grandField1, grandField1.GetCopy(), Coordinate{0, 4},
 		[]Coordinate{{-1, 3}},
 		map[Coordinate]bool{},
 		true, Coordinate{-1, 3},
-		"turninig to king")
-	testFigure_Move(t,
+		"turninig to king",
+	)
+	testFigure_Move(
+		t,
 		Checker{0}, Checker{0},
 		grandField1, grandField1.GetCopy(), Coordinate{0, 4},
 		[]Coordinate{{-1, 3}},
 		map[Coordinate]bool{},
 		false, Coordinate{0, 4},
-		"turninig to king")
+		"turninig to king",
+	)
 
-	testFigure_Move(t,
+	testFigure_Move(
+		t,
 		Checker{0}, King{0},
 		grandField1, grandField1.GetCopy(), Coordinate{8, 4},
 		[]Coordinate{{9, 5}, {8, 4}},
 		map[Coordinate]bool{},
 		true, Coordinate{9, 5},
-		"fantom move after turninig to king")
-	testFigure_Move(t,
+		"fantom move after turninig to king",
+	)
+	testFigure_Move(
+		t,
 		Checker{1}, King{1},
 		grandField1, grandField1.GetCopy(), Coordinate{0, 4},
 		[]Coordinate{{-1, 3}, {8, 4}},
 		map[Coordinate]bool{},
 		true, Coordinate{-1, 3},
-		"fantom move after turninig to king")
+		"fantom move after turninig to king",
+	)
 
 	grandField1.BordersLeft = Coordinate{0, 0}
 	grandField1.BordersRight = Coordinate{8, 8}
 
-	testFigure_Move(t,
+	testFigure_Move(
+		t,
 		Checker{0}, King{0},
 		grandField1, grandField1.GetCopy(), Coordinate{6, 6},
 		[]Coordinate{{8, 4}},
 		map[Coordinate]bool{{7, 5}: true},
 		true, Coordinate{8, 4},
-		"turninig to king after eat")
-	testFigure_Move(t,
+		"turninig to king after eat",
+	)
+	testFigure_Move(
+		t,
 		Checker{1}, King{1},
 		grandField0, grandField0.GetCopy(), Coordinate{2, 6},
 		[]Coordinate{{0, 4}},
 		map[Coordinate]bool{{1, 5}: true},
 		true, Coordinate{0, 4},
-		"turninig to king after eat")
+		"turninig to king after eat",
+	)
 
-	testFigure_Move(t,
+	testFigure_Move(
+		t,
 		Checker{0}, King{0},
 		grandField1, grandField1.GetCopy(), Coordinate{6, 6},
 		[]Coordinate{{8, 4}, {6, 2}},
 		map[Coordinate]bool{{7, 5}: true, {7, 3}: true},
 		true, Coordinate{6, 2},
-		"eat after turninig to king")
-	testFigure_Move(t,
+		"eat after turninig to king",
+	)
+	testFigure_Move(
+		t,
 		Checker{1}, King{1},
 		grandField0, grandField0.GetCopy(), Coordinate{2, 6},
 		[]Coordinate{{0, 4}, {2, 2}},
 		map[Coordinate]bool{{1, 5}: true, {1, 3}: true},
 		true, Coordinate{2, 2},
-		"eat after turninig to king")
+		"eat after turninig to king",
+	)
 
-	testFigure_Move(t,
+	testFigure_Move(
+		t,
 		Checker{0}, Checker{0},
 		grandField1, grandField1.GetCopy(),
 		Coordinate{8, 8},
-		[]Coordinate{{6, 6}, {8, 4}, {6, 2}, {4, 0},
+		[]Coordinate{
+			{6, 6}, {8, 4}, {6, 2}, {4, 0},
 			{2, 2}, {0, 4}, {2, 6}, {4, 8},
-			{6, 6}, {4, 4}},
-		map[Coordinate]bool{{7, 7}: true, {7, 5}: true,
+			{6, 6}, {4, 4},
+		},
+		map[Coordinate]bool{
+			{7, 7}: true, {7, 5}: true,
 			{7, 3}: true, {5, 1}: true, {3, 1}: true,
 			{1, 3}: true, {1, 5}: true, {3, 7}: true,
-			{5, 7}: true, {5, 5}: true},
+			{5, 7}: true, {5, 5}: true,
+		},
 		true, Coordinate{4, 4},
-		"5")
-	testFigure_Move(t,
+		"5",
+	)
+	testFigure_Move(
+		t,
 		Checker{0}, Checker{0},
 		grandField1, grandField1.GetCopy(),
 		Coordinate{8, 8},
-		[]Coordinate{{6, 6}, {4, 8}, {2, 6}, {0, 4},
+		[]Coordinate{
+			{6, 6}, {4, 8}, {2, 6}, {0, 4},
 			{2, 2}, {4, 0}, {6, 2}, {8, 4},
-			{6, 6}, {4, 4}},
-		map[Coordinate]bool{{7, 7}: true, {7, 5}: true,
+			{6, 6}, {4, 4},
+		},
+		map[Coordinate]bool{
+			{7, 7}: true, {7, 5}: true,
 			{7, 3}: true, {5, 1}: true, {3, 1}: true,
 			{1, 3}: true, {1, 5}: true, {3, 7}: true,
-			{5, 7}: true, {5, 5}: true},
+			{5, 7}: true, {5, 5}: true,
+		},
 		true, Coordinate{4, 4},
-		"6")
+		"6",
+	)
 }
 
 func TestChecker_GetAvailableMoves(t *testing.T) {
@@ -321,8 +381,10 @@ func TestChecker_GetAvailableMoves(t *testing.T) {
 		t,
 		&field,
 		Coordinate{2, 2},
-		map[Coordinate]bool{{0, 0}: true, {0, 4}: true,
-			{4, 0}: true, {4, 4}: true},
+		map[Coordinate]bool{
+			{0, 0}: true, {0, 4}: true,
+			{4, 0}: true, {4, 4}: true,
+		},
 		"CheckerGetAvailableMoves1",
 		checker.GetAvailableMoves,
 	)

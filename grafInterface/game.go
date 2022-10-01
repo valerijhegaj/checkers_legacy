@@ -1,13 +1,14 @@
 package grafInterface
 
 import (
+	"image/color"
+	"time"
+
 	"chekers/core"
 	"chekers/saveLoad"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
-	"image/color"
-	"time"
 )
 
 type Game struct {
@@ -42,7 +43,8 @@ func (c *Game) StartInit() {
 
 func (c *Game) createBoard(board core.Field) *fyne.Container {
 	boardDraw := container.NewGridWithColumns(
-		board.BordersRight.Y - board.BordersLeft.Y + 1)
+		board.BordersRight.Y - board.BordersLeft.Y + 1,
+	)
 	var x, y int
 
 	routine := func() {

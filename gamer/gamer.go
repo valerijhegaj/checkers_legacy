@@ -18,7 +18,10 @@ func (c Gamer) IsTurn() bool {
 	return c.Core.IsTurn(c.GamerId)
 }
 
-func (c Gamer) Move(from core.Coordinate, way []core.Coordinate) bool {
+func (c Gamer) Move(
+	from core.Coordinate,
+	way []core.Coordinate,
+) bool {
 	ans := c.Core.Move(from, way, c.GamerId)
 	//if ans {
 	//	fmt.Println(from, way)
@@ -31,7 +34,10 @@ func (c Gamer) InitSave(save saveLoad.Save) {
 	c.Core.InitTurnGamerId(save.TurnGamerId)
 }
 
-func (c Gamer) GetWinner() (bool, Gamer) {
+func (c Gamer) GetWinner() (
+	bool,
+	Gamer,
+) {
 	field := c.GetField()
 	var isCanMakeTurn [2]bool
 	var numberFigures [2]int
@@ -42,14 +48,14 @@ func (c Gamer) GetWinner() (bool, Gamer) {
 			isCanMakeTurn[figure.GetOwnerId()] = true
 		}
 	}
-	if numberFigures[0] == 0 {
+	if numberFigures[0] == 0 || (!isCanMakeTurn[0] && c.Core.IsTurn(0)) {
 		return true, Gamer{1, c.Core}
 	}
-	if numberFigures[1] == 0 {
+	if numberFigures[1] == 0 || (!isCanMakeTurn[1] && c.Core.IsTurn(1)) {
 		return true, Gamer{0, c.Core}
 	}
-	if !isCanMakeTurn[0] && c.Core.IsTurn(0) || !isCanMakeTurn[1] && c.Core.IsTurn(1) {
-		return true, Gamer{0, nil}
-	}
+	//if !isCanMakeTurn[0] && c.Core.IsTurn(0) || !isCanMakeTurn[1] && c.Core.IsTurn(1) {
+	//	return true, Gamer{0, nil}
+	//}
 	return false, Gamer{0, nil}
 }

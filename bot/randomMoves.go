@@ -1,8 +1,9 @@
 package bot
 
 import (
-	"chekers/core"
 	"math/rand"
+
+	"chekers/core"
 )
 
 func NewRandomMoves() RandomMoves {
@@ -14,7 +15,13 @@ type RandomMoves struct {
 	body MinMaxTree
 }
 
-func (c RandomMoves) GetMove(field *core.Field, gamerId int) (core.Coordinate, []core.Coordinate) {
+func (c RandomMoves) GetMove(
+	field *core.Field,
+	gamerId int,
+) (
+	core.Coordinate,
+	[]core.Coordinate,
+) {
 	var from core.Coordinate
 	var way []core.Coordinate
 	c.body = MinMaxTree{2, nil, &simpleAmmount{}}
@@ -24,7 +31,10 @@ func (c RandomMoves) GetMove(field *core.Field, gamerId int) (core.Coordinate, [
 }
 
 func (c RandomMoves) getRandomPosition(left, right core.Coordinate) core.Coordinate {
-	return core.Coordinate{c.randlr(left.X, right.X+1), c.randlr(left.Y, right.Y+1)}
+	return core.Coordinate{
+		c.randlr(left.X, right.X+1),
+		c.randlr(left.Y, right.Y+1),
+	}
 }
 
 type Random interface {

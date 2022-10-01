@@ -1,8 +1,9 @@
 package _interface
 
 import (
-	"chekers/saveLoad"
 	"fmt"
+
+	"chekers/saveLoad"
 )
 
 type loadGameScreen struct {

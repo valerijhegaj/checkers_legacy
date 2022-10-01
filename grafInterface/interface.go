@@ -1,13 +1,14 @@
 package grafInterface
 
 import (
+	"reflect"
+
 	"chekers/bot"
 	"chekers/core"
 	"chekers/gamer"
 	"chekers/saveLoad"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/dialog"
-	"reflect"
 )
 
 const (
@@ -33,7 +34,11 @@ type Interface struct {
 	returnStatus int
 }
 
-func (c *Interface) Init(a *fyne.App, w *fyne.Window, core *core.GameCore) {
+func (c *Interface) Init(
+	a *fyne.App,
+	w *fyne.Window,
+	core *core.GameCore,
+) {
 	c.a = a
 	c.w = w
 

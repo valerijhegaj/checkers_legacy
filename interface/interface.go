@@ -1,12 +1,13 @@
 package _interface
 
 import (
+	"fmt"
+	"sync"
+
 	"chekers/bot"
 	"chekers/core"
 	"chekers/gamer"
 	"chekers/saveLoad"
-	"fmt"
-	"sync"
 )
 
 // interface status
@@ -51,7 +52,10 @@ type Interface struct {
 	mutex sync.Mutex
 }
 
-func (c *Interface) switchCommander(command int, controler screenControler) {
+func (c *Interface) switchCommander(
+	command int,
+	controler screenControler,
+) {
 	switch command {
 	case returnToStatus:
 		if c.status == mainMenu {

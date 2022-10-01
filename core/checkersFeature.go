@@ -4,7 +4,10 @@ type checkersFeature struct {
 	desk *Field
 }
 
-func (c checkersFeature) CheckMove(from, to Coordinate, gamerId int) bool {
+func (c checkersFeature) CheckMove(
+	from, to Coordinate,
+	gamerId int,
+) bool {
 	if c.isGamerHasEater(gamerId) {
 		return c.isMoveToEat(from, to)
 	}

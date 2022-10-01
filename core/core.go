@@ -14,7 +14,11 @@ func (c GameCore) IsTurn(gamerId int) bool {
 	return gamerId == c.turnGamerId
 }
 
-func (c *GameCore) Move(from Coordinate, way []Coordinate, gamerId int) bool {
+func (c *GameCore) Move(
+	from Coordinate,
+	way []Coordinate,
+	gamerId int,
+) bool {
 	if gamerId != c.turnGamerId {
 		return false
 	}
