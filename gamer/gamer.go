@@ -22,8 +22,7 @@ func (c Gamer) Move(
 	from core.Coordinate,
 	way []core.Coordinate,
 ) bool {
-	ans := c.Core.Move(from, way, c.GamerId)
-	return ans
+	return c.Core.Move(from, way, c.GamerId)
 }
 
 func (c Gamer) InitSave(save saveLoad.Save) {

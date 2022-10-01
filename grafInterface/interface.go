@@ -133,3 +133,18 @@ func (c *Interface) Move(from core.Coordinate, to []core.Coordinate) {
 		}
 	}
 }
+
+func (c Interface) IsStartCoordinate(ptr core.Coordinate) bool {
+	field := c.gamer[0].GetField()
+	figure := field.At(ptr)
+	if figure == nil {
+		return false
+	}
+	if c.gamer[0].IsTurn() && figure.GetOwnerId() == 0 {
+		return true
+	}
+	if c.gamer[1].IsTurn() && figure.GetOwnerId() == 1 {
+		return true
+	}
+	return false
+}

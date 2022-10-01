@@ -36,7 +36,7 @@ func (c *Game) StartInit() {
 	save.Master.Gamer0 = saveLoad.Man
 	save.Master.Level0 = 4
 	save.Master.Gamer1 = saveLoad.Bot
-	save.Master.Level1 = 5
+	save.Master.Level1 = 3
 
 	c.intractor.InitSave(save)
 }
