@@ -1,13 +1,14 @@
 package grafInterface
 
 import (
+	"reflect"
+
 	"chekers/bot"
 	"chekers/core"
 	"chekers/gamer"
 	"chekers/saveLoad"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/dialog"
-	"reflect"
 )
 
 const (
@@ -33,7 +34,11 @@ type Interface struct {
 	returnStatus int
 }
 
-func (c *Interface) Init(a *fyne.App, w *fyne.Window, core *core.GameCore) {
+func (c *Interface) Init(
+	a *fyne.App,
+	w *fyne.Window,
+	core *core.GameCore,
+) {
 	c.a = a
 	c.w = w
 
@@ -127,4 +132,19 @@ func (c *Interface) Move(from core.Coordinate, to []core.Coordinate) {
 			c.gamer[1].Move(from, to)
 		}
 	}
+}
+
+func (c Interface) IsStartCoordinate(ptr core.Coordinate) bool {
+	field := c.gamer[0].GetField()
+	figure := field.At(ptr)
+	if figure == nil {
+		return false
+	}
+	if c.gamer[0].IsTurn() && figure.GetOwnerId() == 0 {
+		return true
+	}
+	if c.gamer[1].IsTurn() && figure.GetOwnerId() == 1 {
+		return true
+	}
+	return false
 }

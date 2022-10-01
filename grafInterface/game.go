@@ -1,13 +1,14 @@
 package grafInterface
 
 import (
+	"image/color"
+	"time"
+
 	"chekers/core"
 	"chekers/saveLoad"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
-	"image/color"
-	"time"
 )
 
 type Game struct {
@@ -33,7 +34,7 @@ func (c *Game) StartInit() {
 	var save saveLoad.Save
 	save.Create()
 	save.Master.Gamer0 = saveLoad.Man
-	save.Master.Level0 = 3
+	save.Master.Level0 = 4
 	save.Master.Gamer1 = saveLoad.Bot
 	save.Master.Level1 = 3
 
@@ -42,7 +43,8 @@ func (c *Game) StartInit() {
 
 func (c *Game) createBoard(board core.Field) *fyne.Container {
 	boardDraw := container.NewGridWithColumns(
-		board.BordersRight.Y - board.BordersLeft.Y + 1)
+		board.BordersRight.Y - board.BordersLeft.Y + 1,
+	)
 	var x, y int
 
 	routine := func() {
@@ -59,13 +61,15 @@ func (c *Game) createBoard(board core.Field) *fyne.Container {
 			boardDraw.Add(container.NewMax(cellBg, cell))
 		}
 	}
-	if c.intractor.gamer[0].IsTurn() {
+	if c.intractor.gamer[0].IsTurn() && c.intractor.Participants.Gamer0 == saveLoad.Man ||
+		c.intractor.Participants.Gamer1 == saveLoad.Bot {
 		for x = board.BordersRight.X; x >= board.BordersLeft.X; x-- {
 			for y = board.BordersLeft.Y; y <= board.BordersRight.Y; y++ {
 				routine()
 			}
 		}
-	} else {
+	} else if c.intractor.gamer[1].IsTurn() && c.intractor.Participants.Gamer1 == saveLoad.Man ||
+		c.intractor.Participants.Gamer1 == saveLoad.Bot {
 		for x = board.BordersLeft.X; x <= board.BordersRight.X; x++ {
 			for y = board.BordersRight.Y; y >= board.BordersLeft.Y; y-- {
 				routine()

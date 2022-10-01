@@ -1,8 +1,10 @@
 package _interface
 
 import (
-	"chekers/saveLoad"
 	"fmt"
+
+	"chekers/core"
+	"chekers/saveLoad"
 )
 
 type startGameScreen struct {
@@ -25,12 +27,7 @@ func (c startGameScreen) DisplayHelp() {
 func (c startGameScreen) parse(command string) int {
 	if command == "start" || command == "Start" {
 		var save saveLoad.Save
-		err := save.Read("startFields/start_field.json")
-		if err != nil {
-			fmt.Println(err.Error())
-			fmt.Println("can't open start field, make shure you install all right and didn't delete anything")
-			return resume
-		}
+		save.Field = core.NewStandard8x8Field()
 
 		save.Master = c.getMaster()
 		save.TurnGamerId = 0
@@ -57,7 +54,10 @@ func (c startGameScreen) getMaster() saveLoad.Participants {
 	return master
 }
 
-func (c startGameScreen) parseMasterOne(gamer, level *int, name string) {
+func (c startGameScreen) parseMasterOne(
+	gamer, level *int,
+	name string,
+) {
 	if len(name) != 5 {
 		*gamer = saveLoad.Man
 		return

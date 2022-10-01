@@ -1,12 +1,13 @@
 package _interface
 
 import (
+	"fmt"
+	"reflect"
+
 	"chekers/bot"
 	"chekers/core"
 	"chekers/gamer"
 	"chekers/saveLoad"
-	"fmt"
-	"reflect"
 )
 
 type gameScreen struct {
@@ -65,8 +66,10 @@ func (c gameScreen) Display() {
 
 func (c gameScreen) DisplayHelp() {
 	displayHelpBasic()
-	fmt.Println("move a4a5 - move figure from to, " +
-		"for all gamers coordinates are absolute")
+	fmt.Println(
+		"move a4a5 - move figure from to, " +
+			"for all gamers coordinates are absolute",
+	)
 	fmt.Println("O - checker, K - king, _ - empty")
 	go c.Resume()
 }
@@ -83,7 +86,11 @@ func (c gameScreen) parse(command string) int {
 	return parseBasic(command)
 }
 
-func (c gameScreen) makeMove(gamer gamer.Gamer, from core.Coordinate, to []core.Coordinate) int {
+func (c gameScreen) makeMove(
+	gamer gamer.Gamer,
+	from core.Coordinate,
+	to []core.Coordinate,
+) int {
 	if gamer.Move(from, to) {
 		return game
 	} else {
@@ -92,7 +99,10 @@ func (c gameScreen) makeMove(gamer gamer.Gamer, from core.Coordinate, to []core.
 	}
 }
 
-func InitFromStringCoordinate(coordinate string, interactor *Interface) core.Coordinate {
+func InitFromStringCoordinate(
+	coordinate string,
+	interactor *Interface,
+) core.Coordinate {
 	var c core.Coordinate
 	c.X = int(coordinate[1] - '1')
 	c.Y = int(coordinate[0] - 'a')
@@ -103,7 +113,10 @@ func InitFromStringCoordinate(coordinate string, interactor *Interface) core.Coo
 	return c
 }
 
-func ToStringCoordinate(c core.Coordinate, interactor *Interface) string {
+func ToStringCoordinate(
+	c core.Coordinate,
+	interactor *Interface,
+) string {
 	ans := ""
 	if interactor.gamer1.IsTurn() {
 		ans += string(rune(7 - c.Y + 'a'))
@@ -116,7 +129,10 @@ func ToStringCoordinate(c core.Coordinate, interactor *Interface) string {
 	return ans
 }
 
-func (c gameScreen) getMove() (core.Coordinate, []core.Coordinate) {
+func (c gameScreen) getMove() (
+	core.Coordinate,
+	[]core.Coordinate,
+) {
 	var input string
 
 	c.interactor.mutex.Lock()
@@ -139,7 +155,10 @@ func (c gameScreen) getMove() (core.Coordinate, []core.Coordinate) {
 		if i == 0 {
 			from = InitFromStringCoordinate(coordinate, c.interactor)
 		} else {
-			to = append(to, InitFromStringCoordinate(coordinate, c.interactor))
+			to = append(
+				to,
+				InitFromStringCoordinate(coordinate, c.interactor),
+			)
 		}
 	}
 
@@ -148,13 +167,25 @@ func (c gameScreen) getMove() (core.Coordinate, []core.Coordinate) {
 
 func (c gameScreen) Resume() {
 	if c.interactor.gamer0.IsTurn() {
-		c.routine(c.interactor.Participants.Gamer0, c.interactor.gamer0, c.interactor.bot0)
+		c.routine(
+			c.interactor.Participants.Gamer0,
+			c.interactor.gamer0,
+			c.interactor.bot0,
+		)
 	} else {
-		c.routine(c.interactor.Participants.Gamer1, c.interactor.gamer1, c.interactor.bot1)
+		c.routine(
+			c.interactor.Participants.Gamer1,
+			c.interactor.gamer1,
+			c.interactor.bot1,
+		)
 	}
 }
 
-func (c gameScreen) routine(master int, gamer gamer.Gamer, bot bot.Bot) {
+func (c gameScreen) routine(
+	master int,
+	gamer gamer.Gamer,
+	bot bot.Bot,
+) {
 	if master == saveLoad.Bot {
 		from, to := bot.Move(gamer)
 		c.print(from, to)
@@ -165,7 +196,10 @@ func (c gameScreen) routine(master int, gamer gamer.Gamer, bot bot.Bot) {
 	}
 }
 
-func (c gameScreen) print(from core.Coordinate, to []core.Coordinate) {
+func (c gameScreen) print(
+	from core.Coordinate,
+	to []core.Coordinate,
+) {
 	fmt.Print("from: ", ToStringCoordinate(from, c.interactor))
 	fmt.Print(" to: ")
 	for _, move := range to {

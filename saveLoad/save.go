@@ -1,10 +1,11 @@
 package saveLoad
 
 import (
-	"chekers/core"
 	"encoding/json"
 	"io/ioutil"
 	"reflect"
+
+	"chekers/core"
 )
 
 const (
@@ -19,14 +20,18 @@ type Participants struct {
 	Level1 int `json:"level1"`
 }
 
-func GetSaveList(path string) ([]string, error) {
+func GetSaveList(path string) (
+	[]string,
+	error,
+) {
 	var saveList []string
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
 		return saveList, err
 	}
 	for _, file := range files {
-		if !file.IsDir() && file.Name() != ".gitignore" {
+		if !file.IsDir() && len(file.Name()) > 5 &&
+			file.Name()[len(file.Name())-5:len(file.Name())] == ".json" {
 			saveList = append(saveList, file.Name())
 		}
 	}
@@ -41,48 +46,27 @@ type Save struct {
 }
 
 func (c *Save) Create() {
-	c.Field.Init()
-	c.Field.Put(core.Coordinate{0, 0}, core.Checker{0})
-	c.Field.Put(core.Coordinate{0, 2}, core.Checker{0})
-	c.Field.Put(core.Coordinate{0, 4}, core.Checker{0})
-	c.Field.Put(core.Coordinate{0, 6}, core.Checker{0})
-	c.Field.Put(core.Coordinate{1, 1}, core.Checker{0})
-	c.Field.Put(core.Coordinate{1, 3}, core.Checker{0})
-	c.Field.Put(core.Coordinate{1, 5}, core.Checker{0})
-	c.Field.Put(core.Coordinate{1, 7}, core.Checker{0})
-	c.Field.Put(core.Coordinate{2, 0}, core.Checker{0})
-	c.Field.Put(core.Coordinate{2, 2}, core.Checker{0})
-	c.Field.Put(core.Coordinate{2, 4}, core.Checker{0})
-	c.Field.Put(core.Coordinate{2, 6}, core.Checker{0})
-
-	c.Field.Put(core.Coordinate{5, 1}, core.Checker{1})
-	c.Field.Put(core.Coordinate{5, 3}, core.Checker{1})
-	c.Field.Put(core.Coordinate{5, 5}, core.Checker{1})
-	c.Field.Put(core.Coordinate{5, 7}, core.Checker{1})
-	c.Field.Put(core.Coordinate{6, 0}, core.Checker{1})
-	c.Field.Put(core.Coordinate{6, 2}, core.Checker{1})
-	c.Field.Put(core.Coordinate{6, 4}, core.Checker{1})
-	c.Field.Put(core.Coordinate{6, 6}, core.Checker{1})
-	c.Field.Put(core.Coordinate{7, 1}, core.Checker{1})
-	c.Field.Put(core.Coordinate{7, 3}, core.Checker{1})
-	c.Field.Put(core.Coordinate{7, 5}, core.Checker{1})
-	c.Field.Put(core.Coordinate{7, 7}, core.Checker{1})
-
-	c.Field.BordersRight = core.Coordinate{7, 7}
+	c.Field = core.NewStandard8x8Field()
 }
 
 func (c *Save) putFiguresOnField(figures []figureInfo) {
 	for _, i := range figures {
 		if i.Figure == "Checker" {
-			c.Field.Figures[core.Coordinate{i.X, i.Y}] = core.Checker{i.GamerId}
+			c.Field.Figures[core.Coordinate{
+				i.X,
+				i.Y,
+			}] = core.Checker{i.GamerId}
 		} else if i.Figure == "King" {
-			c.Field.Figures[core.Coordinate{i.X, i.Y}] = core.King{i.GamerId}
+			c.Field.Figures[core.Coordinate{
+				i.X,
+				i.Y,
+			}] = core.King{i.GamerId}
 		}
 	}
 }
 
 func (c *Save) initFromJsonSave(jsonSave *jsonSave) {
-	c.Field.Init()
+	c.Field = core.NewField()
 	c.putFiguresOnField(jsonSave.Figures)
 	c.Field.BordersRight = jsonSave.BordersRight
 	c.Field.BordersLeft = jsonSave.BordersLeft
@@ -118,7 +102,8 @@ type jsonSave struct {
 	TurnGamerId  int             `json:"turnGamerId"`
 }
 
-// warning reflect.TypeOf(figure).String()[5:] can don't work with other names and struct of project
+// warning reflect.TypeOf(figure).String()[5:]
+// can don't work with other names and struct of project
 func (c *jsonSave) takeFiguresFromField(field core.Field) {
 	c.Figures = make([]figureInfo, len(field.Figures))
 	i := 0

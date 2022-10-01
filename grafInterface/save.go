@@ -1,8 +1,9 @@
 package grafInterface
 
 import (
-	"chekers/saveLoad"
 	"fmt"
+
+	"chekers/saveLoad"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
@@ -19,9 +20,11 @@ type Save struct {
 func (c *Save) Init(intractor *Interface) {
 	c.intractor = intractor
 
-	c.save = widget.NewButton("Save", func() {
-		c.Save(c.name)
-	})
+	c.save = widget.NewButton(
+		"Save", func() {
+			c.Save(c.name)
+		},
+	)
 }
 
 func (c *Save) GetContent() fyne.CanvasObject {
