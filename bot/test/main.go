@@ -69,7 +69,7 @@ func grandCompare(population [8]mind, level int) [3]mind {
 			mindj := population[j]
 			go func() {
 				for c := 0; c < 3; c++ {
-					cmp := compare(mindi, mindj, level)
+					cmp := compare(mindi, mindj, level, level)
 					if cmp == 1 {
 						score[i].Add(2)
 					} else if cmp == -1 {
@@ -105,18 +105,18 @@ func grandCompare(population [8]mind, level int) [3]mind {
 	}
 }
 
-func compare(l, r mind, level int) int {
+func compare(l, r mind, leftLevel, rightLevel int) int {
 	var bots [2]bot.Bot
 	bots[0] = bot.Bot{
 		bot.NewMinMaxV2(
-			level,
+			leftLevel,
 			l.kingCost,
 			l.checkerCost,
 		),
 	}
 	bots[1] = bot.Bot{
 		bot.NewMinMaxV2(
-			level,
+			rightLevel,
 			r.kingCost,
 			r.checkerCost,
 		),
@@ -157,10 +157,11 @@ func compare(l, r mind, level int) int {
 
 func main() {
 	var wg sync.WaitGroup
-	wg.Add(10)
+	c := 10
+	wg.Add(2 * c)
 	start := time.Now()
 	t := func() {
-		x := compare(mind{2, 1}, mind{1, 1}, 3)
+		x := compare(mind{2, 1}, mind{1, 1}, 3, 4)
 		if x == 1 {
 			fmt.Println("Yes")
 		} else if x == 0 {
@@ -171,7 +172,7 @@ func main() {
 		wg.Done()
 	}
 	tr := func() {
-		x := compare(mind{1, 1}, mind{2, 1}, 3)
+		x := compare(mind{1, 1}, mind{2, 1}, 4, 3)
 		if x == 1 {
 			fmt.Println("NO")
 		} else if x == 0 {
@@ -181,16 +182,10 @@ func main() {
 		}
 		wg.Done()
 	}
-	go t()
-	go t()
-	go t()
-	go t()
-	go t()
-	go tr()
-	go tr()
-	go tr()
-	go tr()
-	go tr()
+	for i := 0; i < c; i++ {
+		go t()
+		go tr()
+	}
 	wg.Wait()
 	fmt.Println(time.Now().Sub(start))
 

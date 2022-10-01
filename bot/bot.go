@@ -12,7 +12,7 @@ func NewBot(level int) Bot {
 	} else if level <= 4 {
 		bot.Mind = NewMinMax(level)
 	} else {
-		bot.Mind = NewMinMaxV2(level-1, 1.5, 1)
+		bot.Mind = NewMinMaxV2(level-1, 3, 1)
 	}
 	return bot
 }

@@ -13,7 +13,7 @@ func testFigure_GetAvailableMoves(
 	moves := GetAvailableMoves(field, from)
 	for _, move := range moves {
 		if !availableMoves[move] {
-			t.Error(messeage)
+			t.Error(messeage, move)
 		}
 		delete(availableMoves, move)
 	}

@@ -33,7 +33,7 @@ func (c *Game) KeyEventCallback(keyEvent *fyne.KeyEvent) {
 func (c *Game) StartInit() {
 	var save saveLoad.Save
 	save.Create()
-	save.Master.Gamer0 = saveLoad.Bot
+	save.Master.Gamer0 = saveLoad.Man
 	save.Master.Level0 = 4
 	save.Master.Gamer1 = saveLoad.Bot
 	save.Master.Level1 = 5

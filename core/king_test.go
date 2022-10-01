@@ -474,3 +474,199 @@ func TestKing_GetAvailableMoves(t *testing.T) {
 	}
 	test(figure.GetAvailableMovesToEat, realMoves)
 }
+
+func TestKing_GetAvailableMoves2(t *testing.T) {
+	field := NewTestField()
+
+	king := King{0}
+	field.Put(Coordinate{3, 3}, king)
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{3, 3},
+		map[Coordinate]bool{
+			{0, 0}: true, {1, 1}: true, {2, 2}: true,
+			{2, 4}: true, {1, 5}: true, {0, 6}: true,
+			{4, 2}: true, {5, 1}: true, {6, 0}: true,
+			{4, 4}: true, {5, 5}: true, {6, 6}: true,
+			{7, 7}: true,
+		},
+		"KingGetAvailableMoves1",
+		king.GetAvailableMoves,
+	)
+
+	field.Put(Coordinate{2, 2}, TestFigure{1})
+	field.Put(Coordinate{2, 4}, TestFigure{1})
+	field.Put(Coordinate{4, 2}, TestFigure{1})
+	field.Put(Coordinate{4, 4}, TestFigure{1})
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{3, 3},
+		map[Coordinate]bool{
+			{0, 0}: true, {1, 1}: true, {1, 5}: true,
+			{0, 6}: true, {5, 1}: true, {6, 0}: true,
+			{5, 5}: true, {6, 6}: true, {7, 7}: true,
+		},
+		"KingGetAvailableMoves2",
+		king.GetAvailableMoves,
+	)
+
+	field = NewTestField()
+	field.Put(Coordinate{3, 3}, king)
+	field.Put(Coordinate{2, 2}, TestFigure{0})
+	field.Put(Coordinate{2, 4}, TestFigure{0})
+	field.Put(Coordinate{4, 2}, TestFigure{0})
+	field.Put(Coordinate{4, 4}, TestFigure{0})
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{3, 3},
+		map[Coordinate]bool{},
+		"KingGetAvailableMoves3",
+		king.GetAvailableMoves,
+	)
+
+	field = NewTestField()
+	field.Put(Coordinate{3, 3}, king)
+	field.Put(Coordinate{1, 1}, TestFigure{1})
+	field.Put(Coordinate{1, 5}, TestFigure{1})
+	field.Put(Coordinate{5, 1}, TestFigure{1})
+	field.Put(Coordinate{5, 5}, TestFigure{1})
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{3, 3},
+		map[Coordinate]bool{
+			{0, 0}: true, {2, 2}: true, {2, 4}: true,
+			{0, 6}: true, {4, 2}: true, {6, 0}: true,
+			{4, 4}: true, {6, 6}: true, {7, 7}: true,
+		},
+		"KingGetAvailableMoves4",
+		king.GetAvailableMoves,
+	)
+
+	field.Put(Coordinate{2, 2}, TestFigure{1})
+	field.Put(Coordinate{2, 4}, TestFigure{1})
+	field.Put(Coordinate{4, 2}, TestFigure{1})
+	field.Put(Coordinate{4, 4}, TestFigure{1})
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{3, 3},
+		map[Coordinate]bool{},
+		"KingGetAvailableMoves5",
+		king.GetAvailableMoves,
+	)
+
+	field = NewTestField()
+	field.Put(Coordinate{3, 3}, king)
+	field.Put(Coordinate{1, 1}, TestFigure{0})
+	field.Put(Coordinate{1, 5}, TestFigure{0})
+	field.Put(Coordinate{5, 1}, TestFigure{0})
+	field.Put(Coordinate{5, 5}, TestFigure{0})
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{3, 3},
+		map[Coordinate]bool{
+			{2, 2}: true, {2, 4}: true, {4, 2}: true,
+			{4, 4}: true,
+		},
+		"KingGetAvailableMoves6",
+		king.GetAvailableMoves,
+	)
+}
+
+func TestKing_GetAvailableMovesToEat(t *testing.T) {
+	field := NewTestField()
+
+	king := King{0}
+	field.Put(Coordinate{3, 3}, king)
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{3, 3},
+		map[Coordinate]bool{},
+		"KingGetAvailableMovesToEat1",
+		king.GetAvailableMovesToEat,
+	)
+
+	field.Put(Coordinate{2, 2}, TestFigure{1})
+	field.Put(Coordinate{2, 4}, TestFigure{1})
+	field.Put(Coordinate{4, 2}, TestFigure{1})
+	field.Put(Coordinate{4, 4}, TestFigure{1})
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{3, 3},
+		map[Coordinate]bool{
+			{0, 0}: true, {1, 1}: true, {1, 5}: true,
+			{0, 6}: true, {5, 1}: true, {6, 0}: true,
+			{5, 5}: true, {6, 6}: true, {7, 7}: true,
+		},
+		"KingGetAvailableMovesToEat2",
+		king.GetAvailableMovesToEat,
+	)
+
+	field = NewTestField()
+	field.Put(Coordinate{3, 3}, king)
+	field.Put(Coordinate{2, 2}, TestFigure{0})
+	field.Put(Coordinate{2, 4}, TestFigure{0})
+	field.Put(Coordinate{4, 2}, TestFigure{0})
+	field.Put(Coordinate{4, 4}, TestFigure{0})
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{3, 3},
+		map[Coordinate]bool{},
+		"KingGetAvailableMovesToEat3",
+		king.GetAvailableMovesToEat,
+	)
+
+	field = NewTestField()
+	field.Put(Coordinate{3, 3}, king)
+	field.Put(Coordinate{1, 1}, TestFigure{1})
+	field.Put(Coordinate{1, 5}, TestFigure{1})
+	field.Put(Coordinate{5, 1}, TestFigure{1})
+	field.Put(Coordinate{5, 5}, TestFigure{1})
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{3, 3},
+		map[Coordinate]bool{
+			{0, 0}: true, {0, 6}: true, {6, 0}: true,
+			{6, 6}: true, {7, 7}: true,
+		},
+		"KingGetAvailableMovesToEat4",
+		king.GetAvailableMovesToEat,
+	)
+
+	field.Put(Coordinate{2, 2}, TestFigure{1})
+	field.Put(Coordinate{2, 4}, TestFigure{1})
+	field.Put(Coordinate{4, 2}, TestFigure{1})
+	field.Put(Coordinate{4, 4}, TestFigure{1})
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{3, 3},
+		map[Coordinate]bool{},
+		"KingGetAvailableMovesToEat5",
+		king.GetAvailableMovesToEat,
+	)
+
+	field = NewTestField()
+	field.Put(Coordinate{3, 3}, king)
+	field.Put(Coordinate{1, 1}, TestFigure{0})
+	field.Put(Coordinate{1, 5}, TestFigure{0})
+	field.Put(Coordinate{5, 1}, TestFigure{0})
+	field.Put(Coordinate{5, 5}, TestFigure{0})
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{3, 3},
+		map[Coordinate]bool{},
+		"KingGetAvailableMovesToEat6",
+		king.GetAvailableMovesToEat,
+	)
+}

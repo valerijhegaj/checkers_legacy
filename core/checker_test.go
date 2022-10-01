@@ -389,4 +389,132 @@ func TestChecker_GetAvailableMoves(t *testing.T) {
 		checker.GetAvailableMoves,
 	)
 
+	field = NewTestField()
+	field.Put(Coordinate{2, 2}, checker)
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{2, 2},
+		map[Coordinate]bool{
+			{1, 1}: true, {1, 3}: true,
+		},
+		"CheckerGetAvailableMoves2",
+		checker.GetAvailableMoves,
+	)
+	field.Put(Coordinate{3, 0}, checker)
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{3, 0},
+		map[Coordinate]bool{
+			{2, 1}: true,
+		},
+		"CheckerGetAvailableMoves3",
+		checker.GetAvailableMoves,
+	)
+
+	field = NewTestField()
+	checker = Checker{0}
+	field.Put(Coordinate{6, 6}, checker)
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{6, 6},
+		map[Coordinate]bool{
+			{7, 5}: true, {7, 7}: true,
+		},
+		"CheckerGetAvailableMoves4",
+		checker.GetAvailableMoves,
+	)
+
+	field = NewTestField()
+
+	field.Put(Coordinate{1, 1}, TestFigure{1})
+	field.Put(Coordinate{3, 1}, TestFigure{1})
+	field.Put(Coordinate{1, 3}, TestFigure{1})
+	field.Put(Coordinate{3, 3}, TestFigure{1})
+	checker = Checker{1}
+	field.Put(Coordinate{2, 2}, checker)
+
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{2, 2},
+		map[Coordinate]bool{},
+		"CheckerGetAvailableMoves5",
+		checker.GetAvailableMoves,
+	)
+}
+
+func TestChecker_GetAvailableMovesToEat(t *testing.T) {
+	field := NewTestField()
+
+	field.Put(Coordinate{1, 1}, TestFigure{0})
+	field.Put(Coordinate{3, 1}, TestFigure{0})
+	field.Put(Coordinate{1, 3}, TestFigure{0})
+	field.Put(Coordinate{3, 3}, TestFigure{0})
+	checker := Checker{1}
+	field.Put(Coordinate{2, 2}, checker)
+
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{2, 2},
+		map[Coordinate]bool{
+			{0, 0}: true, {0, 4}: true,
+			{4, 0}: true, {4, 4}: true,
+		},
+		"CheckerGetAvailableMovesToEat1",
+		checker.GetAvailableMovesToEat,
+	)
+
+	field = NewTestField()
+	field.Put(Coordinate{2, 2}, checker)
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{2, 2},
+		map[Coordinate]bool{},
+		"CheckerGetAvailableMovesToEat2",
+		checker.GetAvailableMovesToEat,
+	)
+	field.Put(Coordinate{3, 0}, checker)
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{3, 0},
+		map[Coordinate]bool{},
+		"CheckerGetAvailableMovesToEat3",
+		checker.GetAvailableMovesToEat,
+	)
+
+	field = NewTestField()
+	checker = Checker{0}
+	field.Put(Coordinate{6, 6}, checker)
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{6, 6},
+		map[Coordinate]bool{},
+		"CheckerGetAvailableMovesToEat4",
+		checker.GetAvailableMovesToEat,
+	)
+
+	field = NewTestField()
+
+	field.Put(Coordinate{1, 1}, TestFigure{1})
+	field.Put(Coordinate{3, 1}, TestFigure{1})
+	field.Put(Coordinate{1, 3}, TestFigure{1})
+	field.Put(Coordinate{3, 3}, TestFigure{1})
+	checker = Checker{1}
+	field.Put(Coordinate{2, 2}, checker)
+
+	testFigure_GetAvailableMoves(
+		t,
+		&field,
+		Coordinate{2, 2},
+		map[Coordinate]bool{},
+		"CheckerGetAvailableMovesToEat5",
+		checker.GetAvailableMovesToEat,
+	)
 }
