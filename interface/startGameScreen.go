@@ -3,6 +3,7 @@ package _interface
 import (
 	"fmt"
 
+	"chekers/core"
 	"chekers/saveLoad"
 )
 
@@ -26,12 +27,7 @@ func (c startGameScreen) DisplayHelp() {
 func (c startGameScreen) parse(command string) int {
 	if command == "start" || command == "Start" {
 		var save saveLoad.Save
-		err := save.Read("startFields/start_field.json")
-		if err != nil {
-			fmt.Println(err.Error())
-			fmt.Println("can't open start field, make shure you install all right and didn't delete anything")
-			return resume
-		}
+		save.Field = core.NewStandart8x8Field()
 
 		save.Master = c.getMaster()
 		save.TurnGamerId = 0

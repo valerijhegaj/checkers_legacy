@@ -4,38 +4,26 @@ func NewField() Field {
 	return Field{Figures: make(map[Coordinate]Figure)}
 }
 
-func NewStandart8x8Field() Field {
+func NewStandartField(n int) Field {
 	field := NewField()
+	for x := 0; x < n/2-1; x++ {
+		for y := x % 2; y < n; y += 2 {
+			field.Put(Coordinate{x, y}, Checker{0})
+		}
+	}
 
-	field.Put(Coordinate{0, 0}, Checker{0})
-	field.Put(Coordinate{0, 2}, Checker{0})
-	field.Put(Coordinate{0, 4}, Checker{0})
-	field.Put(Coordinate{0, 6}, Checker{0})
-	field.Put(Coordinate{1, 1}, Checker{0})
-	field.Put(Coordinate{1, 3}, Checker{0})
-	field.Put(Coordinate{1, 5}, Checker{0})
-	field.Put(Coordinate{1, 5}, Checker{0})
-	field.Put(Coordinate{1, 7}, Checker{0})
-	field.Put(Coordinate{2, 0}, Checker{0})
-	field.Put(Coordinate{2, 2}, Checker{0})
-	field.Put(Coordinate{2, 4}, Checker{0})
-	field.Put(Coordinate{2, 6}, Checker{0})
+	for x := n/2 + 1; x < n; x++ {
+		for y := x % 2; y < n; y += 2 {
+			field.Put(Coordinate{x, y}, Checker{1})
+		}
+	}
 
-	field.Put(Coordinate{5, 1}, Checker{1})
-	field.Put(Coordinate{5, 3}, Checker{1})
-	field.Put(Coordinate{5, 5}, Checker{1})
-	field.Put(Coordinate{5, 7}, Checker{1})
-	field.Put(Coordinate{6, 0}, Checker{1})
-	field.Put(Coordinate{6, 2}, Checker{1})
-	field.Put(Coordinate{6, 4}, Checker{1})
-	field.Put(Coordinate{6, 6}, Checker{1})
-	field.Put(Coordinate{7, 1}, Checker{1})
-	field.Put(Coordinate{7, 3}, Checker{1})
-	field.Put(Coordinate{7, 5}, Checker{1})
-	field.Put(Coordinate{7, 7}, Checker{1})
-
-	field.BordersRight = Coordinate{7, 7}
+	field.BordersRight = Coordinate{n - 1, n - 1}
 	return field
+}
+
+func NewStandart8x8Field() Field {
+	return NewStandartField(8)
 }
 
 type Field struct {
