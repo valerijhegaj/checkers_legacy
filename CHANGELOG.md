@@ -1,4 +1,10 @@
 # Changelog - Checkers
+
+## v1.0.1
+stable version, unstable saves
+- fixed non - obvious besyachee control
+- mac intel
+
 ## v1.0.0
 very unstable version, may behave strangely, crash, deadlocks
 - added compilations

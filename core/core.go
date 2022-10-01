@@ -1,12 +1,9 @@
 package core
 
-import "sync"
-
 type GameCore struct {
 	field       Field
 	turnGamerId int
 	checkersFeature
-	Mutex sync.Mutex
 }
 
 func (c GameCore) GetField() Field {
@@ -17,7 +14,11 @@ func (c GameCore) IsTurn(gamerId int) bool {
 	return gamerId == c.turnGamerId
 }
 
-func (c *GameCore) Move(from Coordinate, way []Coordinate, gamerId int) bool {
+func (c *GameCore) Move(
+	from Coordinate,
+	way []Coordinate,
+	gamerId int,
+) bool {
 	if gamerId != c.turnGamerId {
 		return false
 	}
@@ -32,12 +33,11 @@ func (c *GameCore) Move(from Coordinate, way []Coordinate, gamerId int) bool {
 		return false
 	}
 
-	sucсeess, to := figure.Move(&c.field, from, way)
-	if sucсeess {
-		c.checkersFeature.MadeMove(from, to, gamerId)
+	success, _ := figure.Move(&c.field, from, way)
+	if success {
 		c.turnGamerId ^= 1
 	}
-	return sucсeess
+	return success
 }
 
 func (c *GameCore) InitField(field Field) {

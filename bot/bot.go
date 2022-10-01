@@ -8,25 +8,33 @@ import (
 func NewBot(level int) Bot {
 	var bot Bot
 	if level == 0 {
-		bot.Analyzator = CreateRandomMoves()
+		bot.Mind = NewRandomMoves()
+	} else if level <= 4 {
+		bot.Mind = NewMinMax(level)
 	} else {
-		bot.Analyzator = minMax{level, tree{}}
+		bot.Mind = NewMinMaxV2(level-1, 3, 1)
 	}
 	return bot
 }
 
 type Bot struct {
-	Analyzator
+	Mind
 }
 
-func (c *Bot) Move(gamer gamer.Gamer) (core.Coordinate, []core.Coordinate) {
+func (c *Bot) Move(gamer gamer.Gamer) (
+	core.Coordinate,
+	[]core.Coordinate,
+) {
 	field := gamer.GetField()
-	from, way := c.analyzeField(&field, gamer.GamerId)
+	from, way := c.GetMove(&field, gamer.GamerId)
 
 	gamer.Move(from, way)
 	return from, way
 }
 
-type Analyzator interface {
-	analyzeField(field *core.Field, gamerId int) (core.Coordinate, []core.Coordinate)
+type Mind interface {
+	GetMove(field *core.Field, gamerId int) (
+		core.Coordinate,
+		[]core.Coordinate,
+	)
 }

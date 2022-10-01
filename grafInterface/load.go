@@ -1,8 +1,9 @@
 package grafInterface
 
 import (
-	"chekers/saveLoad"
 	"fmt"
+
+	"chekers/saveLoad"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
@@ -28,9 +29,13 @@ func (c *Load) GetContent() fyne.CanvasObject {
 	content := container.NewVBox()
 	for i := range saveList {
 		name := saveList[i]
-		content.Add(widget.NewButton(name[:len(name)-5], func() {
-			c.Load(name)
-		}))
+		content.Add(
+			widget.NewButton(
+				name[:len(name)-5], func() {
+					c.Load(name)
+				},
+			),
+		)
 	}
 	return container.NewVScroll(
 		content,

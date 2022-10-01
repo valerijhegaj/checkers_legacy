@@ -3,9 +3,10 @@
 package grafInterface
 
 import (
+	"reflect"
+
 	"chekers/core"
 	"fyne.io/fyne/v2"
-	"reflect"
 )
 
 func GetResource(figure core.Figure) fyne.Resource {

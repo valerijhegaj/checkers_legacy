@@ -1,8 +1,9 @@
 package grafInterface
 
 import (
-	"chekers/core"
 	"fmt"
+
+	"chekers/core"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 )
@@ -28,28 +29,28 @@ func (c Cell) TappedSecondary(*fyne.PointEvent) {
 var eventor event
 
 type event struct {
-	from           core.Coordinate
-	to             []core.Coordinate
-	isNotEmptyFrom bool
+	from core.Coordinate
+	to   []core.Coordinate
 }
 
-func (c *event) Tapped(coordinate core.Coordinate, interactor *Interface) {
-	if c.isNotEmptyFrom {
-		fmt.Println("to", coordinate)
-		c.to = append(c.to, coordinate)
-		interactor.Move(c.from, c.to)
-		c.to = nil
-		c.isNotEmptyFrom = false
-	} else {
-		fmt.Println("from", coordinate)
+func (c *event) Tapped(
+	coordinate core.Coordinate,
+	interactor *Interface,
+) {
+	if interactor.IsStartCoordinate(coordinate) {
 		c.from = coordinate
-		c.isNotEmptyFrom = true
+		c.to = nil
+		fmt.Println("from", coordinate)
+		return
 	}
+	fmt.Println("to", coordinate)
+	c.to = append(c.to, coordinate)
+	interactor.Move(c.from, c.to)
+	c.to = nil
+
 }
 
 func (c *event) TappedSecondary(coordinate core.Coordinate) {
 	fmt.Println("way", coordinate)
-	if c.isNotEmptyFrom {
-		c.to = append(c.to, coordinate)
-	}
+	c.to = append(c.to, coordinate)
 }

@@ -18,24 +18,36 @@ it's a simple checkers
 ## Download
 
 ### Windows (amd-64)
-https://github.com/valerijhegaj/checkers/blob/v1.0.0/download/windows-amd64/checkers.zip \
+https://github.com/valerijhegaj/checkers/blob/release/download/windows-amd64/checkers.zip \
 download \
 unzip in folder for game \
 click checker.exe
 
 ### Linux (amd-64)
-https://github.com/valerijhegaj/checkers/blob/v1.0.0/download/linux-amd64/checkers.tar.gz \
+https://github.com/valerijhegaj/checkers/blob/release/download/linux-amd64/checkers.tar.gz \
 download \
 unzip in folder for game \
 chmod +x checkers \
 ./checkers
 
 ### Mac (arm-64 = apple silicon)
-https://github.com/valerijhegaj/checkers/blob/v1.0.0/download/macos-arm64/checkers.tar.gz \
+https://github.com/valerijhegaj/checkers/blob/release/download/macos-arm64/checkers.tar.gz \
 download \
 unzip in folder for game \
 chmod +x checkers \
 ./checkers
+
+### Mac (amd-64 = intel)
+https://github.com/valerijhegaj/checkers/blob/release/download/macos-amd64/checkers.tar.gz \
+download \
+unzip in folder for game \
+chmod +x checkers \
+./checkers
+
+### Other or if the above does not start
+git clone https://github.com/valerijhegaj/checkers.git \
+cd checkers \
+go run main.go
 
 ## Report bugs / questions
 

@@ -1,5 +1,31 @@
 package core
 
+func NewField() Field {
+	return Field{Figures: make(map[Coordinate]Figure)}
+}
+
+func NewStandardField(n int) Field {
+	field := NewField()
+	for x := 0; x < n/2-1; x++ {
+		for y := x % 2; y < n; y += 2 {
+			field.Put(Coordinate{x, y}, Checker{0})
+		}
+	}
+
+	for x := n/2 + 1; x < n; x++ {
+		for y := x % 2; y < n; y += 2 {
+			field.Put(Coordinate{x, y}, Checker{1})
+		}
+	}
+
+	field.BordersRight = Coordinate{n - 1, n - 1}
+	return field
+}
+
+func NewStandard8x8Field() Field {
+	return NewStandardField(8)
+}
+
 type Field struct {
 	Figures      map[Coordinate]Figure
 	Bin          []Figure
@@ -7,13 +33,11 @@ type Field struct {
 	BordersLeft  Coordinate
 }
 
-func (c *Field) Init() {
-	c.Figures = make(map[Coordinate]Figure)
-}
-
 func (c *Field) InBorders(coordinate Coordinate) bool {
-	return coordinate.X <= c.BordersRight.X && coordinate.Y <= c.BordersRight.Y &&
-		coordinate.X >= c.BordersLeft.X && coordinate.Y >= c.BordersLeft.Y
+	return coordinate.X <= c.BordersRight.X &&
+		coordinate.Y <= c.BordersRight.Y &&
+		coordinate.X >= c.BordersLeft.X &&
+		coordinate.Y >= c.BordersLeft.Y
 }
 
 func (c *Field) IsAvailable(coordinate Coordinate) bool {
@@ -38,7 +62,7 @@ func (c *Field) Move(from Coordinate, to Coordinate) {
 
 func (c *Field) Remove(ptr Coordinate) {
 	c.Bin = append(c.Bin, c.Figures[ptr])
-	delete(c.Figures, ptr)
+	c.RemoveWithOutBin(ptr)
 }
 
 func (c *Field) RemoveWithOutBin(ptr Coordinate) {
@@ -50,8 +74,7 @@ func (c *Field) Put(ptr Coordinate, figure Figure) {
 }
 
 func (c *Field) GetCopy() Field {
-	var copy_ Field
-	copy_.Init()
+	copy_ := NewField()
 
 	for key, value := range c.Figures {
 		copy_.Figures[key] = value
