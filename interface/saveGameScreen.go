@@ -3,7 +3,7 @@ package _interface
 import (
 	"fmt"
 
-	"chekers/saveLoad"
+	"checkers/saveLoad"
 )
 
 type saveGameScreen struct {

@@ -3,7 +3,7 @@ package bot
 import (
 	"math/rand"
 
-	"chekers/core"
+	"checkers/core"
 )
 
 func NewRandomMoves() RandomMoves {

@@ -4,7 +4,7 @@ import (
 	"math"
 	"reflect"
 
-	"chekers/core"
+	"checkers/core"
 )
 
 func NewMinMax(level int) Mind {

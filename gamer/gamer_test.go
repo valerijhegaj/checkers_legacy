@@ -3,7 +3,7 @@ package gamer
 import (
 	"testing"
 
-	"chekers/core"
+	"checkers/core"
 )
 
 func TestGamer_GetField(t *testing.T) {
