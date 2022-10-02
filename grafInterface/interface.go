@@ -3,10 +3,10 @@ package grafInterface
 import (
 	"reflect"
 
-	"chekers/bot"
-	"chekers/core"
-	"chekers/gamer"
-	"chekers/saveLoad"
+	"checkers/bot"
+	"checkers/core"
+	"checkers/gamer"
+	"checkers/saveLoad"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/dialog"
 )

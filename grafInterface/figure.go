@@ -5,7 +5,7 @@ package grafInterface
 import (
 	"reflect"
 
-	"chekers/core"
+	"checkers/core"
 	"fyne.io/fyne/v2"
 )
 

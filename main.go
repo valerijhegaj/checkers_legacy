@@ -1,8 +1,8 @@
 package main
 
 import (
-	"chekers/core"
-	"chekers/grafInterface"
+	"checkers/core"
+	"checkers/grafInterface"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 )

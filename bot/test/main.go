@@ -7,9 +7,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"chekers/bot"
-	"chekers/core"
-	"chekers/gamer"
+	"checkers/bot"
+	"checkers/core"
+	"checkers/gamer"
 )
 
 type mind struct {
