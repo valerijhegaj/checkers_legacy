@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"sync"
 
-	"chekers/bot"
-	"chekers/core"
-	"chekers/gamer"
-	"chekers/saveLoad"
+	"checkers/bot"
+	"checkers/core"
+	"checkers/gamer"
+	"checkers/saveLoad"
 )
 
 // interface status

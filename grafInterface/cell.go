@@ -3,7 +3,7 @@ package grafInterface
 import (
 	"fmt"
 
-	"chekers/core"
+	"checkers/core"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 )

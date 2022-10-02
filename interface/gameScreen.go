@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"reflect"
 
-	"chekers/bot"
-	"chekers/core"
-	"chekers/gamer"
-	"chekers/saveLoad"
+	"checkers/bot"
+	"checkers/core"
+	"checkers/gamer"
+	"checkers/saveLoad"
 )
 
 type gameScreen struct {

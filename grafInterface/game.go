@@ -4,8 +4,8 @@ import (
 	"image/color"
 	"time"
 
-	"chekers/core"
-	"chekers/saveLoad"
+	"checkers/core"
+	"checkers/saveLoad"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"

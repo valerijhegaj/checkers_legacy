@@ -1,8 +1,8 @@
 package gamer
 
 import (
-	"chekers/core"
-	"chekers/saveLoad"
+	"checkers/core"
+	"checkers/saveLoad"
 )
 
 type Gamer struct {

@@ -1,4 +1,4 @@
-module chekers
+module checkers
 
 go 1.19
 

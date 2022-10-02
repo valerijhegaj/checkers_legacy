@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"reflect"
 
-	"chekers/core"
+	"checkers/core"
 )
 
 const (

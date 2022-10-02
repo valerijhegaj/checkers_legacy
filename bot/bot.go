@@ -1,8 +1,8 @@
 package bot
 
 import (
-	"chekers/core"
-	"chekers/gamer"
+	"checkers/core"
+	"checkers/gamer"
 )
 
 func NewBot(level int) Bot {

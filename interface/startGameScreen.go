@@ -3,8 +3,8 @@ package _interface
 import (
 	"fmt"
 
-	"chekers/core"
-	"chekers/saveLoad"
+	"checkers/core"
+	"checkers/saveLoad"
 )
 
 type startGameScreen struct {

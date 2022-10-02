@@ -3,7 +3,7 @@ package grafInterface
 import (
 	"fmt"
 
-	"chekers/saveLoad"
+	"checkers/saveLoad"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
