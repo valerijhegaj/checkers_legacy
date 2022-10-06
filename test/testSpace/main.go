@@ -1,20 +1,22 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+	"log"
+)
+
+type helper struct {
+	Password string `json:"password"`
+	Name     string `json:"name"`
+}
 
 func main() {
-	var x [4]func()
-	s := []string{"0", "1", "2", "3"}
-	for i := 0; i < 4; i++ {
-		c := s[i]
-		x[i] = func() {
-
-			fmt.Println(c)
-		}
+	s := "{\"name\":\"user\", \"password\":\"password\"}"
+	var s1 helper
+	err := json.Unmarshal([]byte(s), &s1)
+	if err != nil {
+		log.Fatalln(err.Error())
 	}
-
-	for _, f := range x {
-		f()
-	}
-
+	fmt.Println(s1)
 }
