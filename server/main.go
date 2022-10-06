@@ -6,7 +6,7 @@ import (
 
 	changePassword "server/api/change_password"
 	createUser "server/api/create_user"
-	"server/api/get_token"
+	getToken "server/api/get_token"
 	"server/internal/data"
 )
 
