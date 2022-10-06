@@ -30,7 +30,7 @@ func (c *RAMstorage) Init() error {
 func (c *RAMstorage) NewUser(name, password string) error {
 	_, ok := c.users[name]
 	if ok {
-		return errors.New("already exist")
+		return errors.New(ErrorAlreadyExist)
 	}
 	c.users[name] = password
 	return nil
@@ -44,10 +44,10 @@ func (c *RAMstorage) NewToken(token, name string) error {
 func (c *RAMstorage) CheckAccess(name, password string) error {
 	pass, ok := c.users[name]
 	if !ok {
-		return errors.New("wrong username")
+		return errors.New(ErrorWrongUserName)
 	}
 	if pass != password {
-		return errors.New("wrong password")
+		return errors.New(ErrorWrongPassword)
 	}
 	return nil
 }
@@ -59,9 +59,9 @@ func (c *RAMstorage) DeleteUser(name string) {
 func (c *RAMstorage) ChangePassword(token, password string) error {
 	_, ok := c.tokens[token]
 	if !ok {
-		return errors.New("don't exist token")
+		return errors.New(ErrorBadToken)
 	}
 
-	c.tokens[token] = password
+	c.users[c.tokens[token]] = password
 	return nil
 }

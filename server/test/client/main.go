@@ -56,9 +56,5 @@ func test_client_change_password(token, password, url string) {
 }
 
 func main() {
-	test_client_create_user("name", "password", url)
-	test_client_change_password("name", "p", url)
-	test_client_get_token("name", "p", url)
-	test_client_get_token("name", "password", url)
-	test_client_change_password("name", "p", url)
+	test_client_change_password("nam", "p", url)
 }

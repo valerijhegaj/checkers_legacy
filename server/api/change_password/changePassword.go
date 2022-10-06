@@ -36,11 +36,15 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	err = d.ChangePassword(token, password)
 	if err != nil {
 		log.Println(
-			"Tryed to change password token:", token+", but",
+			"Tried to change password token:", token+", but",
 			err.Error(),
 		)
-		if err.Error() == "bad token" {
+		if err.Error() == data.ErrorBadToken {
 			w.WriteHeader(http.StatusForbidden)
+			return
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
 		}
 	}
 	log.Println("Changed password for token:", token)

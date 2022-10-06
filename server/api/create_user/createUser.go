@@ -35,7 +35,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	err = d.NewUser(name, password)
 	if err != nil {
 		log.Println("Tryed to create user:", name+", but", err.Error())
-		if err.Error() == "already exist" {
+		if err.Error() == data.ErrorAlreadyExist {
 			w.WriteHeader(http.StatusForbidden)
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)

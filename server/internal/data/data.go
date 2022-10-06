@@ -26,3 +26,10 @@ type Storage interface {
 
 	ChangePassword(token, password string) error
 }
+
+const (
+	ErrorBadToken      = "bad token"
+	ErrorAlreadyExist  = "already exist"
+	ErrorWrongUserName = "wrong username"
+	ErrorWrongPassword = "wrong password"
+)
