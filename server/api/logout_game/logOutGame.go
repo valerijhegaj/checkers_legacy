@@ -1,4 +1,4 @@
-package changePassword
+package logOutGame
 
 import (
 	"encoding/json"
@@ -10,49 +10,47 @@ import (
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPatch {
+	if r.Method != http.MethodPost {
 		log.Println(
-			"Bad method for change password, request method:",
+			"Bad method for logout game, request method:",
 			r.Method,
 		)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	token, password, err := Parse(r.Body)
+	token, gameID, err := Parse(r.Body)
 	if err != nil {
-		log.Println(err.Error())
+		log.Println("Tried to logout game, but " + err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	d, err := data.GetStorage()
 	if err != nil {
-		log.Println(err.Error())
+		log.Println("Tried to logout game, but " + err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	err = d.ChangePassword(token, password)
+	err = d.LogOutGame(token, gameID)
 	if err != nil {
-		log.Println(
-			"Tried to change password token:", token+", but",
-			err.Error(),
-		)
-		if err.Error() == data.ErrorBadToken {
+		log.Println("Tried to logout game, but " + err.Error())
+		if err.Error() == data.ErrorNotFoundGame {
+			w.WriteHeader(http.StatusNotFound)
+		} else if err.Error() == data.ErrorNotHaveAccess {
 			w.WriteHeader(http.StatusForbidden)
-			return
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
-			return
 		}
+		return
 	}
-	log.Println("Changed password for token:", token)
+	log.Println("Loged out gameID: " + gameID + ", token: " + token)
 }
 
 type helperParse struct {
-	Token    string `json:"token"`
-	Password string `json:"password"`
+	Token  string `json:"token"`
+	GameID string `json:"game_id"`
 }
 
 func Parse(i io.ReadCloser) (
@@ -71,5 +69,5 @@ func Parse(i io.ReadCloser) (
 	if err != nil {
 		return "", "", err
 	}
-	return helper.Token, helper.Password, nil
+	return helper.Token, helper.GameID, nil
 }

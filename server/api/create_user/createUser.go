@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	getToken "server/api/get_token"
-	"server/internal/data"
+	"checkers/server/api/get_token"
+	"checkers/server/internal/data"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {

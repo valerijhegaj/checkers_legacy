@@ -74,6 +74,15 @@ func (c *Save) initFromJsonSave(jsonSave *jsonSave) {
 	c.TurnGamerId = jsonSave.TurnGamerId
 }
 
+func (c *Save) GetRawSave() (
+	[]byte,
+	error,
+) {
+	var helper jsonSave
+	helper.initFromSave(c)
+	return helper.getRawSave()
+}
+
 func (c *Save) Read(path string) error {
 	var helper jsonSave
 	err := helper.read(path)
@@ -122,6 +131,13 @@ func (c *jsonSave) initFromSave(save *Save) {
 	c.BordersRight = save.Field.BordersRight
 	c.BordersLeft = save.Field.BordersLeft
 	c.takeFiguresFromField(save.Field)
+}
+
+func (c *jsonSave) getRawSave() (
+	[]byte,
+	error,
+) {
+	return json.Marshal(c)
 }
 
 func (c *jsonSave) write(path string) error {

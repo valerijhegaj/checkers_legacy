@@ -7,8 +7,8 @@ import (
 	"log"
 	"net/http"
 
-	"server/internal/data"
-	"server/internal/helper"
+	"checkers/server/internal/data"
+	"checkers/server/internal/helper"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +41,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	w.Write([]byte(token))
+	w.Write([]byte("{\"token\":\"" + token + "\"}"))
 	log.Println("Created token:", token+",", "for user:", name)
 }
 
