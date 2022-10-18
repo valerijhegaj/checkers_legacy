@@ -1,10 +1,6 @@
 package main
 
-import (
-	"encoding/json"
-	"fmt"
-	"log"
-)
+import "fmt"
 
 type helper struct {
 	Password string `json:"password"`
@@ -12,11 +8,10 @@ type helper struct {
 }
 
 func main() {
-	s := "{\"name\":\"user\", \"password\":\"password\"}"
-	var s1 helper
-	err := json.Unmarshal([]byte(s), &s1)
-	if err != nil {
-		log.Fatalln(err.Error())
-	}
-	fmt.Println(s1)
+	m := make(map[int]helper)
+	m[1] = helper{"1", "1"}
+	h := m[1]
+	h.Password = "12"
+	m[1] = h
+	fmt.Println(m)
 }

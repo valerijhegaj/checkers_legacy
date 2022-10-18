@@ -2,7 +2,6 @@ package data
 
 import (
 	"checkers/core"
-	"checkers/saveLoad"
 	"checkers/server/internal/game"
 )
 
@@ -12,7 +11,10 @@ func InitGlobalStorage() error {
 	GlobalStorage = struct {
 		UserCurator
 		GameCurator
-	}{UserCurator: NewCuratorRAMU()}
+	}{
+		UserCurator: NewCuratorRAMU(),
+		GameCurator: NewCuratorRAMG(),
+	}
 	return nil
 }
 
@@ -34,12 +36,15 @@ type UserCurator interface {
 }
 
 type GameCurator interface {
-	NewGame(token, gameName string, settings game.Settings) error
+	NewGame(gameName, password string, settings game.Settings) error
 
-	GetGame(token, gameName string) (saveLoad.Save, error)
-	LoginGame(token, gameName string) error
-	MakeMove(
-		token string, from core.Coordinate, path []core.Coordinate,
-	) error
+	GetGame(token, gameName string) ([]byte, error)
+	LoginGame(token, gameName, password string) error
+	ChangeGame(token, gameName string, settings game.Settings) error
 	DeleteGame(token, gameName string) error
+
+	MakeMove(
+		token, gameName string, from core.Coordinate,
+		path []core.Coordinate,
+	) error
 }

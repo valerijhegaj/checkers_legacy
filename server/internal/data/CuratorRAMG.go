@@ -10,11 +10,15 @@ import (
 )
 
 func NewCuratorRAMG() GameCurator {
-	return &CuratorRAMG{}
+	return &CuratorRAMG{
+		game:      make(map[int]*game.Game),
+		gameID:    make(map[string]int),
+		maxGameID: 1,
+	}
 }
 
 type CuratorRAMG struct {
-	game   map[int]game.Game
+	game   map[int]*game.Game
 	gameID map[string]int
 
 	maxGameID int
@@ -23,6 +27,10 @@ type CuratorRAMG struct {
 func (c *CuratorRAMG) NewGame(
 	gameName, password string, settings game.Settings,
 ) error {
+	if settings.Gamer0 == settings.Gamer1 &&
+		settings.Gamer0 == saveLoad.Bot {
+		return errors.New(errorsStrings.PermissionDenied)
+	}
 	_, ok := c.gameID[gameName]
 	if ok {
 		return errors.New(errorsStrings.GameAlreadyExist)
@@ -37,26 +45,35 @@ func (c *CuratorRAMG) NewGame(
 
 func (c *CuratorRAMG) GetGame(
 	token string, gameName string,
-) (saveLoad.Save, error) {
+) ([]byte, error) {
 	userID, err := GetGlobalStorage().GetUserID(token)
 	if err != nil {
-		return saveLoad.Save{}, err
+		return nil, errors.New(errorsStrings.NotAuthorized)
 	}
 	gameID, ok := c.gameID[gameName]
 	if !ok {
-		return saveLoad.Save{}, errors.New(errorsStrings.NotFound)
+		return nil, errors.New(errorsStrings.NotFound)
 	}
 	game := c.game[gameID]
 	return game.GetGame(userID)
 }
 
 func (c *CuratorRAMG) LoginGame(
-	token string, gameName string,
+	token, gameName, password string,
 ) error {
-	return nil
+	userID, err := GetGlobalStorage().GetUserID(token)
+	if err != nil {
+		return errors.New(errorsStrings.NotAuthorized)
+	}
+	gameID, ok := c.gameID[gameName]
+	if !ok {
+		return errors.New(errorsStrings.NotFound)
+	}
+	game := c.game[gameID]
+	return game.AddUser(userID, password)
 }
-func (c *CuratorRAMG) MakeMove(
-	token string, from core.Coordinate, path []core.Coordinate,
+func (c *CuratorRAMG) ChangeGame(
+	token, gameName string, settings game.Settings,
 ) error {
 	return nil
 }
@@ -64,4 +81,19 @@ func (c *CuratorRAMG) DeleteGame(
 	token string, gameName string,
 ) error {
 	return nil
+}
+func (c *CuratorRAMG) MakeMove(
+	token, gameName string, from core.Coordinate,
+	path []core.Coordinate,
+) error {
+	userID, err := GetGlobalStorage().GetUserID(token)
+	if err != nil {
+		return errors.New(errorsStrings.NotAuthorized)
+	}
+	gameID, ok := c.gameID[gameName]
+	if !ok {
+		return errors.New(errorsStrings.NotFound)
+	}
+	game := c.game[gameID]
+	return game.Move(userID, from, path)
 }

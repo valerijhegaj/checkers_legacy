@@ -6,6 +6,7 @@ type Helper struct {
 	Password string `json:"password,omitempty"`
 	UserName string `json:"username,omitempty"`
 	MaxAge   int    `json:"max_age,omitempty"`
+	GameName string `json:"gamename,omitempty"`
 }
 
 func Parse(data []byte) (
