@@ -26,6 +26,18 @@ func NewStandard8x8Field() Field {
 	return NewStandardField(8)
 }
 
+func IsEqual(left *Field, right *Field) bool {
+	if len(left.Figures) != len(right.Figures) {
+		return false
+	}
+	for key, value := range left.Figures {
+		if right.Figures[key] != value {
+			return false
+		}
+	}
+	return true
+}
+
 type Field struct {
 	Figures      map[Coordinate]Figure
 	Bin          []Figure

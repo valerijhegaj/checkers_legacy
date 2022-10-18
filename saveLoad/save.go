@@ -13,6 +13,12 @@ const (
 	Bot
 )
 
+func NewSaveFromRawSave(rawSave []byte) *Save {
+	var save Save
+	save.InitFromRawSave(rawSave)
+	return &save
+}
+
 type Participants struct {
 	Gamer0 int `json:"gamer0"`
 	Level0 int `json:"level0"`
@@ -76,6 +82,16 @@ func (c *Save) GetRawSave() (
 	return helper.getRawSave()
 }
 
+func (c *Save) InitFromRawSave(rawSave []byte) error {
+	var helper jsonSave
+	err := helper.initFromRawSave(rawSave)
+	if err != nil {
+		return err
+	}
+	c.initFromJsonSave(&helper)
+	return nil
+}
+
 func (c *Save) Read(path string) error {
 	var helper jsonSave
 	err := helper.read(path)
@@ -133,6 +149,10 @@ func (c *jsonSave) getRawSave() (
 	error,
 ) {
 	return json.Marshal(c)
+}
+
+func (c *jsonSave) initFromRawSave(rawSave []byte) error {
+	return json.Unmarshal(rawSave, c)
 }
 
 func (c *jsonSave) write(path string) error {

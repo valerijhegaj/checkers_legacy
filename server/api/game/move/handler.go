@@ -1,12 +1,10 @@
 package move
 
 import (
-	"encoding/json"
 	"io"
 	"log"
 	"net/http"
 
-	"checkers/core"
 	"checkers/server/api"
 	"checkers/server/internal/data"
 	"checkers/server/internal/errorsStrings"
@@ -15,7 +13,7 @@ import (
 func Handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		log.Println(
-			"Bad method for new game, request method:",
+			"Bad method for move, request method:",
 			r.Method,
 		)
 		w.WriteHeader(http.StatusBadRequest)
@@ -24,26 +22,16 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		log.Println("Failed new game:", err.Error())
+		log.Println("Failed move:", err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	parsedBody, err := api.Parse(body)
-	gameName := parsedBody.GameName
+	gameName, from, way :=
+		parsedBody.GameName, parsedBody.From, parsedBody.Way
 	if err != nil {
-		log.Println("Failed new game: " + err.Error())
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	way := struct {
-		From core.Coordinate   `json:"from"`
-		Way  []core.Coordinate `json:"way"`
-	}{}
-	err = json.Unmarshal(body, &way)
-	if err != nil {
-		log.Println("Failed new game: " + err.Error())
+		log.Println("Failed move: " + err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -57,9 +45,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	storage := data.GetGlobalStorage()
-	err = storage.MakeMove(token, gameName, way.From, way.Way)
+	err = storage.MakeMove(token, gameName, from, way)
 	if err != nil {
-		log.Println("Failed new game: " + err.Error())
+		log.Println("Failed move: " + err.Error())
 		switch err.Error() {
 		case errorsStrings.NotAuthorized:
 			w.WriteHeader(http.StatusForbidden)

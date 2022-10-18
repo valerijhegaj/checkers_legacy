@@ -2,7 +2,7 @@ package data
 
 import (
 	"checkers/core"
-	"checkers/server/internal/game"
+	"checkers/server/pkg/defines"
 )
 
 var GlobalStorage Storage
@@ -36,11 +36,11 @@ type UserCurator interface {
 }
 
 type GameCurator interface {
-	NewGame(gameName, password string, settings game.Settings) error
+	NewGame(gameName, password string, settings defines.Settings) error
 
 	GetGame(token, gameName string) ([]byte, error)
 	LoginGame(token, gameName, password string) error
-	ChangeGame(token, gameName string, settings game.Settings) error
+	ChangeGame(token, gameName string, settings defines.Settings) error
 	DeleteGame(token, gameName string) error
 
 	MakeMove(

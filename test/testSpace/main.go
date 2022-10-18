@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"checkers/core"
+)
 
 type helper struct {
 	Password string `json:"password"`
@@ -8,10 +12,12 @@ type helper struct {
 }
 
 func main() {
-	m := make(map[int]helper)
-	m[1] = helper{"1", "1"}
-	h := m[1]
-	h.Password = "12"
-	m[1] = h
-	fmt.Println(m)
+	checker_1 := core.Checker{1}
+	checker_1_clone := core.Checker{1}
+	checker_0 := core.Checker{0}
+	//king_1 := core.King{1}
+	//king_0 := core.King{0}
+	fmt.Println(checker_1 == checker_1_clone)
+	fmt.Println(checker_0 == checker_1)
+	fmt.Println(core.Figure(checker_1_clone) == core.Figure(checker_1))
 }

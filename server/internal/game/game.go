@@ -8,9 +8,10 @@ import (
 	"checkers/gamer"
 	"checkers/saveLoad"
 	"checkers/server/internal/errorsStrings"
+	"checkers/server/pkg/defines"
 )
 
-func NewGame(settings Settings, password string) *Game {
+func NewGame(settings defines.Settings, password string) *Game {
 	var c core.GameCore
 	game := Game{
 		gamer: [2]gamer.Gamer{{0, &c}, {1, &c}},
@@ -41,8 +42,6 @@ type Participants struct {
 	gamer [2]int
 	level [2]int
 }
-
-type Settings saveLoad.Participants
 
 type Game struct {
 	gamer [2]gamer.Gamer
@@ -102,8 +101,9 @@ func (c *Game) GetGame(userID int) ([]byte, error) {
 	save.Field = c.gamer[0].GetField()
 	if c.gamer[0].IsTurn() {
 		save.TurnGamerId = 0
+	} else {
+		save.TurnGamerId = 1
 	}
-	save.TurnGamerId = 1
 
 	save.Master.Gamer0 = c.Participants.gamer[0]
 	save.Master.Gamer1 = c.Participants.gamer[1]

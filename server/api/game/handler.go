@@ -1,7 +1,6 @@
 package game
 
 import (
-	"encoding/json"
 	"io"
 	"log"
 	"net/http"
@@ -9,19 +8,10 @@ import (
 	"checkers/server/api"
 	"checkers/server/internal/data"
 	"checkers/server/internal/errorsStrings"
-	"checkers/server/internal/game"
+	"checkers/server/pkg/defines"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		log.Println(
-			"Bad method for new game, request method:",
-			r.Method,
-		)
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		log.Println("Failed new game:", err.Error())
@@ -30,7 +20,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	parsedBody, err := api.Parse(body)
-	gameName, password := parsedBody.GameName, parsedBody.Password
+	gameName, password, settings :=
+		parsedBody.GameName, parsedBody.Password, parsedBody.Settings
 	if err != nil {
 		log.Println("Failed new game: " + err.Error())
 		w.WriteHeader(http.StatusBadRequest)
@@ -51,7 +42,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	case http.MethodPost:
 		login(w, token, gameName, password)
 	case http.MethodPut:
-		change(w, token, gameName, body)
+		change(w, token, gameName, settings)
 	case http.MethodDelete:
 		del(w, token, gameName)
 	default:
@@ -64,9 +55,17 @@ func get(w http.ResponseWriter, token, gameName string) {
 	game, err := storage.GetGame(token, gameName)
 	if err == nil {
 		w.Write(game)
-		w.WriteHeader(http.StatusOK)
+		log.Printf(
+			"Successfully get game token: %s, gamename %s\n", token,
+			gameName,
+		)
 		return
 	}
+
+	log.Printf(
+		"Failed get game error: %s, token: %s, gamename: %s", err.Error(),
+		token, gameName,
+	)
 	switch err.Error() { //refactor extract method
 	case errorsStrings.NotAuthorized:
 		w.WriteHeader(http.StatusUnauthorized)
@@ -84,13 +83,25 @@ func login(w http.ResponseWriter, token, gameName, password string) {
 	err := storage.LoginGame(token, gameName, password)
 	if err == nil {
 		w.WriteHeader(http.StatusCreated)
+		log.Printf(
+			"Successfully log in game token: %s, gamename %s\n", token,
+			gameName,
+		)
 		return
 	}
+
+	log.Printf(
+		"Failed log in game error: %s, token: %s, gamename: %s",
+		err.Error(),
+		token, gameName,
+	)
 	switch err.Error() {
 	case errorsStrings.NotAuthorized:
 		w.WriteHeader(http.StatusUnauthorized)
 	case errorsStrings.NotFound:
 		w.WriteHeader(http.StatusNotFound)
+	case errorsStrings.PermissionDenied:
+		w.WriteHeader(http.StatusForbidden)
 	default:
 		w.WriteHeader(http.StatusInternalServerError)
 	}
@@ -98,21 +109,25 @@ func login(w http.ResponseWriter, token, gameName, password string) {
 
 func change(
 	w http.ResponseWriter, token, gameName string,
-	body []byte,
+	settings defines.Settings,
 ) {
-	var settings game.Settings
-	err := json.Unmarshal(body, &settings)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+	storage := data.GetGlobalStorage()
+	err := storage.ChangeGame(token, gameName, settings)
+	if err == nil {
+		w.WriteHeader(http.StatusOK)
+		log.Printf(
+			"Successfully change settings game token: %s, gamename %s\n",
+			token,
+			gameName,
+		)
 		return
 	}
 
-	storage := data.GetGlobalStorage()
-	err = storage.ChangeGame(token, gameName, settings)
-	if err == nil {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
+	log.Printf(
+		"Failed change settings game error: %s, token: %s, gamename: %s",
+		err.Error(),
+		token, gameName,
+	)
 	switch err.Error() {
 	case errorsStrings.NotAuthorized:
 		w.WriteHeader(http.StatusUnauthorized)
@@ -128,8 +143,17 @@ func del(w http.ResponseWriter, token, gameName string) {
 	err := storage.DeleteGame(token, gameName)
 	if err == nil {
 		w.WriteHeader(http.StatusOK)
+		log.Printf(
+			"Successfully del game token: %s, gamename %s\n", token,
+			gameName,
+		)
 		return
 	}
+
+	log.Printf(
+		"Failed del game error: %s, token: %s, gamename: %s", err.Error(),
+		token, gameName,
+	)
 	switch err.Error() {
 	case errorsStrings.NotAuthorized:
 		w.WriteHeader(http.StatusUnauthorized)

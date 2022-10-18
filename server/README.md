@@ -34,9 +34,9 @@ it will be server to store data
     request:
       Cookie: not required
       body: {
-               "username":your_username, 
-               "password":your_password
-            }
+        "username":your_username, 
+        "password":your_password
+      }
     response:
       201 - success creted user
       400 - bad request
@@ -46,10 +46,10 @@ it will be server to store data
     request:
       Cookie: not required
       body: {
-               "username":your_username, 
-               "password":your_password,
-               "max_age":cookies_lifetime
-            }
+        "username":your_username, 
+        "password":your_password,
+        "max_age":cookies_lifetime
+      }
     response:
       201 - success log in
         Set-Cookies: token=your_access_token
@@ -60,13 +60,15 @@ it will be server to store data
     request:
       Cookie: token=your_access_token
       body: {
-               "gamename":gamename, 
-               "password":game_password,
-               "gamer0":int (0 - man, 1 - bot),
-               "gamer1":int (0 - man, 1 - bot),
-               "level0":int, (bot level from 0 - 3)
-               "level1":int
-            }
+        "gamename":gamename, 
+        "password":game_password,
+        "settings": {
+          "gamer0":int (0 - man, 1 - bot),
+          "gamer1":int (0 - man, 1 - bot),
+          "level0":int (bot level from 0 - 3),
+          "level1":int
+        }
+      }
     response:
       201 - success create game
       400 - bad request
@@ -77,10 +79,10 @@ it will be server to store data
     request:
       Cookie: token=your_access_token
       body: {
-               "gamename":gamename, 
-               "from": {"x":int,"y":int},
-               "to": [{"x":int,"y":int}, ...]
-            }
+        "gamename":gamename, 
+        "from": {"x":int,"y":int},
+        "to": [{"x":int,"y":int}, ...]
+      }
     response:
       201 - successfully moved
       400 - bad request
@@ -93,10 +95,10 @@ it will be server to store data
     request:
       Cookie: token=your_access_token
       body: {
-               "gamename":gamename
-            }
+        "gamename":gamename
+      }
     response:
-      201 - successfully moved
+      200 - successfully moved
       body: {
         "figures": [
           {
@@ -118,9 +120,9 @@ it will be server to store data
     request:
       Cookie: token=your_access_token
       body: {
-               "gamename":gamename,
-               "password":password
-            }
+        "gamename":gamename,
+        "password":password
+      }
     response:
       201 - successfully loged in
       400 - bad request

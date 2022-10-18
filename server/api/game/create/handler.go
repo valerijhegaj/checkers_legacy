@@ -1,7 +1,6 @@
 package create
 
 import (
-	"encoding/json"
 	"io"
 	"log"
 	"net/http"
@@ -9,7 +8,6 @@ import (
 	"checkers/server/api"
 	"checkers/server/internal/data"
 	"checkers/server/internal/errorsStrings"
-	"checkers/server/internal/game"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -30,16 +28,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	parsedBody, err := api.Parse(body)
-	gameName, password :=
-		parsedBody.GameName, parsedBody.Password
-	if err != nil {
-		log.Println("Failed new game: " + err.Error())
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	settings := game.Settings{}
-	err = json.Unmarshal(body, &settings)
+	gameName, password, settings :=
+		parsedBody.GameName, parsedBody.Password, parsedBody.Settings
 	if err != nil {
 		log.Println("Failed new game: " + err.Error())
 		w.WriteHeader(http.StatusBadRequest)

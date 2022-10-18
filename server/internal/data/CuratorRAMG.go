@@ -7,6 +7,7 @@ import (
 	"checkers/saveLoad"
 	"checkers/server/internal/errorsStrings"
 	"checkers/server/internal/game"
+	"checkers/server/pkg/defines"
 )
 
 func NewCuratorRAMG() GameCurator {
@@ -25,7 +26,7 @@ type CuratorRAMG struct {
 }
 
 func (c *CuratorRAMG) NewGame(
-	gameName, password string, settings game.Settings,
+	gameName, password string, settings defines.Settings,
 ) error {
 	if settings.Gamer0 == settings.Gamer1 &&
 		settings.Gamer0 == saveLoad.Bot {
@@ -73,7 +74,7 @@ func (c *CuratorRAMG) LoginGame(
 	return game.AddUser(userID, password)
 }
 func (c *CuratorRAMG) ChangeGame(
-	token, gameName string, settings game.Settings,
+	token, gameName string, settings defines.Settings,
 ) error {
 	return nil
 }
