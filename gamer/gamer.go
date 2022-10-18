@@ -19,8 +19,7 @@ func (c Gamer) IsTurn() bool {
 }
 
 func (c Gamer) Move(
-	from core.Coordinate,
-	way []core.Coordinate,
+	from core.Coordinate, way []core.Coordinate,
 ) bool {
 	return c.Core.Move(from, way, c.GamerId)
 }

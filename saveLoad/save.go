@@ -20,10 +20,7 @@ type Participants struct {
 	Level1 int `json:"level1"`
 }
 
-func GetSaveList(path string) (
-	[]string,
-	error,
-) {
+func GetSaveList(path string) ([]string, error) {
 	var saveList []string
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
