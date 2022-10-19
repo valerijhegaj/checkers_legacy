@@ -326,7 +326,7 @@ func Test_server(t *testing.T) {
 		from, to = generateFromTo([]int{4, 0, 2, 2, 4, 4})
 		move(true, from, to, aboba)
 
-		from, to = generateFromTo([]int{4, 2, 3, 3})
+		from, to = generateFromTo([]int{2, 4, 3, 3})
 		move(true, from, to, valerijhegaj)
 
 		from, to = generateFromTo([]int{4, 4, 2, 2})
