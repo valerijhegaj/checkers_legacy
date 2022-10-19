@@ -1,7 +1,6 @@
 package game
 
 import (
-	"io"
 	"log"
 	"net/http"
 
@@ -9,10 +8,11 @@ import (
 	"checkers/server/internal/data"
 	"checkers/server/internal/errorsStrings"
 	"checkers/server/pkg/defines"
+	"checkers/server/pkg/file"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	body, err := io.ReadAll(r.Body)
+	body, err := file.ReadAll(r.Body)
 	if err != nil {
 		log.Println("Failed new game:", err.Error())
 		w.WriteHeader(http.StatusBadRequest)

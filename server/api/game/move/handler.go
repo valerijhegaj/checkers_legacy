@@ -1,13 +1,13 @@
 package move
 
 import (
-	"io"
 	"log"
 	"net/http"
 
 	"checkers/server/api"
 	"checkers/server/internal/data"
 	"checkers/server/internal/errorsStrings"
+	"checkers/server/pkg/file"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -20,7 +20,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	body, err := io.ReadAll(r.Body)
+	body, err := file.ReadAll(r.Body)
 	if err != nil {
 		log.Println("Failed move:", err.Error())
 		w.WriteHeader(http.StatusBadRequest)
