@@ -29,6 +29,23 @@ func (c *User) IsEmptyCookies() bool {
 	return len(c.cookies) == 0
 }
 
+func (c *User) IsAuthorized() (bool, error) {
+	req, err := http.NewRequest(
+		http.MethodGet,
+		fmt.Sprintf("http://localhost:%d/api/user", c.PORT),
+		nil,
+	)
+	if err != nil {
+		return false, err
+	}
+
+	c.addCookies(req)
+
+	res, err := c.client.Do(req)
+
+	return res.StatusCode == http.StatusOK, nil
+}
+
 func (c *User) Register() (int, error) {
 	req, err := http.NewRequest(
 		http.MethodPost,

@@ -10,15 +10,21 @@ import (
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
+	switch r.Method {
+	case http.MethodPost:
+		post(w, r)
+	case http.MethodGet:
+		get(w, r)
+	default:
 		log.Println(
 			"Bad method for new user, request method:",
 			r.Method,
 		)
 		w.WriteHeader(http.StatusBadRequest)
-		return
 	}
+}
 
+func post(w http.ResponseWriter, r *http.Request) {
 	body, err := file.ReadAll(r.Body)
 	if err != nil {
 		log.Println("Failed to create new user:", err.Error())
@@ -27,18 +33,16 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	parsedBody, err := api.Parse(body)
-	username, password := parsedBody.UserName, parsedBody.Password
-	if username == "" || err != nil {
-		log.Print("Failed to create new user: ")
-		if err == nil {
-			log.Println(err.Error())
-		} else {
-			log.Println("unresolved username")
-		}
+
+	if err != nil {
+		log.Println("Failed to create new user: ", err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
+	username, password := parsedBody.UserName, parsedBody.Password
+	if username == "" {
+		log.Println("Failed to create new user: no user name")
+	}
 	storage := data.GetGlobalStorage()
 	err = storage.NewUser(username, password)
 	if err != nil {
@@ -48,4 +52,20 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusCreated)
 	log.Println("Successfully new user: " + username)
+}
+
+func get(w http.ResponseWriter, r *http.Request) {
+	var token string
+	cookies := r.Cookies()
+	for _, c := range cookies {
+		if c.Name == "token" {
+			token = c.Value
+		}
+	}
+
+	storage := data.GetGlobalStorage()
+	_, err := storage.GetUserID(token)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+	}
 }
