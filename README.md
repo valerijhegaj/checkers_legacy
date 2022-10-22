@@ -1,6 +1,9 @@
 # Checkers
 
 it's a simple checkers
+`bash
+echo
+`
 
 ## Rules
 - checkers move diagonally on one square only towards the opponent

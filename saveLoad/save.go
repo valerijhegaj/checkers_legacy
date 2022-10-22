@@ -13,6 +13,12 @@ const (
 	Bot
 )
 
+func NewSaveFromRawSave(rawSave []byte) *Save {
+	var save Save
+	save.InitFromRawSave(rawSave)
+	return &save
+}
+
 type Participants struct {
 	Gamer0 int `json:"gamer0"`
 	Level0 int `json:"level0"`
@@ -20,10 +26,7 @@ type Participants struct {
 	Level1 int `json:"level1"`
 }
 
-func GetSaveList(path string) (
-	[]string,
-	error,
-) {
+func GetSaveList(path string) ([]string, error) {
 	var saveList []string
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
@@ -43,24 +46,19 @@ type Save struct {
 	Field       core.Field
 	Master      Participants
 	TurnGamerId int
-}
-
-func (c *Save) Create() {
-	c.Field = core.NewStandard8x8Field()
+	Winner      int
 }
 
 func (c *Save) putFiguresOnField(figures []figureInfo) {
 	for _, i := range figures {
 		if i.Figure == "Checker" {
 			c.Field.Figures[core.Coordinate{
-				i.X,
-				i.Y,
-			}] = core.Checker{i.GamerId}
+				i.X, i.Y,
+			}] = core.Checker{OwnerId: i.GamerId}
 		} else if i.Figure == "King" {
 			c.Field.Figures[core.Coordinate{
-				i.X,
-				i.Y,
-			}] = core.King{i.GamerId}
+				i.X, i.Y,
+			}] = core.King{OwnerId: i.GamerId}
 		}
 	}
 }
@@ -72,6 +70,26 @@ func (c *Save) initFromJsonSave(jsonSave *jsonSave) {
 	c.Field.BordersLeft = jsonSave.BordersLeft
 	c.Master = jsonSave.Position
 	c.TurnGamerId = jsonSave.TurnGamerId
+	c.Winner = jsonSave.Winner
+}
+
+func (c *Save) GetRawSave() (
+	[]byte,
+	error,
+) {
+	var helper jsonSave
+	helper.initFromSave(c)
+	return helper.getRawSave()
+}
+
+func (c *Save) InitFromRawSave(rawSave []byte) error {
+	var helper jsonSave
+	err := helper.initFromRawSave(rawSave)
+	if err != nil {
+		return err
+	}
+	c.initFromJsonSave(&helper)
+	return nil
 }
 
 func (c *Save) Read(path string) error {
@@ -100,6 +118,7 @@ type jsonSave struct {
 	BordersLeft  core.Coordinate `json:"bordersLeft"`
 	Position     Participants    `json:"position"`
 	TurnGamerId  int             `json:"turnGamerId"`
+	Winner       int             `json:"winner"`
 }
 
 // warning reflect.TypeOf(figure).String()[5:]
@@ -121,11 +140,23 @@ func (c *jsonSave) initFromSave(save *Save) {
 	c.TurnGamerId = save.TurnGamerId
 	c.BordersRight = save.Field.BordersRight
 	c.BordersLeft = save.Field.BordersLeft
+	c.Winner = save.Winner
 	c.takeFiguresFromField(save.Field)
 }
 
+func (c *jsonSave) getRawSave() (
+	[]byte,
+	error,
+) {
+	return json.Marshal(c)
+}
+
+func (c *jsonSave) initFromRawSave(rawSave []byte) error {
+	return json.Unmarshal(rawSave, c)
+}
+
 func (c *jsonSave) write(path string) error {
-	rawSave, err := json.Marshal(c)
+	rawSave, err := c.getRawSave()
 	if err != nil {
 		return err
 	}
