@@ -14,7 +14,7 @@ type Helper struct {
 	GameName string            `json:"gamename,omitempty"`
 	Settings defines.Settings  `json:"settings,omitempty"`
 	From     core.Coordinate   `json:"from"`
-	Way      []core.Coordinate `json:"way"`
+	Way      []core.Coordinate `json:"to"`
 }
 
 func Parse(data []byte) (

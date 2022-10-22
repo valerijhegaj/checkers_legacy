@@ -146,14 +146,10 @@ func (c *User) Move(
 func (c *User) GetGame(gameName string) (int, []byte, error) {
 	req, err := http.NewRequest(
 		http.MethodGet,
-		fmt.Sprintf("http://localhost:%d/api/game", c.PORT),
-		file.NewReadCloserFromBytes(
-			api.UnParse(
-				api.Helper{
-					GameName: gameName,
-				},
-			),
+		fmt.Sprintf(
+			"http://localhost:%d/api/game?gamename=%s", c.PORT, gameName,
 		),
+		nil,
 	)
 	if err != nil {
 		return -1, nil, err
@@ -179,8 +175,8 @@ func (c *User) LogInGame(gameName, password string) (int, error) {
 		file.NewReadCloserFromBytes(
 			api.UnParse(
 				api.Helper{
-					GameName: gameName,
 					Password: password,
+					GameName: gameName,
 				},
 			),
 		),

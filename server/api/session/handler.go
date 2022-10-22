@@ -10,6 +10,12 @@ import (
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
+	api.EachHandlerRoutine(w)
+
+	if r.Method == http.MethodOptions {
+		api.CreateResponseCROPS(w, "POST")
+		return
+	}
 	if r.Method != http.MethodPost {
 		log.Println(
 			"Bad method for new session, request method:",

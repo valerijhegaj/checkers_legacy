@@ -10,7 +10,10 @@ import (
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
+	api.EachHandlerRoutine(w)
 	switch r.Method {
+	case http.MethodOptions:
+		api.CreateResponseCROPS(w, "POST, GET")
 	case http.MethodPost:
 		post(w, r)
 	case http.MethodGet:
@@ -66,6 +69,9 @@ func get(w http.ResponseWriter, r *http.Request) {
 	storage := data.GetGlobalStorage()
 	_, err := storage.GetUserID(token)
 	if err != nil {
+		log.Println("get not authed", token)
 		w.WriteHeader(http.StatusNotFound)
+		return
 	}
+	log.Println("get authed", token)
 }

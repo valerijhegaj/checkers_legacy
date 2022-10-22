@@ -12,6 +12,24 @@ import (
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
+	api.EachHandlerRoutine(w)
+	if r.Method == http.MethodOptions {
+		api.CreateResponseCROPS(w, "GET, POST, PUT, DELETE")
+		return
+	}
+	var token string
+	cookies := r.Cookies()
+	for _, c := range cookies {
+		if c.Name == "token" {
+			token = c.Value
+		}
+	}
+
+	if r.Method == http.MethodGet {
+		gameName := r.URL.Query().Get("gamename")
+		get(w, token, gameName)
+		return
+	}
 	body, err := file.ReadAll(r.Body)
 	if err != nil {
 		log.Println("Failed new game:", err.Error())
@@ -20,20 +38,12 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	parsedBody, err := api.Parse(body)
-	gameName, password, settings :=
-		parsedBody.GameName, parsedBody.Password, parsedBody.Settings
+	password, settings, gameName :=
+		parsedBody.Password, parsedBody.Settings, parsedBody.GameName
 	if err != nil {
 		log.Println("Failed new game: " + err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		return
-	}
-
-	var token string
-	cookies := r.Cookies()
-	for _, c := range cookies {
-		if c.Name == "token" {
-			token = c.Value
-		}
 	}
 
 	switch r.Method {
