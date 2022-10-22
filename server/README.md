@@ -5,6 +5,8 @@ In this project I will try to write a restful server with the authorization data
 it will be server to store data
 
 ## Available http requests
+    GET    /api/user        - get your username
+
     POST   /api/user        - create new user 
     POST   /api/session     - create new access token for user 
     
@@ -30,6 +32,12 @@ it will be server to store data
 
 ## Details of http requests
 ### /api/user
+#### GET
+    request:
+      Cookie: optional
+    response:
+      200 - when you send cookie with exist token
+      404 - token not found
 #### POST
     request:
       Cookie: not required

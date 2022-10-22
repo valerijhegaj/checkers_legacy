@@ -326,10 +326,36 @@ func Test_server(t *testing.T) {
 		from, to = generateFromTo([]int{4, 0, 2, 2, 4, 4})
 		move(true, from, to, aboba)
 
-		from, to = generateFromTo([]int{4, 2, 3, 3})
+		from, to = generateFromTo([]int{2, 4, 3, 3})
 		move(true, from, to, valerijhegaj)
 
 		from, to = generateFromTo([]int{4, 4, 2, 2})
 		move(true, from, to, aboba)
+	}
+
+	//----------------------test7---------------------------------------
+	//is authorized
+	{
+		isAuth, err := valerijhegaj.IsAuthorized()
+		if err != nil {
+			t.Error(format.ErrorString("without errors", err.Error()))
+		}
+		if !isAuth {
+			t.Error(format.ErrorInt(1, 0))
+		}
+
+		byba := apiParser.User{
+			Username: "byba",
+			PORT:     4444,
+			Password: password1,
+		}
+
+		isAuth, err = byba.IsAuthorized()
+		if err != nil {
+			t.Error(format.ErrorString("without errors", err.Error()))
+		}
+		if isAuth {
+			t.Error(format.ErrorInt(0, 1))
+		}
 	}
 }
