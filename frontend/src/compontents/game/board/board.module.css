@@ -1,0 +1,10 @@
+.board {
+    width: 95vmin;
+    height: 95vmin;
+    background: gray;
+    margin: auto;
+    border-style: solid;
+    border-color: gray;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto;
+}
